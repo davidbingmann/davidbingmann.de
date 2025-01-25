@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.DS_Store
+
+# Virtual Environments
+venv/
+.env/
+
+# PyCharm Specific
+.idea/
+
+# Logs
+*.log
+
+# MacOS
+.DS_Store
