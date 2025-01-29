@@ -6,6 +6,50 @@
   background: #333333;
 }
 
+.menu-container {
+    position: absolute; /* Positioniert das Menü relativ zum Seitenanfang */
+    top: 10px; /* Abstand vom oberen Rand */
+    right: 20px; /* Abstand vom rechten Rand */
+    display: flex;
+    flex-direction: column; /* Stapelt Hamburger-Icon und Dropdown-Menü */
+    align-items: flex-end; /* Rechtsbündig */
+}
+.hamburger {
+    width: 30px;
+    height: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    color: white;
+}
+
+.hamburger div {
+    height: 3px;
+    background-color: #ffffff;
+}
+
+.dropdown-menu {
+    display: none; /* Standardmäßig versteckt */
+    position: absolute;
+    top: 40px;
+    right: 0;
+    border-radius: 5px;
+    color: white;
+}
+
+.dropdown-menu .menu-item {
+    display: block;
+    padding: 10px 20px;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.menu-container.active .dropdown-menu {
+    display: block;
+}
+
+
 .profile-container {
     display: flex;
     flex-direction: column;

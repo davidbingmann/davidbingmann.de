@@ -29,6 +29,7 @@ headers = (
     Favicon("/assets/favicon.ico", "/assets/favicon.ico"),
     Meta(name="viewport", content="width=device-width, initial-scale=1, viewport-fit=cover"),
     Meta(charset="utf-8"),
+    Script(src="assets/toggleMenu.js"),
 )
 
 def render_markdown(file_path):
@@ -41,6 +42,17 @@ def load_main_page():
         Head(headers),
         Title("David Bingmann"),
         Container(
+            Div(
+                Div(
+                    I(cls="fas fa-bars hamburger-icon", onclick="toggleMenu()"),
+                ),
+                    Div(
+                        A("Projects", href="/projects", cls="menu-item"),
+                        A("Resume", href="/resume", cls="menu-item"),
+                        cls="dropdown-menu"
+                    ),
+                    cls="menu-container"
+                ),
             Div(
                 Image("assets/profile_picture.jpeg"),
                 cls="profile-picture-wrapper"
@@ -61,15 +73,39 @@ def load_main_page():
                 A("Click here to view the website’s code", href="https://github.com/davidbingmann/davidbingmann.de", target="_blank", cls="code-link"),
                 cls="footer"
             ),
-            cls="profile-container"
+            cls="profile-container")
 
 
         )
-    )
+
 
 
 @rt("/")
 def main_page():
     return load_main_page()
+
+@rt("/projects")
+def projects_page():
+    return Container(
+        Div(
+            H1("Projects"),
+            cls="header-container"
+        ),
+        Div(
+            P("Nothing to see here yet!", cls="center-text"),
+            cls="center-container"
+        )
+    )
+
+
+@rt("/resume")
+def projects_page():
+    return Container(
+        Div(
+            H1("Projects"),
+            P("Nothing to see here yet!", cls="center-text"),
+            cls="content-container"
+        )
+    )
 
 serve()
