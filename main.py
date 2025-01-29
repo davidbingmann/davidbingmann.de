@@ -82,30 +82,16 @@ def load_main_page():
 
 @rt("/")
 def main_page():
-    return load_main_page()
+    return load_main_page(),
+
 
 @rt("/projects")
 def projects_page():
-    return Container(
-        Div(
-            H1("Projects"),
-            cls="header-container"
-        ),
-        Div(
-            P("Nothing to see here yet!", cls="center-text"),
-            cls="center-container"
-        )
-    )
+    pass
 
 
 @rt("/resume")
 def projects_page():
-    return Container(
-        Div(
-            H1("Projects"),
-            P("Nothing to see here yet!", cls="center-text"),
-            cls="content-container"
-        )
-    )
+    pass
 
 serve()
