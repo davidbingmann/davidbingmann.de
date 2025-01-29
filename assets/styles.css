@@ -1,7 +1,52 @@
+.container-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background: #333333;
+}
+
+.profile-container {
+    display: flex;
+    flex-direction: column; /* Stapelt Bild und Text vertikal */
+    align-items: center;
+    margin-top: 100px;/* Zentriert Bild und Text horizontal */
+}
+
+.profile-name {
+    margin-top: 15px;
+    margin-bottom: 1px;/* Abstand zwischen Bild und Text */
+    font-size: 1.5rem;      /* Schriftgröße anpassen */
+    font-weight: bold;      /* Schrift fett machen */
+    color: white;           /* Schriftfarbe (falls nötig) */
+}
+
+.profile-picture-wrapper {
+    width: 200px;           /* Gleiche Breite */
+    height: 200px;          /* Gleiche Höhe für quadratische Form */
+    border-radius: 50%;     /* Rundes Bild */
+    overflow: hidden;       /* Überschüssige Bildteile abschneiden */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000; /* Optional: Hintergrundfarbe */
+}
+
 .profile-picture {
-    width: 130px;
-    height: 130px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 25px;
+    width: 100%;            /* Bild füllt den Container */
+    height: 100%;           /* Proportional skaliert */
+    object-fit: cover;      /* Schneidet das Bild passend zu */
+}
+
+.social-container {
+    display: flex;
+    justify-content: center; /* Zentriert die Symbole horizontal */
+    gap: 15px;              /* Abstand zwischen den Symbolen */
+    margin-top: 1px;       /* Abstand zum Namen */
+}
+
+.github-icon, .x-icon, .bluesky-icon, .linkedin-icon {
+    font-size: 1.2rem;      /* Größe der Symbole */
+    color: white;           /* Standardfarbe */
+    text-decoration: none;  /* Entfernt Unterstreichung */
 }

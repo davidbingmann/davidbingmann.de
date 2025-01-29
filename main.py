@@ -25,21 +25,29 @@ headers = (
 
 def load_main_page():
     return (
-        Head(headers),  # Head mit CSS einbinden
+        Head(headers),
         Title("David Bingmann"),
         Container(
             Div(
-                Image(
-                    "assets/profile_picture.jpeg",
-                    alt="Profile picture",
-                    cls="profile-picture",
-                )
+                Image("assets/profile_picture.jpeg"),
+                cls="profile-picture-wrapper"
             ),
+
+            Div(H1("David Bingmann"), cls="profile-name"),
+
             Div(
-                H1("David Bingmann"),
-            )
-        ),
+                A(I(cls="fab fa-github"), href="https://github.com/davidbingmann", cls="github-icon", target="_blank"),
+                A(I(cls="fab fa-x-twitter"), href="https://x.com/DavidBingmann2", cls="x-icon", target="_blank"),
+                A(I(cls="fab fa-bluesky"), href="https://bsky.app/profile/davidbingmann.de", cls="bluesky-icon", target="_blank"),
+                A(I(cls="fab fa-linkedin"), href="https://www.linkedin.com/in/david-bingmann-13b897293/", cls="linkedin-icon", target="_blank"),
+                cls="social-container"
+            ),
+            cls="profile-container"
+
+
+        )
     )
+
 
 @rt("/")
 def main_page():
