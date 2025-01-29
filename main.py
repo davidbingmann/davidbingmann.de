@@ -57,6 +57,10 @@ def load_main_page():
             ),
 
             Div(NotStr(render_markdown("assets/about_me.md")), cls="about-me-container"),
+            Div(
+                A("Click here to view the website’s code", href="https://github.com/davidbingmann/davidbingmann.de", target="_blank", cls="code-link"),
+                cls="footer"
+            ),
             cls="profile-container"
 
 

@@ -71,3 +71,21 @@
     margin-bottom: 1.5rem;  /* Abstand nach der Überschrift */
     color: #fff;
 }
+
+.footer {
+    position: fixed; /* Fixiert den Footer am unteren Rand */
+    bottom: 0; /* Positioniert ihn am unteren Rand */
+    left: 0;
+    width: 100%; /* Deckt die gesamte Breite ab */
+    display: flex; /* Flexbox aktivieren */
+    justify-content: center; /* Horizontal zentrieren */
+    align-items: center; /* Vertikal zentrieren */
+    background-color: transparent; /* Kein Hintergrund */
+    padding: 10px 0;
+}
+
+.code-link {
+    color: #575757; /* Blass hellgrau */
+    font-size: 0.9rem; /* Kleinere Schriftgröße */
+    text-decoration: none; /* Entfernt Unterstreichung */
+}
