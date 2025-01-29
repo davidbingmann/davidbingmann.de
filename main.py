@@ -1,11 +1,19 @@
 from fasthtml.common import *
 from fasthtml.js import HighlightJS
 from markdown_it import MarkdownIt
+from mdit_py_plugins.front_matter import front_matter_plugin
+from mdit_py_plugins.footnote import footnote_plugin
 import pathlib
 from fh_bootstrap import bst_hdrs, Container, Image, Icon, ContainerT
 
 app, rt = fast_app(static_dirs=["./assets"])
 
+md = md = (
+    MarkdownIt("commonmark")
+    .enable("table")  # Tabellen aktivieren (falls benötigt)
+    .use(front_matter_plugin)  # Front Matter aktivieren
+    .use(footnote_plugin)  # Fußnoten aktivieren
+)
 
 fa_cfurl = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0"
 headers = (
@@ -22,6 +30,11 @@ headers = (
     Meta(name="viewport", content="width=device-width, initial-scale=1, viewport-fit=cover"),
     Meta(charset="utf-8"),
 )
+
+def render_markdown(file_path):
+    with open(file_path, "r", encoding="utf-8") as f:
+        content = f.read()
+    return md.render(content)
 
 def load_main_page():
     return (
@@ -42,6 +55,8 @@ def load_main_page():
                 A(I(cls="fab fa-linkedin"), href="https://www.linkedin.com/in/david-bingmann-13b897293/", cls="linkedin-icon", target="_blank"),
                 cls="social-container"
             ),
+
+            Div(NotStr(render_markdown("assets/about_me.md")), cls="about-me-container"),
             cls="profile-container"
 
 

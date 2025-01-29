@@ -8,45 +8,66 @@
 
 .profile-container {
     display: flex;
-    flex-direction: column; /* Stapelt Bild und Text vertikal */
+    flex-direction: column;
     align-items: center;
-    margin-top: 100px;/* Zentriert Bild und Text horizontal */
+    margin-top: 100px;
 }
 
 .profile-name {
     margin-top: 15px;
-    margin-bottom: 1px;/* Abstand zwischen Bild und Text */
-    font-size: 1.5rem;      /* Schriftgröße anpassen */
-    font-weight: bold;      /* Schrift fett machen */
-    color: white;           /* Schriftfarbe (falls nötig) */
+    margin-bottom: 1px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
 }
 
 .profile-picture-wrapper {
-    width: 200px;           /* Gleiche Breite */
-    height: 200px;          /* Gleiche Höhe für quadratische Form */
-    border-radius: 50%;     /* Rundes Bild */
-    overflow: hidden;       /* Überschüssige Bildteile abschneiden */
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #000; /* Optional: Hintergrundfarbe */
+    background-color: #000;
 }
 
 .profile-picture {
-    width: 100%;            /* Bild füllt den Container */
-    height: 100%;           /* Proportional skaliert */
-    object-fit: cover;      /* Schneidet das Bild passend zu */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .social-container {
     display: flex;
-    justify-content: center; /* Zentriert die Symbole horizontal */
-    gap: 15px;              /* Abstand zwischen den Symbolen */
-    margin-top: 1px;       /* Abstand zum Namen */
+    justify-content: center;
+    gap: 15px;
+    margin-top: 1px;
 }
 
 .github-icon, .x-icon, .bluesky-icon, .linkedin-icon {
-    font-size: 1.2rem;      /* Größe der Symbole */
-    color: white;           /* Standardfarbe */
-    text-decoration: none;  /* Entfernt Unterstreichung */
+    font-size: 1.2rem;
+    color: white;
+    text-decoration: none;
+}
+
+.about-me-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #2a2a2a; /* Hintergrundfarbe */
+    border-radius: 10px; /* Abgerundete Ecken */
+    color: #ddd; /* Schriftfarbe */
+    text-align: left; /* Text linksbündig */
+    line-height: 1.6; /* Zeilenhöhe für bessere Lesbarkeit */
+}
+
+.about-container p {
+    margin-bottom: 1.5rem;  /* Abstand zwischen den Absätzen */
+    line-height: 1.6;       /* Zeilenhöhe für bessere Lesbarkeit */
+}
+
+.about-title {
+    margin-bottom: 1.5rem;  /* Abstand nach der Überschrift */
+    color: #fff;
 }
