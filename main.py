@@ -3,16 +3,15 @@ from fasthtml.js import HighlightJS
 from markdown_it import MarkdownIt
 from mdit_py_plugins.front_matter import front_matter_plugin
 from mdit_py_plugins.footnote import footnote_plugin
-import pathlib
 from fh_bootstrap import bst_hdrs, Container, Image, Icon, ContainerT
 
 app, rt = fast_app(static_dirs=["./assets"])
 
 md = md = (
     MarkdownIt("commonmark")
-    .enable("table")  # Tabellen aktivieren (falls benötigt)
-    .use(front_matter_plugin)  # Front Matter aktivieren
-    .use(footnote_plugin)  # Fußnoten aktivieren
+    .enable("table") 
+    .use(front_matter_plugin)
+    .use(footnote_plugin) 
 )
 
 fa_cfurl = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0"
@@ -88,7 +87,7 @@ def projects_page():
                 A("Home", href="/", cls="btn btn-primary"),
                 H1("Projects", cls="projects-title text-center"),
                 Div(
-                    P("nothing to see here yet", cls="empty-text text-center"),
+                    P("Nothing to see here yet!", cls="empty-text text-center"),
                     cls="empty-container d-flex justify-content-center align-items-center"
                 ),
                 cls="projects-container"
@@ -99,18 +98,54 @@ def projects_page():
 
 @rt("/resume") 
 def resume_page():
+    timeline_items = [
+        {
+            "year": "October 2024",
+            "title": "Research Assistant at DFKI",
+            "description": "Start of my part-time job at the German Research Center for Artificial Intelligence (DFKI) alongside my studies"
+        },
+        {
+            "year": "October 2024",
+            "title": "Start of my Bachelor's degree",
+            "description": "Start of my Bachelor's degree: Artificial Intelligence and Data Science at the University of Applied Science in Trier"
+        },
+        {
+            "year": "May 2024",
+            "title": "Internship at Tesla Automation",
+            "description": "Internship from 27/05/2024 until 07/06/2024 in Controls Engineering"
+        },
+        {
+            "year": "March 2024",
+            "title": "Abitur",
+            "description": "Finished my Abitur at the Staatliches Eifelgymnasium in Neuerburg"
+        }
+    ]
+    
     return (
-        Head(headers),
+        Head(*headers, StyleX("assets/timeline.css")),
         Title("Resume - David Bingmann"),
         Container(
             Div(
                 A("Home", href="/", cls="btn btn-primary"),
                 H1("Resume", cls="projects-title text-center"),
                 Div(
-                    P("nothing to see here yet", cls="empty-text text-center"),
-                    cls="empty-container d-flex justify-content-center align-items-center"
-                ),
-                cls="projects-container"
+                    Div(
+                        *[Div(
+                            Div(
+                                Div(
+                                    H3(item["title"], cls="timeline-title"),
+                                    P(item["year"], cls="timeline-year"),
+                                    P(item["description"], cls="timeline-description"),
+                                ),
+                                cls="timeline-content"
+                            ),
+                            cls="timeline-item",
+                            style=f"--item-index: {i}"
+                        ) for i, item in enumerate(timeline_items)],
+                        cls="timeline"
+                    ),
+                    cls="resume-container"
+                )
             )
         )
     )
