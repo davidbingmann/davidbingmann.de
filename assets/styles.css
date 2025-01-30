@@ -1,28 +1,37 @@
 :root {
-
   --pico-primary-inverse: #fff !important;
   --pico-background-color: #333333 !important;
   --pico-color: white !important;
 }
+
 body {
-  color: var(--pico-color); /* Redundante Sicherung */
+  color: var(--pico-color);
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: #ffffff !important; /* Erzwingt Weiß für alle Überschriften */
+  color: #ffffff !important;
 }
 
 .menu-container {
-    position: absolute; /* Positioniert das Menü relativ zum Seitenanfang */
-    top: 10px; /* Abstand vom oberen Rand */
-    right: 20px; /* Abstand vom rechten Rand */
+    position: absolute;
+    top: 5px;
+    right: 15px;
     display: flex;
-    flex-direction: column; /* Stapelt Hamburger-Icon und Dropdown-Menü */
-    align-items: flex-end; /* Rechtsbündig */
+    flex-direction: column;
+    align-items: flex-end;
+    z-index: 100;
 }
+
+.hamburger-icon {
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: white;
+    padding: 3px;
+}
+
 .hamburger {
-    width: 30px;
-    height: 20px;
+    width: 25px;
+    height: 15px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -31,36 +40,42 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .hamburger div {
-    height: 3px;
+    height: 2px;
     background-color: #ffffff;
 }
 
 .dropdown-menu {
-    display: none; /* Standardmäßig versteckt */
+    display: none;
     position: absolute;
-    top: 40px;
+    top: 35px;
     right: 0;
     border-radius: 5px;
     color: white;
+    background-color: #333333;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 .dropdown-menu .menu-item {
     display: block;
-    padding: 10px 20px;
+    padding: 8px 15px;
     color: #ffffff;
     text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.dropdown-menu .menu-item:hover {
+    text-decoration: underline;
 }
 
 .menu-container.active .dropdown-menu {
     display: block;
 }
 
-
 .profile-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 100px;
+    margin-top: 80px;
     color: white;
 }
 
@@ -100,43 +115,104 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 1.2rem;
     color: white;
     text-decoration: none;
+    padding: 6px;
+    border: 2px solid transparent;
+}
+
+.github-icon:hover, .x-icon:hover, .bluesky-icon:hover, .linkedin-icon:hover {
+    border: 2px solid white;
+    border-radius: 8px;
 }
 
 .about-me-container {
     max-width: 800px;
-    margin: 2rem auto;
+    margin: 1.5rem auto;
     padding: 2rem;
-    background: #2a2a2a; /* Hintergrundfarbe */
-    border-radius: 10px; /* Abgerundete Ecken */
-    color: #fffafa !important; /* Schriftfarbe */
-    text-align: left; /* Text linksbündig */
-    line-height: 1.6; /* Zeilenhöhe für bessere Lesbarkeit */
+    background: #2a2a2a;
+    border-radius: 10px;
+    color: #fffafa !important;
+    text-align: left;
+    line-height: 1.6;
 }
 
 .about-container p {
-    margin-bottom: 1.5rem;  /* Abstand zwischen den Absätzen */
-    line-height: 1.6;       /* Zeilenhöhe für bessere Lesbarkeit */
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
 }
 
 .about-title {
-    margin-bottom: 1.5rem;  /* Abstand nach der Überschrift */
+    margin-bottom: 1.5rem;
     color: #fff;
 }
 
 .footer {
-    position: fixed; /* Fixiert den Footer am unteren Rand */
-    bottom: 0; /* Positioniert ihn am unteren Rand */
+    position: fixed;
+    bottom: 0;
     left: 0;
-    width: 100%; /* Deckt die gesamte Breite ab */
-    display: flex; /* Flexbox aktivieren */
-    justify-content: center; /* Horizontal zentrieren */
-    align-items: center; /* Vertikal zentrieren */
-    background-color: transparent; /* Kein Hintergrund */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
     padding: 10px 0;
 }
 
 .code-link {
-    color: #575757; /* Blass hellgrau */
-    font-size: 0.9rem; /* Kleinere Schriftgröße */
-    text-decoration: none; /* Entfernt Unterstreichung */
+    color: #575757;
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.justify-content-center {
+    justify-content: center;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+.projects-title {
+    margin-top: 5rem;
+}
+
+.empty-container {
+    min-height: calc(100vh - 5rem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.empty-text {
+    color: #808080;
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.btn-primary {
+    background-color: #333333;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    position: absolute;
+    top: 5rem;
+    left: 20px;
+    text-decoration: none;
+}
+
+.btn-primary:hover {
+    text-decoration: underline;
+}
+
+.btn-primary::before {
+    content: "← ";
+    font-size: 1.1em;
 }

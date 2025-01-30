@@ -37,7 +37,8 @@ def render_markdown(file_path):
         content = f.read()
     return md.render(content)
 
-def load_main_page():
+@rt("/")
+def main_page():
     return (
         Head(headers),
         Title("David Bingmann"),
@@ -70,28 +71,48 @@ def load_main_page():
 
             Div(NotStr(render_markdown("assets/about_me.md")), cls="about-me-container"),
             Div(
-                A("Click here to view the website’s code", href="https://github.com/davidbingmann/davidbingmann.de", target="_blank", cls="code-link"),
+                A("Click here to view the website's code", href="https://github.com/davidbingmann/davidbingmann.de", target="_blank", cls="code-link"),
                 cls="footer"
             ),
             cls="profile-container")
-
-
-        )
-
-
-
-@rt("/")
-def main_page():
-    return load_main_page(),
+        ),
 
 
 @rt("/projects")
 def projects_page():
-    pass
+    return (
+        Head(headers),
+        Title("Projects - David Bingmann"),
+        Container(
+            Div(
+                A("Home", href="/", cls="btn btn-primary"),
+                H1("Projects", cls="projects-title text-center"),
+                Div(
+                    P("nothing to see here yet", cls="empty-text text-center"),
+                    cls="empty-container d-flex justify-content-center align-items-center"
+                ),
+                cls="projects-container"
+            )
+        )
+    )
 
 
-@rt("/resume")
-def projects_page():
-    pass
+@rt("/resume") 
+def resume_page():
+    return (
+        Head(headers),
+        Title("Resume - David Bingmann"),
+        Container(
+            Div(
+                A("Home", href="/", cls="btn btn-primary"),
+                H1("Resume", cls="projects-title text-center"),
+                Div(
+                    P("nothing to see here yet", cls="empty-text text-center"),
+                    cls="empty-container d-flex justify-content-center align-items-center"
+                ),
+                cls="projects-container"
+            )
+        )
+    )
 
 serve()
