@@ -7,8 +7,8 @@ services:
       dockerfile: Dockerfile
     container_name: mywebsite_app
     restart: always
-    expose:
-      - "8000"
+    ports:
+      - "8000:8000"
     environment:
       - ENV=production
 
