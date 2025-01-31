@@ -4,9 +4,11 @@ from markdown_it import MarkdownIt
 from mdit_py_plugins.front_matter import front_matter_plugin
 from mdit_py_plugins.footnote import footnote_plugin
 from fh_bootstrap import bst_hdrs, Container, Image, Icon, ContainerT
+from fastapi import FastAPI
+import uvicorn
 
-app, rt = fast_app(static_dirs=["./assets"])
-
+app, rt = FastAPI()
+app.mount("/assets", StaticFiles(directory="assets"), name="assets")
 md = md = (
     MarkdownIt("commonmark")
     .enable("table") 
@@ -150,4 +152,5 @@ def resume_page():
         )
     )
 
-serve()
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="0.0.0.0", port=8000)
