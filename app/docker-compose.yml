@@ -28,7 +28,7 @@ services:
 
   watchtower:
     image: containrrr/watchtower:latest
-    container_name: watchtower
+    container_name: watchtower_new
     restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
