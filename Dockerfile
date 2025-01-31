@@ -9,7 +9,6 @@ ENV PATH="/venv/bin:$PATH"
 
 COPY pyproject.toml .
 RUN uv pip install -r pyproject.toml
-RUN uv pip install fastapi uvicorn
 
 FROM python:3.11-slim
 WORKDIR /app

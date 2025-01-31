@@ -4,11 +4,8 @@ from markdown_it import MarkdownIt
 from mdit_py_plugins.front_matter import front_matter_plugin
 from mdit_py_plugins.footnote import footnote_plugin
 from fh_bootstrap import bst_hdrs, Container, Image, Icon, ContainerT
-from fastapi import FastAPI
-import uvicorn
+import pathlib
 
-app, rt = FastAPI()
-app.mount("/assets", StaticFiles(directory="assets"), name="assets")
 md = md = (
     MarkdownIt("commonmark")
     .enable("table") 
@@ -33,12 +30,16 @@ headers = (
     Script(src="assets/toggleMenu.js"),
 )
 
+app = FastHTML(hdrs=bst_hdrs + headers, live=False, default_hdrs=False, exception_handlers=exception_handlers)
+app.mount("/assets", StaticFiles(directory="assets"), name="assets")
+app.mount("/posts/img", StaticFiles(directory="posts/img"), name="posts_img")
+
 def render_markdown(file_path):
     with open(file_path, "r", encoding="utf-8") as f:
         content = f.read()
     return md.render(content)
 
-@rt("/")
+@app.get("/")
 def main_page():
     return (
         Head(headers),
@@ -79,7 +80,7 @@ def main_page():
         ),
 
 
-@rt("/projects")
+@app.get("/projects")
 def projects_page():
     return (
         Head(headers),
@@ -98,7 +99,7 @@ def projects_page():
     )
 
 
-@rt("/resume") 
+@app.get("/resume")
 def resume_page():
     timeline_items = [
         {
@@ -153,4 +154,4 @@ def resume_page():
     )
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000)
+   serve(host="0.0.0.0", port=8000)
