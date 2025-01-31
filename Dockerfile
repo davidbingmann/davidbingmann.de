@@ -5,7 +5,7 @@ WORKDIR /app
 # Systemabhängigkeiten & PDM installieren
 RUN pip install uv && apt-get update && apt-get install -y --no-install-recommends gcc python3-dev
 
-COPY pyproject.toml pyproject.lock ./
+COPY pyproject.toml ./
 
 # PDM installieren
 RUN pip install pdm
