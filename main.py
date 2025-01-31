@@ -30,9 +30,8 @@ headers = (
     Script(src="assets/toggleMenu.js"),
 )
 
-app = FastHTML(hdrs=bst_hdrs + headers, live=False, default_hdrs=False, exception_handlers=exception_handlers)
+app = FastHTML(hdrs=bst_hdrs + headers, live=False, default_hdrs=False,)
 app.mount("/assets", StaticFiles(directory="assets"), name="assets")
-app.mount("/posts/img", StaticFiles(directory="posts/img"), name="posts_img")
 
 def render_markdown(file_path):
     with open(file_path, "r", encoding="utf-8") as f:

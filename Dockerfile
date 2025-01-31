@@ -1,23 +1,22 @@
-FROM python:3.11-slim as builder
+FROM ghcr.io/astral-sh/uv:python3.13-bookworm-slim
 
 WORKDIR /app
-RUN pip install uv==0.1.44
 
-# Virtuelle Umgebung explizit erstellen
-RUN python -m uv venv /venv
-ENV PATH="/venv/bin:$PATH"
+ENV UV_LINK_MODE=copy \
+    UV_COMPILE_BYTECODE=1 \
+    UV_PYTHON_DOWNLOADS=never \
+    UV_PYTHON=python3.13 \
+    PYTHONPATH=/app
 
-COPY pyproject.toml .
-RUN uv pip install -r pyproject.toml
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    uv sync --frozen --no-install-project
 
-FROM python:3.11-slim
-WORKDIR /app
+ADD . /app
 
-# Virtuelle Umgebung kopieren
-COPY --from=builder /venv /venv
-ENV PATH="/venv/bin:$PATH"
-
-COPY . .
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen
 
 CMD ["uv", "run", "main.py"]
 
