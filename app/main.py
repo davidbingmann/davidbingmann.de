@@ -28,7 +28,7 @@ headers = (
     Favicon("/assets/favicon.ico", "/assets/favicon.ico"),
     Meta(name="viewport", content="width=device-width, initial-scale=1, viewport-fit=cover"),
     Meta(charset="utf-8"),
-    Script(src="assets/toggleMenu.js"),
+    Script(src="../assets/toggleMenu.js"),
 )
 
 def render_markdown(file_path):
@@ -54,7 +54,7 @@ def main_page():
                 cls="menu-container"
             ),
             Div(
-                Image("assets/profile_picture.jpeg"),
+                Image("../assets/profile_picture.jpeg"),
                 cls="profile-picture-wrapper"
             ),
 
@@ -68,7 +68,7 @@ def main_page():
                 cls="social-container"
             ),
 
-            Div(NotStr(render_markdown("assets/about_me.md")), cls="about-me-container"),
+            Div(NotStr(render_markdown("../assets/about_me.md")), cls="about-me-container"),
             Div(
                 A("Click here to view the website's code", href="https://github.com/davidbingmann/davidbingmann.de", target="_blank", cls="code-link"),
                 cls="footer"

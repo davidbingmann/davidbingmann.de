@@ -3,6 +3,9 @@ name = "davidbingmann.de"
 version = "1.0.0"
 description = "my personal website"
 requires-python = ">=3.13"
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
 dependencies = [
     "fh-bootstrap>=0.0.3",
     "frontmatter>=3.0.8",
