@@ -5,10 +5,15 @@ WORKDIR /app
 # Systemabhängigkeiten & PDM installieren
 RUN pip install uv && apt-get update && apt-get install -y --no-install-recommends gcc python3-dev
 
-COPY . .
+COPY pyproject.toml pyproject.lock ./
+
+# PDM installieren
+RUN pip install pdm
 
 # Abhängigkeiten installieren
-RUN uv pip install -r requirements.txt
+RUN pdm install
+
+COPY . .
 
 # Port freigeben und Befehl ausführen
 EXPOSE 8000
