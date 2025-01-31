@@ -3,14 +3,15 @@ from fasthtml.js import HighlightJS
 from markdown_it import MarkdownIt
 from mdit_py_plugins.front_matter import front_matter_plugin
 from mdit_py_plugins.footnote import footnote_plugin
-from fh_bootstrap import bst_hdrs, Container, Image, Icon, ContainerT
-import pathlib
+from fh_bootstrap import Container, Image
+
+app, rt = fast_app(static_dirs=["./assets"])
 
 md = md = (
     MarkdownIt("commonmark")
-    .enable("table") 
+    .enable("table")
     .use(front_matter_plugin)
-    .use(footnote_plugin) 
+    .use(footnote_plugin)
 )
 
 fa_cfurl = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0"
@@ -30,15 +31,12 @@ headers = (
     Script(src="assets/toggleMenu.js"),
 )
 
-app = FastHTML(hdrs=bst_hdrs + headers, live=False, default_hdrs=False,)
-app.mount("/assets", StaticFiles(directory="assets"), name="assets")
-
 def render_markdown(file_path):
     with open(file_path, "r", encoding="utf-8") as f:
         content = f.read()
     return md.render(content)
 
-@app.get("/")
+@rt("/")
 def main_page():
     return (
         Head(headers),
@@ -48,13 +46,13 @@ def main_page():
                 Div(
                     I(cls="fas fa-bars hamburger-icon", onclick="toggleMenu()"),
                 ),
-                    Div(
-                        A("Projects", href="/projects", cls="menu-item"),
-                        A("Resume", href="/resume", cls="menu-item"),
-                        cls="dropdown-menu"
-                    ),
-                    cls="menu-container"
+                Div(
+                    A("Projects", href="/projects", cls="menu-item"),
+                    A("Resume", href="/resume", cls="menu-item"),
+                    cls="dropdown-menu"
                 ),
+                cls="menu-container"
+            ),
             Div(
                 Image("assets/profile_picture.jpeg"),
                 cls="profile-picture-wrapper"
@@ -76,10 +74,9 @@ def main_page():
                 cls="footer"
             ),
             cls="profile-container")
-        ),
+    ),
 
-
-@app.get("/projects")
+@rt("/projects")
 def projects_page():
     return (
         Head(headers),
@@ -97,8 +94,7 @@ def projects_page():
         )
     )
 
-
-@app.get("/resume")
+@rt("/resume")
 def resume_page():
     timeline_items = [
         {
@@ -122,7 +118,7 @@ def resume_page():
             "description": "Finished my Abitur at the Staatliches Eifelgymnasium in Neuerburg"
         }
     ]
-    
+
     return (
         Head(*headers, StyleX("assets/timeline.css")),
         Title("Resume - David Bingmann"),
@@ -152,5 +148,4 @@ def resume_page():
         )
     )
 
-if __name__ == "__main__":
-   serve(host="0.0.0.0", port=8000)
+serve()
