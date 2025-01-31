@@ -1,3 +1,38 @@
-davidbingmann.de {
-    reverse_proxy web:8000
+# Basis-Konfiguration mit HTTPS und Reverse Proxy
+davidbingmann.de, www.davidbingmann.de {
+    # Automatisches HTTPS mit Let's Encrypt
+    tls {
+        issuer acme
+    }
+
+    # www zu non-www Redirect
+    @www host www.davidbingmann.de
+    redir @www https://davidbingmann.de{uri} permanent
+
+    # Reverse Proxy zur Python-App
+    reverse_proxy web:8000 {
+        header_up X-Real-IP {remote_host}
+        transport http {
+            tls_insecure_skip_verify
+        }
+    }
+
+    # Statische Dateien (CSS/JS)
+    handle_path /static/* {
+        root * ./assets
+        file_server
+    }
+
+    # Sicherheitsheader
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Frame-Options "DENY"
+        X-Content-Type-Options "nosniff"
+        Referrer-Policy "strict-origin-when-cross-origin"
+    }
+}
+
+# HTTP zu HTTPS Redirect
+http://davidbingmann.de http://www.davidbingmann.de {
+    redir https://davidbingmann.de{uri} permanent
 }
