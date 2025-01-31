@@ -4,6 +4,7 @@ version = "1.0.0"
 description = "my personal website"
 requires-python = ">=3.13"
 dependencies = [
+    "fastapi>=0.115.8",
     "fh-bootstrap>=0.0.3",
     "frontmatter>=3.0.8",
     "markdown-it-py[plugins]>=3.0.0",
