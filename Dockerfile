@@ -19,7 +19,7 @@ ENV PATH="/venv/bin:$PATH"
 
 COPY . .
 
-CMD ["/venv/bin/uvicorn", "main:app", "--host", "0.0.0.0"]
+CMD ["uv", "run", "main.py"]
 
 
 
