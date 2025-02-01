@@ -1,10 +1,11 @@
 .resume-container {
   min-height: calc(100vh - 150px);
   max-height: 100vh;
-  overflow: hidden;
+  overflow-y: auto;
   position: relative;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  padding-top: 7rem;
 }
 
 .resume-container::-webkit-scrollbar {
@@ -13,19 +14,17 @@
 
 .timeline {
   position: relative;
-  max-height: calc(100vh - 150px);
-  overflow-y: auto;
+  height: auto;
+  min-height: 100vh;
+  overflow-y: visible;
   padding: 20px 0;
   max-width: 1200px;
-  margin: 50px auto;
+  margin: 0 auto;
   opacity: 0;
   transform: translateY(50px);
   animation: fadeInUp 1s ease forwards;
-  height: calc(100% + 5px);
-  padding-bottom: 5px;
   -ms-overflow-style: none;
   scrollbar-width: none;
-  bottom: 0;
 }
 
 .timeline::before {
@@ -240,40 +239,45 @@
 
 /* Mobile Anpassungen */
 @media (max-width: 768px) {
-    .timeline {
-        padding-top: 2px;  /* Minimaler Abstand zur Überschrift */
-        min-height: 150vh;  /* Scrollbereich */
-        margin-bottom: 50px;  /* Zusätzlicher Platz am Ende */
-    }
+  .resume-container {
+    padding-top: 7rem;
+    height: auto;
+    overflow-y: auto;
+  }
 
-    .timeline-content {
-        width: 90%;
-        margin: 0 auto;
-        font-size: 0.9em;
-    }
+  .timeline {
+    margin-top: 0 !important;
+    min-height: auto;
+    height: auto;
+  }
 
-    .timeline-item {
-        width: 100%;
-        margin: 0 0 20px 0;
-        padding: 15px;
-        left: 0;
-    }
+  .timeline-content {
+    width: 90%;
+    margin: 0 auto;
+    font-size: 0.9em;
+  }
 
-    .timeline-item:first-child {
-        margin-top: 0;  /* Erster Kasten direkt am Start */
-    }
+  .timeline-item {
+    width: 100%;
+    margin: 0 0 20px 0;
+    padding: 15px;
+    left: 0;
+  }
 
-    .timeline-item:nth-child(odd),
-    .timeline-item:nth-child(even) {
-        left: 0;
-        animation-delay: 0s !important; /* Animation startet sofort */
-    }
+  .timeline-item:first-child {
+    margin-top: 0;
+  }
 
-    /* Timeline-Linie und Pfeil ausblenden */
-    .timeline::before,
-    .timeline::after,
-    .timeline-item::before,
-    .timeline-item::after {
-        display: none;
-    }
+  .timeline-item:nth-child(odd),
+  .timeline-item:nth-child(even) {
+    left: 0;
+    animation-delay: 0s !important;
+  }
+
+  .timeline::before,
+  .timeline::after,
+  .timeline-item::before,
+  .timeline-item::after {
+    display: none;
+  }
 }
