@@ -1,4 +1,4 @@
 davidbingmann.de {
-    reverse_proxy mywebsite_app:3000
+    reverse_proxy mywebsite_app:5001
 }
 
