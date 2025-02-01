@@ -197,7 +197,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .projects-title {
-    margin-top: 5rem;
+    margin-top: 7rem;
 }
 
 .empty-container {
@@ -237,19 +237,33 @@ h1, h2, h3, h4, h5, h6 {
 
 @media (max-width: 768px) {
     .profile-container {
-        margin-bottom: 100px;  /* Mehr Platz am Ende der Seite */
+        margin-bottom: 100px;
     }
     
     .about-me-container {
-        margin-bottom: 100px;  /* Mehr Platz am Ende der Seite */
+        margin-bottom: 100px;
     }
 
     .empty-container {
-        min-height: calc(100vh - 8rem);  /* Mehr Platz nach unten */
-        margin-bottom: 100px;  /* Zusätzlicher Platz am Ende */
+        padding-top: 2rem;
+        min-height: calc(100vh - 8rem);
+        margin-bottom: 100px;
     }
 
     .code-link {
-        display: none;  /* Blendet den Link auf mobilen Geräten aus */
+        display: none;
+    }
+
+    .btn-primary {
+        position: fixed;
+        top: 1rem;
+        left: 1rem;
+        z-index: 100;
+    }
+
+    .projects-title {
+        margin-top: 4rem;
+        width: 100%;
+        text-align: center;
     }
 }
