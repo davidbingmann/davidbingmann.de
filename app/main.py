@@ -7,12 +7,7 @@ from fh_bootstrap import Container, Image
 
 app, rt = fast_app(static_dirs=["./assets"])
 
-md = md = (
-    MarkdownIt("commonmark")
-    .enable("table")
-    .use(front_matter_plugin)
-    .use(footnote_plugin)
-)
+md = MarkdownIt("commonmark").enable("table").use(front_matter_plugin).use(footnote_plugin)
 
 fa_cfurl = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0"
 headers = (
@@ -31,50 +26,70 @@ headers = (
     Script(src="assets/toggleMenu.js"),
 )
 
+
 def render_markdown(file_path):
     with open(file_path, "r", encoding="utf-8") as f:
         content = f.read()
     return md.render(content)
 
+
 @rt("/")
 def main_page():
     return (
-        Head(headers),
-        Title("David Bingmann"),
-        Container(
-            Div(
+        (
+            Head(headers),
+            Title("David Bingmann"),
+            Container(
                 Div(
-                    I(cls="fas fa-bars hamburger-icon", onclick="toggleMenu()"),
+                    Div(
+                        I(cls="fas fa-bars hamburger-icon", onclick="toggleMenu()"),
+                    ),
+                    Div(
+                        A("Projects", href="/projects", cls="menu-item"),
+                        A("Resume", href="/resume", cls="menu-item"),
+                        cls="dropdown-menu",
+                    ),
+                    cls="menu-container",
                 ),
+                Div(Image("assets/profile_picture.jpeg"), cls="profile-picture-wrapper"),
+                Div(H1("David Bingmann"), cls="profile-name"),
                 Div(
-                    A("Projects", href="/projects", cls="menu-item"),
-                    A("Resume", href="/resume", cls="menu-item"),
-                    cls="dropdown-menu"
+                    A(
+                        I(cls="fab fa-github"),
+                        href="https://github.com/davidbingmann",
+                        cls="github-icon",
+                        target="_blank",
+                    ),
+                    A(I(cls="fab fa-x-twitter"), href="https://x.com/DavidBingmann2", cls="x-icon", target="_blank"),
+                    A(
+                        I(cls="fab fa-bluesky"),
+                        href="https://bsky.app/profile/davidbingmann.de",
+                        cls="bluesky-icon",
+                        target="_blank",
+                    ),
+                    A(
+                        I(cls="fab fa-linkedin"),
+                        href="https://www.linkedin.com/in/david-bingmann-13b897293/",
+                        cls="linkedin-icon",
+                        target="_blank",
+                    ),
+                    cls="social-container",
                 ),
-                cls="menu-container"
+                Div(NotStr(render_markdown("assets/about_me.md")), cls="about-me-container"),
+                Div(
+                    A(
+                        "Click here to view the website's code",
+                        href="https://github.com/davidbingmann/davidbingmann.de",
+                        target="_blank",
+                        cls="code-link",
+                    ),
+                    cls="footer",
+                ),
+                cls="profile-container",
             ),
-            Div(
-                Image("assets/profile_picture.jpeg"),
-                cls="profile-picture-wrapper"
-            ),
+        ),
+    )
 
-            Div(H1("David Bingmann"), cls="profile-name"),
-
-            Div(
-                A(I(cls="fab fa-github"), href="https://github.com/davidbingmann", cls="github-icon", target="_blank"),
-                A(I(cls="fab fa-x-twitter"), href="https://x.com/DavidBingmann2", cls="x-icon", target="_blank"),
-                A(I(cls="fab fa-bluesky"), href="https://bsky.app/profile/davidbingmann.de", cls="bluesky-icon", target="_blank"),
-                A(I(cls="fab fa-linkedin"), href="https://www.linkedin.com/in/david-bingmann-13b897293/", cls="linkedin-icon", target="_blank"),
-                cls="social-container"
-            ),
-
-            Div(NotStr(render_markdown("assets/about_me.md")), cls="about-me-container"),
-            Div(
-                A("Click here to view the website's code", href="https://github.com/davidbingmann/davidbingmann.de", target="_blank", cls="code-link"),
-                cls="footer"
-            ),
-            cls="profile-container")
-    ),
 
 @rt("/projects")
 def projects_page():
@@ -87,12 +102,13 @@ def projects_page():
                 H1("Projects", cls="projects-title text-center"),
                 Div(
                     P("Nothing to see here yet!", cls="empty-text text-center"),
-                    cls="empty-container d-flex justify-content-center align-items-center"
+                    cls="empty-container d-flex justify-content-center align-items-center",
                 ),
-                cls="projects-container"
+                cls="projects-container",
             )
-        )
+        ),
     )
+
 
 @rt("/resume")
 def resume_page():
@@ -100,23 +116,23 @@ def resume_page():
         {
             "year": "October 2024",
             "title": "Research Assistant at DFKI",
-            "description": "Start of my part-time job at the German Research Center for Artificial Intelligence (DFKI) alongside my studies"
+            "description": "Start of my part-time job at the German Research Center for Artificial Intelligence (DFKI) alongside my studies",
         },
         {
             "year": "October 2024",
             "title": "Start of my Bachelor's degree",
-            "description": "Start of my Bachelor's degree: Artificial Intelligence and Data Science at the University of Applied Science in Trier"
+            "description": "Start of my Bachelor's degree: Artificial Intelligence and Data Science at the University of Applied Science in Trier",
         },
         {
             "year": "May 2024",
             "title": "Internship at Tesla Automation",
-            "description": "Internship from 27/05/2024 until 07/06/2024 in Controls Engineering"
+            "description": "Internship from 27/05/2024 until 07/06/2024 in Controls Engineering",
         },
         {
             "year": "March 2024",
             "title": "Abitur",
-            "description": "Finished my Abitur at the Staatliches Eifelgymnasium in Neuerburg"
-        }
+            "description": "Finished my Abitur at the Staatliches Eifelgymnasium in Neuerburg",
+        },
     ]
 
     return (
@@ -128,24 +144,28 @@ def resume_page():
                 H1("Resume", cls="projects-title text-center"),
                 Div(
                     Div(
-                        *[Div(
+                        *[
                             Div(
                                 Div(
-                                    H3(item["title"], cls="timeline-title"),
-                                    P(item["year"], cls="timeline-year"),
-                                    P(item["description"], cls="timeline-description"),
+                                    Div(
+                                        H3(item["title"], cls="timeline-title"),
+                                        P(item["year"], cls="timeline-year"),
+                                        P(item["description"], cls="timeline-description"),
+                                    ),
+                                    cls="timeline-content",
                                 ),
-                                cls="timeline-content"
-                            ),
-                            cls="timeline-item",
-                            style=f"--item-index: {i}"
-                        ) for i, item in enumerate(timeline_items)],
-                        cls="timeline"
+                                cls="timeline-item",
+                                style=f"--item-index: {i}",
+                            )
+                            for i, item in enumerate(timeline_items)
+                        ],
+                        cls="timeline",
                     ),
-                    cls="resume-container"
-                )
+                    cls="resume-container",
+                ),
             )
-        )
+        ),
     )
+
 
 serve()
