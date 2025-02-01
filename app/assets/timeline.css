@@ -35,7 +35,7 @@
   background-color: #fff;
   top: 0;
   bottom: 0;
-  transform-origin: bottom;  /* Startpunkt unten */
+  transform-origin: bottom;
   animation: grow-line 1s ease-out forwards;
 }
 
@@ -43,12 +43,11 @@
   content: '';
   position: absolute;
   left: 50%;
-  transform: translateX(-50%) rotate(180deg);
   width: 0;
   height: 0;
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
-  border-bottom: 12px solid #fff;
+  border-top: 12px solid #fff;
   animation: move-arrow 1s ease-out forwards;
 }
 
@@ -189,9 +188,11 @@
 
 @keyframes move-arrow {
     from {
+        transform: translateX(-50%);
         bottom: 0;
     }
     to {
+        transform: translateX(-50%);
         bottom: calc(100% - 12px);
     }
 }
