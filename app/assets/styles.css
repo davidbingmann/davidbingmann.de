@@ -148,7 +148,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .footer {
-    position: fixed;
+    position: sticky;
     bottom: 0;
     left: 0;
     width: 100%;
@@ -164,7 +164,7 @@ h1, h2, h3, h4, h5, h6 {
     color: #575757;
     font-size: 0.9rem;
     text-decoration: none;
-    position: fixed;
+    position: sticky;
     bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
