@@ -37,10 +37,7 @@ def render_markdown(file_path):
 @rt("/")
 def main_page():
     return (
-        Head(
-            headers,
-            StyleX("body { overflow: hidden; }")
-        ),
+        Head(headers),
         Title("David Bingmann"),
         Container(
             Div(
