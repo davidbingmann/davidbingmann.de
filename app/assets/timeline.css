@@ -43,12 +43,14 @@
   content: '';
   position: absolute;
   left: 50%;
+  bottom: calc(100% - 12px);
   width: 0;
   height: 0;
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
-  border-top: 12px solid #fff;
-  animation: move-arrow 1s ease-out forwards;
+  border-top: 12px solid #fff;  /* Pfeil zeigt nach oben */
+  opacity: 0;
+  animation: show-arrow 0.5s ease-out 1s forwards;  /* 1s Verzögerung */
 }
 
 .timeline-item {
@@ -186,14 +188,14 @@
     }
 }
 
-@keyframes move-arrow {
-    from {
-        transform: translateX(-50%);
-        bottom: 0;
+@keyframes show-arrow {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(10px);
     }
-    to {
-        transform: translateX(-50%);
-        bottom: calc(100% - 12px);
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
     }
 }
 
