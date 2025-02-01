@@ -240,46 +240,32 @@
 
 /* Mobile Anpassungen */
 @media (max-width: 768px) {
+    /* Timeline-Linie und Pfeil ausblenden */
+    .timeline::before,
+    .timeline::after,
+    .timeline-item::before,
+    .timeline-item::after {
+        display: none;
+    }
+
     .timeline-content {
-        width: calc(100% - 60px);  /* Volle Breite minus Platz für Linie */
-        margin-left: 40px;
+        width: 90%;  /* Breite der Kästen */
+        margin: 0 auto;  /* Zentrieren */
         font-size: 0.9em;
     }
 
-    /* Alle Items untereinander */
+    /* Vertikale Anordnung */
     .timeline-item {
         width: 100%;
-        margin: 0;
-        padding: 10px 0;
+        margin: 0 0 20px 0;  /* Abstand nur nach unten */
+        padding: 15px;
+        left: 0;
     }
 
-    /* Entferne die links/rechts Positionierung */
+    /* Zurücksetzen der Desktop-Positionierung */
     .timeline-item:nth-child(even),
     .timeline-item:nth-child(odd) {
         left: 0;
         transform: none;
-    }
-
-    .timeline::before {
-        left: 20px;
-    }
-
-    .timeline::after {
-        left: 20px;
-        transform: rotate(180deg);
-    }
-
-    .timeline-item::before {
-        left: 20px;
-        width: 20px;
-        height: 2px;
-        background-color: #fff;
-        top: 50%;
-    }
-
-    .timeline-item::after {
-        left: 20px;
-        top: 50%;
-        transform: translateY(-50%);
     }
 }
