@@ -35,7 +35,7 @@
   width: 3px;
   background-color: #fff;
   top: 0;
-  bottom: -50vh;
+  bottom: -200vh;
   transform-origin: bottom;
   animation: grow-line 1s ease-out forwards;
 }
