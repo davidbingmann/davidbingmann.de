@@ -155,12 +155,18 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     background-color: transparent;
     padding: 10px 0;
+    margin-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 .code-link {
     color: #575757;
     font-size: 0.9rem;
     text-decoration: none;
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
 }
 
 .text-center {
