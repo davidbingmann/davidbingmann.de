@@ -37,53 +37,54 @@ def render_markdown(file_path):
 @rt("/")
 def main_page():
     return (
-        (
-            Head(headers),
-            Title("David Bingmann"),
-            Container(
+        Head(
+            headers,
+            StyleX("body { overflow: hidden; }")
+        ),
+        Title("David Bingmann"),
+        Container(
+            Div(
                 Div(
-                    Div(
-                        I(cls="fas fa-bars hamburger-icon", onclick="toggleMenu()"),
-                    ),
-                    Div(
-                        A("Projects", href="/projects", cls="menu-item"),
-                        A("Resume", href="/resume", cls="menu-item"),
-                        cls="dropdown-menu",
-                    ),
-                    cls="menu-container",
+                    I(cls="fas fa-bars hamburger-icon", onclick="toggleMenu()"),
                 ),
-                Div(Image("assets/profile_picture.jpeg"), cls="profile-picture-wrapper"),
-                Div(H1("David Bingmann"), cls="profile-name"),
                 Div(
-                    A(
-                        I(cls="fab fa-github"),
-                        href="https://github.com/davidbingmann",
-                        cls="github-icon",
-                        target="_blank",
-                    ),
-                    A(
-                        I(cls="fab fa-x-twitter"),
-                        href="https://x.com/DavidBingmann2",
-                        cls="x-icon",
-                        target="_blank",
-                    ),
-                    A(
-                        I(cls="fab fa-bluesky"),
-                        href="https://bsky.app/profile/davidbingmann.de",
-                        cls="bluesky-icon",
-                        target="_blank",
-                    ),
-                    A(
-                        I(cls="fab fa-linkedin"),
-                        href="https://www.linkedin.com/in/david-bingmann-13b897293/",
-                        cls="linkedin-icon",
-                        target="_blank",
-                    ),
-                    cls="social-container",
+                    A("Projects", href="/projects", cls="menu-item"),
+                    A("Resume", href="/resume", cls="menu-item"),
+                    cls="dropdown-menu",
                 ),
-                Div(NotStr(render_markdown("assets/about_me.md")), cls="about-me-container"),
-                cls="profile-container",
+                cls="menu-container",
             ),
+            Div(Image("assets/profile_picture.jpeg"), cls="profile-picture-wrapper"),
+            Div(H1("David Bingmann"), cls="profile-name"),
+            Div(
+                A(
+                    I(cls="fab fa-github"),
+                    href="https://github.com/davidbingmann",
+                    cls="github-icon",
+                    target="_blank",
+                ),
+                A(
+                    I(cls="fab fa-x-twitter"),
+                    href="https://x.com/DavidBingmann2",
+                    cls="x-icon",
+                    target="_blank",
+                ),
+                A(
+                    I(cls="fab fa-bluesky"),
+                    href="https://bsky.app/profile/davidbingmann.de",
+                    cls="bluesky-icon",
+                    target="_blank",
+                ),
+                A(
+                    I(cls="fab fa-linkedin"),
+                    href="https://www.linkedin.com/in/david-bingmann-13b897293/",
+                    cls="linkedin-icon",
+                    target="_blank",
+                ),
+                cls="social-container",
+            ),
+            Div(NotStr(render_markdown("assets/about_me.md")), cls="about-me-container"),
+            cls="profile-container",
         ),
     )
 
