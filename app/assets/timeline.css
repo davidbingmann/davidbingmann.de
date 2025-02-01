@@ -29,36 +29,27 @@
 
 .timeline::before {
   content: '';
-  position: fixed;
-  width: 0;
-  height: 0;
+  position: absolute;
   left: 50%;
+  width: 3px;
+  background-color: #fff;
   top: 0;
-  transform: translateX(-50%);
-  border-left: 12px solid transparent;
-  border-right: 12px solid transparent;
-  border-bottom: 20px solid white;
-  z-index: 2;
-  filter: drop-shadow(0 0 10px rgba(255,255,255,0.3));
-  animation: arrowUp 2s ease forwards;
-  opacity: 0;
+  bottom: 0;
+  transform-origin: bottom;  /* Startpunkt unten */
+  animation: grow-line 1s ease-out forwards;
 }
 
 .timeline::after {
   content: '';
-  position: fixed;
-  width: 8px;
-  background: white;
-  top: 20px;
-  bottom: 20px;
+  position: absolute;
   left: 50%;
-  margin-left: -4px;
-  transform: scaleY(0);
-  transform-origin: bottom;
-  animation: growLineUp 2s ease forwards;
-  box-shadow: 0 0 10px rgba(255,255,255,0.3);
-  pointer-events: none;
-  z-index: 1;
+  transform: translateX(-50%) rotate(180deg);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 12px solid #fff;
+  animation: move-arrow 1s ease-out forwards;
 }
 
 .timeline-item {
@@ -185,24 +176,24 @@
   display: block;
 }
 
-@keyframes growLineUp {
-  0% {
-    transform: scaleY(0);
-  }
-  100% {
-    transform: scaleY(1);
-  }
+@keyframes grow-line {
+    from {
+        transform: translateX(-50%) scaleY(0);
+        height: 0;
+    }
+    to {
+        transform: translateX(-50%) scaleY(1);
+        height: 100%;
+    }
 }
 
-@keyframes arrowUp {
-  0% {
-    transform: translateX(-50%) translateY(calc(100vh - 40px));
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(-50%) translateY(0);
-    opacity: 1;
-  }
+@keyframes move-arrow {
+    from {
+        bottom: 0;
+    }
+    to {
+        bottom: calc(100% - 12px);
+    }
 }
 
 @keyframes fadeInUp {
@@ -240,32 +231,35 @@
 
 /* Mobile Anpassungen */
 @media (max-width: 768px) {
+    .timeline {
+        padding-top: 30px;  /* Abstand nach der Überschrift */
+        min-height: 120vh;  /* Mehr Scrollbereich */
+    }
+
+    .timeline-content {
+        width: 90%;
+        margin: 0 auto;
+        font-size: 0.9em;
+    }
+
+    .timeline-item {
+        width: 100%;
+        margin: 0 0 20px 0;  /* Ursprünglicher Abstand zwischen Kästen */
+        padding: 15px;
+        left: 0;
+    }
+
+    .timeline-item:nth-child(even),
+    .timeline-item:nth-child(odd) {
+        left: 0;
+        transform: none;
+    }
+
     /* Timeline-Linie und Pfeil ausblenden */
     .timeline::before,
     .timeline::after,
     .timeline-item::before,
     .timeline-item::after {
         display: none;
-    }
-
-    .timeline-content {
-        width: 90%;  /* Breite der Kästen */
-        margin: 0 auto;  /* Zentrieren */
-        font-size: 0.9em;
-    }
-
-    /* Vertikale Anordnung */
-    .timeline-item {
-        width: 100%;
-        margin: 0 0 20px 0;  /* Abstand nur nach unten */
-        padding: 15px;
-        left: 0;
-    }
-
-    /* Zurücksetzen der Desktop-Positionierung */
-    .timeline-item:nth-child(even),
-    .timeline-item:nth-child(odd) {
-        left: 0;
-        transform: none;
     }
 }
