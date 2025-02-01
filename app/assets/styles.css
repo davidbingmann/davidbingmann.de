@@ -238,10 +238,6 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     .code-link {
-        position: fixed;  /* Fixiert den Link am unteren Bildschirmrand */
-        bottom: 20px;    /* Abstand vom unteren Rand */
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 1000;   /* Stellt sicher, dass der Link über anderen Elementen liegt */
+        display: none;  /* Blendet den Link auf mobilen Geräten aus */
     }
 }
