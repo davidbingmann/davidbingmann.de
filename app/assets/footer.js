@@ -1,15 +1,15 @@
-let lastScrollPosition = window.pageYOffset;
 const codeLink = document.querySelector('.code-link');
 
 window.addEventListener('scroll', () => {
-    const currentScrollPosition = window.pageYOffset;
+    // Prüfe, ob wir am Ende der Seite sind
+    const isAtBottom = window.innerHeight + window.pageYOffset >= document.documentElement.scrollHeight - 10;
     
-    // Wenn wir nach oben scrollen und nicht ganz oben sind
-    if (currentScrollPosition < lastScrollPosition && currentScrollPosition > 100) {
-        codeLink.classList.add('hidden');
-    } else {
+    if (isAtBottom) {
         codeLink.classList.remove('hidden');
+    } else {
+        codeLink.classList.add('hidden');
     }
-    
-    lastScrollPosition = currentScrollPosition;
 });
+
+// Initial ausführen
+window.dispatchEvent(new Event('scroll'));
