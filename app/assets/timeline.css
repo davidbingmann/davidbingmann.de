@@ -257,10 +257,10 @@
         margin-top: 0;  /* Erster Kasten direkt am Start */
     }
 
-    .timeline-item:nth-child(even),
-    .timeline-item:nth-child(odd) {
+    .timeline-item:nth-child(odd),
+    .timeline-item:nth-child(even) {
         left: 0;
-        transform: none;
+        animation-delay: 0s !important; /* Animation startet sofort */
     }
 
     /* Timeline-Linie und Pfeil ausblenden */
