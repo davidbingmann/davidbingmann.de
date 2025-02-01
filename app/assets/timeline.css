@@ -235,8 +235,8 @@
 /* Mobile Anpassungen */
 @media (max-width: 768px) {
     .timeline {
-        padding-top: 30px;  /* Abstand nach der Überschrift */
-        min-height: 120vh;  /* Mehr Scrollbereich */
+        padding-top: 5px;
+        min-height: 200vh;  /* Deutlich mehr Scrollbereich */
     }
 
     .timeline-content {
@@ -247,7 +247,7 @@
 
     .timeline-item {
         width: 100%;
-        margin: 0 0 20px 0;  /* Ursprünglicher Abstand zwischen Kästen */
+        margin: 0 0 20px 0;
         padding: 15px;
         left: 0;
     }
