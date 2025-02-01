@@ -166,4 +166,4 @@ def resume_page():
     )
 
 
-serve()
+serve() #start of the website
