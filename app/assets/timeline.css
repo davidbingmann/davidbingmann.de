@@ -236,7 +236,7 @@
 @media (max-width: 768px) {
     .timeline {
         padding-top: 5px;
-        min-height: 200vh;  /* Deutlich mehr Scrollbereich */
+        min-height: 500vh;  /* Deutlich mehr Scrollbereich */
     }
 
     .timeline-content {
