@@ -34,8 +34,8 @@
   left: 50%;
   width: 3px;
   background-color: #fff;
-  bottom: 0;
   top: 0;
+  bottom: -50vh;
   transform-origin: bottom;
   animation: grow-line 1s ease-out forwards;
 }
@@ -167,7 +167,7 @@
 @keyframes grow-line {
     from {
         transform: translateX(-50%) scaleY(0);
-        height: 0;
+        height: .50;
     }
     to {
         transform: translateX(-50%) scaleY(1);
