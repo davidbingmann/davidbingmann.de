@@ -164,11 +164,14 @@ h1, h2, h3, h4, h5, h6 {
     color: #575757;
     font-size: 0.9rem;
     text-decoration: none;
-    position: sticky;
-    bottom: 10px;
+    position: fixed;
+    bottom: 5px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 10;
+    background-color: #333333;
+    padding: 5px 10px;
+    border-radius: 5px;
 }
 
 .text-center {
