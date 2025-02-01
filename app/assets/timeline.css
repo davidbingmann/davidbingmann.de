@@ -237,3 +237,48 @@
     transform: translateX(0);
   }
 }
+
+/* Mobile Anpassungen */
+@media (max-width: 768px) {
+    .timeline-content {
+        width: 90%;
+        margin-left: 40px;  /* Abstand von der Linie */
+        font-size: 0.9em;
+    }
+
+    .timeline::before {
+        left: 20px;
+    }
+
+    .timeline::after {
+        left: 20px;
+        transform: rotate(180deg);
+    }
+
+    .timeline-item {
+        padding: 10px;  /* Padding verkleinern */
+    }
+
+    /* Abstände zwischen Items verkleinern */
+    .timeline-item:not(:last-child) {
+        margin-bottom: 20px;
+    }
+
+    /* Verbindungslinien anpassen */
+    .timeline-item::before {
+        content: '';
+        position: absolute;
+        left: 20px;  /* Gleiche Position wie Hauptlinie */
+        width: 20px;  /* Länge der horizontalen Linie */
+        height: 2px;
+        background-color: #fff;
+        top: 50%;  /* Mittig zum Kasten */
+    }
+
+    /* Punkt an der Verbindungslinie */
+    .timeline-item::after {
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+}
