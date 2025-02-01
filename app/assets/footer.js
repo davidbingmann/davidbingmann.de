@@ -1,5 +1,7 @@
 const codeLink = document.querySelector('.code-link');
 
+let lastScrollPosition = window.pageYOffset;
+
 // Funktion zum Überprüfen der Scroll-Position
 function checkScroll() {
     const scrollPosition = window.pageYOffset;
@@ -12,6 +14,13 @@ function checkScroll() {
     } else {
         codeLink.classList.remove('visible');
     }
+
+    // Blende den Link aus, wenn nach oben gescrollt wird
+    if (scrollPosition < lastScrollPosition) {
+        codeLink.classList.remove('visible');
+    }
+
+    lastScrollPosition = scrollPosition;
 }
 
 // Event Listener für Scroll-Events
