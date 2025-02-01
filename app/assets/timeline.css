@@ -241,9 +241,23 @@
 /* Mobile Anpassungen */
 @media (max-width: 768px) {
     .timeline-content {
-        width: 90%;
-        margin-left: 40px;  /* Abstand von der Linie */
+        width: calc(100% - 60px);  /* Volle Breite minus Platz für Linie */
+        margin-left: 40px;
         font-size: 0.9em;
+    }
+
+    /* Alle Items untereinander */
+    .timeline-item {
+        width: 100%;
+        margin: 0;
+        padding: 10px 0;
+    }
+
+    /* Entferne die links/rechts Positionierung */
+    .timeline-item:nth-child(even),
+    .timeline-item:nth-child(odd) {
+        left: 0;
+        transform: none;
     }
 
     .timeline::before {
@@ -255,27 +269,14 @@
         transform: rotate(180deg);
     }
 
-    .timeline-item {
-        padding: 10px;  /* Padding verkleinern */
-    }
-
-    /* Abstände zwischen Items verkleinern */
-    .timeline-item:not(:last-child) {
-        margin-bottom: 20px;
-    }
-
-    /* Verbindungslinien anpassen */
     .timeline-item::before {
-        content: '';
-        position: absolute;
-        left: 20px;  /* Gleiche Position wie Hauptlinie */
-        width: 20px;  /* Länge der horizontalen Linie */
+        left: 20px;
+        width: 20px;
         height: 2px;
         background-color: #fff;
-        top: 50%;  /* Mittig zum Kasten */
+        top: 50%;
     }
 
-    /* Punkt an der Verbindungslinie */
     .timeline-item::after {
         left: 20px;
         top: 50%;
