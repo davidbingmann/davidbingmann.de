@@ -222,3 +222,26 @@ h1, h2, h3, h4, h5, h6 {
     content: "← ";
     font-size: 1.1em;
 }
+
+@media (max-width: 768px) {
+    .profile-container {
+        margin-bottom: 100px;  /* Mehr Platz am Ende der Seite */
+    }
+    
+    .about-me-container {
+        margin-bottom: 100px;  /* Mehr Platz am Ende der Seite */
+    }
+
+    .empty-container {
+        min-height: calc(100vh - 8rem);  /* Mehr Platz nach unten */
+        margin-bottom: 100px;  /* Zusätzlicher Platz am Ende */
+    }
+
+    .code-link {
+        position: fixed;  /* Fixiert den Link am unteren Bildschirmrand */
+        bottom: 20px;    /* Abstand vom unteren Rand */
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;   /* Stellt sicher, dass der Link über anderen Elementen liegt */
+    }
+}
