@@ -35,10 +35,21 @@
   width: 3px;
   background-color: #fff;
   top: 0;
-  height: 150%;
+  height: 300%;
   transform-origin: top;
   transform: translateX(-50%);
   animation: grow-line 1s ease-out forwards;
+}
+
+.timeline::after {
+  content: '▲';  /* Unicode Dreieck */
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%) translateY(-50%);
+  color: #fff;
+  font-size: 12px;
+  animation: fadeIn 1s ease-out forwards;
 }
 
 .timeline-item {
@@ -215,6 +226,15 @@
   to {
     opacity: 1;
     transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 
