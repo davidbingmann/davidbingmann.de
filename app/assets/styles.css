@@ -258,12 +258,29 @@ h1, h2, h3, h4, h5, h6 {
         position: fixed;
         top: 1rem;
         left: 1rem;
-        z-index: 100;
+        z-index: 1001;
+        background-color: #333333;
     }
 
-    .projects-title {
-        margin-top: 4rem;
-        width: 100%;
+    .projects-title, 
+    h1.projects-title {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background-color: #1a1a1a;
+        margin: 0;
+        padding: 1rem;
+        padding-top: 3rem;
+        z-index: 1000;
         text-align: center;
+    }
+
+    .timeline {
+        margin-top: 7rem !important;
+    }
+
+    .resume-container {
+        padding-top: 2rem;
     }
 }
