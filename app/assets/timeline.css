@@ -35,7 +35,7 @@
   width: 3px;
   background-color: #fff;
   top: 0;
-  height: 300%;
+  height: 100%;
   transform-origin: top;
   transform: translateX(-50%);
   animation: grow-line 1s ease-out forwards;
