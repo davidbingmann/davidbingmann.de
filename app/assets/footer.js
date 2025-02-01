@@ -8,9 +8,9 @@ function checkScroll() {
     
     // Zeige Link nur an, wenn wir fast am Ende der Seite sind
     if (scrollPosition + windowHeight >= documentHeight - 20) {
-        codeLink.classList.remove('hidden');
+        codeLink.classList.add('visible');
     } else {
-        codeLink.classList.add('hidden');
+        codeLink.classList.remove('visible');
     }
 }
 
