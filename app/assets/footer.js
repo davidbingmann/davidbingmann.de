@@ -5,8 +5,8 @@ function checkScroll() {
     const windowHeight = window.innerHeight;
     const documentHeight = document.documentElement.scrollHeight;
 
-    // Zeige Link nur an, wenn wir fast am Ende der Seite sind
-    if (scrollPosition + windowHeight >= documentHeight - 20) {
+    // Zeige Link nur an, wenn wir genau am Ende der Seite sind
+    if (scrollPosition + windowHeight >= documentHeight) {
         codeLink.classList.add('visible');
     } else {
         codeLink.classList.remove('visible');
@@ -14,4 +14,4 @@ function checkScroll() {
 }
 
 window.addEventListener('scroll', checkScroll);
-checkScroll(); // Initial Check
+checkScroll(); // Initialer Check
