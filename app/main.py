@@ -24,6 +24,7 @@ headers = (
     Meta(name="viewport", content="width=device-width, initial-scale=1, viewport-fit=cover"),
     Meta(charset="utf-8"),
     Script(src="assets/toggleMenu.js"),
+    Script(src="assets/footer.js"),
 )
 
 
