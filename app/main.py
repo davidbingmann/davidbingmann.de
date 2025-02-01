@@ -61,7 +61,12 @@ def main_page():
                         cls="github-icon",
                         target="_blank",
                     ),
-                    A(I(cls="fab fa-x-twitter"), href="https://x.com/DavidBingmann2", cls="x-icon", target="_blank"),
+                    A(
+                        I(cls="fab fa-x-twitter"),
+                        href="https://x.com/DavidBingmann2",
+                        cls="x-icon",
+                        target="_blank",
+                    ),
                     A(
                         I(cls="fab fa-bluesky"),
                         href="https://bsky.app/profile/davidbingmann.de",
@@ -77,15 +82,6 @@ def main_page():
                     cls="social-container",
                 ),
                 Div(NotStr(render_markdown("assets/about_me.md")), cls="about-me-container"),
-                Div(
-                    A(
-                        "Click here to view the website's code",
-                        href="https://github.com/davidbingmann/davidbingmann.de",
-                        target="_blank",
-                        cls="code-link",
-                    ),
-                    cls="footer",
-                ),
                 cls="profile-container",
             ),
         ),
