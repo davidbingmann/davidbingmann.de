@@ -1,15 +1,21 @@
 const codeLink = document.querySelector('.code-link');
 
-window.addEventListener('scroll', () => {
-    // Prüfe, ob wir am Ende der Seite sind
-    const isAtBottom = window.innerHeight + window.pageYOffset >= document.documentElement.scrollHeight - 10;
+// Funktion zum Überprüfen der Scroll-Position
+function checkScroll() {
+    const scrollPosition = window.pageYOffset;
+    const windowHeight = window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight;
     
-    if (isAtBottom) {
+    // Zeige Link nur an, wenn wir fast am Ende der Seite sind
+    if (scrollPosition + windowHeight >= documentHeight - 20) {
         codeLink.classList.remove('hidden');
     } else {
         codeLink.classList.add('hidden');
     }
-});
+}
+
+// Event Listener für Scroll-Events
+window.addEventListener('scroll', checkScroll);
 
 // Initial ausführen
-window.dispatchEvent(new Event('scroll'));
+checkScroll();
