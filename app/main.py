@@ -61,12 +61,6 @@ def main_page():
                     target="_blank",
                 ),
                 A(
-                    I(cls="fab fa-x-twitter"),
-                    href="https://x.com/DavidBingmann2",
-                    cls="x-icon",
-                    target="_blank",
-                ),
-                A(
                     I(cls="fab fa-bluesky"),
                     href="https://bsky.app/profile/davidbingmann.de",
                     cls="bluesky-icon",
