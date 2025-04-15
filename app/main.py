@@ -72,6 +72,12 @@ def main_page():
                     cls="linkedin-icon",
                     target="_blank",
                 ),
+                A(
+                    I(cls="fab fa-x-twitter"),
+                    href="https://x.com/DavidBingmann2",
+                    cls="x-icon",
+                    target="_blank",
+                ),
                 cls="social-container",
             ),
             Div(NotStr(render_markdown("assets/about_me.md")), cls="about-me-container"),
