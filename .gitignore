@@ -16,3 +16,6 @@ venv/
 
 # MacOS
 .DS_Store
+
+# FastHTML Session Keys
+app/.sesskey

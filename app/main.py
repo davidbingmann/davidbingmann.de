@@ -4,6 +4,7 @@ from markdown_it import MarkdownIt
 from mdit_py_plugins.front_matter import front_matter_plugin
 from mdit_py_plugins.footnote import footnote_plugin
 from fh_bootstrap import Container, Image
+import os
 
 app, rt = fast_app(static_dirs=["./assets"])
 
@@ -17,7 +18,7 @@ headers = (
         rel="stylesheet",
         type="text/css",
     ),
-    StyleX("assets/styles.css"),
+    Link(rel="stylesheet", href="assets/styles.css"),
     Script(src="https://unpkg.com/htmx.org@next/dist/htmx.min.js"),
     *HighlightJS(langs=["python", "html", "yaml", "bash", "sh", "powershell", "dockerfile"], dark="a11y-dark"),
     Favicon("/assets/favicon.ico", "/assets/favicon.ico"),
@@ -29,7 +30,10 @@ headers = (
 
 
 def render_markdown(file_path):
-    with open(file_path, "r", encoding="utf-8") as f:
+    """Render markdown file to HTML"""
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    full_path = os.path.join(script_dir, file_path)
+    with open(full_path, "r", encoding="utf-8") as f:
         content = f.read()
     return md.render(content)
 
@@ -109,6 +113,11 @@ def projects_page():
 def resume_page():
     timeline_items = [
         {
+            "year": "October 2025",
+            "title": "Switch to University of Trier",
+            "description": "Switch to the University of Trier to study Business Informatics and Artificial Intelligence",
+        },
+        {
             "year": "October 2024",
             "title": "Research Assistant at DFKI",
             "description": "Start of my part-time job at the German Research Center for Artificial Intelligence (DFKI) alongside my studies",
@@ -116,7 +125,7 @@ def resume_page():
         {
             "year": "October 2024",
             "title": "Start of my Bachelor's degree",
-            "description": "Start of my Bachelor's degree: Artificial Intelligence and Data Science at the University of Applied Science in Trier",
+            "description": "Start of my Bachelor's degree: Artificial Intelligence and Data Science at the University of Applied Sciences in Trier",
         },
         {
             "year": "May 2024",
@@ -131,7 +140,7 @@ def resume_page():
     ]
 
     return (
-        Head(*headers, StyleX("assets/timeline.css")),
+        Head(*headers, Link(rel="stylesheet", href="assets/timeline.css")),
         Title("Resume - David Bingmann"),
         Container(
             Div(
@@ -163,4 +172,4 @@ def resume_page():
     )
 
 
-serve() #start of the website
+serve()  # start of the website
