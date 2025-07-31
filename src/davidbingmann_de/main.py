@@ -18,15 +18,14 @@ headers = (
         rel="stylesheet",
         type="text/css",
     ),
-    Link(rel="stylesheet", href="assets/styles.css"),
+    Link(rel="stylesheet", href="/assets/styles.css"),
     Script(src="https://unpkg.com/htmx.org@next/dist/htmx.min.js"),
     *HighlightJS(langs=["python", "html", "yaml", "bash", "sh", "powershell", "dockerfile"], dark="a11y-dark"),
     Link(rel="icon", type="image/x-icon", href="/assets/favicon.ico"),
-    Link(rel="shortcut icon", type="image/x-icon", href="/assets/favicon.ico"),
     Meta(name="viewport", content="width=device-width, initial-scale=1, viewport-fit=cover"),
     Meta(charset="utf-8"),
-    Script(src="assets/toggleMenu.js"),
-    Script(src="assets/footer.js"),
+    Script(src="/assets/toggleMenu.js"),
+    Script(src="/assets/footer.js"),
 )
 
 
@@ -56,7 +55,7 @@ def main_page():
                 ),
                 cls="menu-container",
             ),
-            Div(Image("assets/profile_picture.jpeg"), cls="profile-picture-wrapper"),
+            Div(Image("/assets/profile_picture.jpeg"), cls="profile-picture-wrapper"),
             Div(H1("David Bingmann"), cls="profile-name"),
             Div(
                 A(
@@ -129,7 +128,7 @@ def resume_page():
     ]
 
     return (
-        Head(*headers, Link(rel="stylesheet", href="assets/timeline.css")),
+        Head(*headers, Link(rel="stylesheet", href="/assets/timeline.css")),
         Title("Resume - David Bingmann"),
         Container(
             Div(
