@@ -18,4 +18,4 @@ ADD . /app
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen
 
-CMD ["uv", "run", "main.py"]
+CMD ["uv", "run", "src/davidbingmann_de/main.py"]
