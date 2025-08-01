@@ -70,6 +70,18 @@ def main_page():
                     cls="linkedin-icon",
                     target="_blank",
                 ),
+                A(
+                    I(cls="fab fa-x-twitter"),
+                    href="https://x.com/davidbingmann",
+                    cls="x-icon",
+                    target="_blank",
+                ),
+                A(
+                    I(cls="fab fa-bluesky"),
+                    href="https://bsky.app/profile/davidbingmann.de",
+                    cls="bluesky-icon",
+                    target="_blank",
+                ),
                 cls="social-container",
             ),
             Div(NotStr(render_markdown("assets/about_me.md")), cls="about-me-container"),
