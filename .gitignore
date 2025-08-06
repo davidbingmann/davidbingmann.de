@@ -22,3 +22,6 @@ venv/
 
 # FastHTML Session Keys
 app/.sesskey
+
+# Claude Code
+CLAUDE.md
