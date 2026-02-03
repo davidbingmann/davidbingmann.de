@@ -10,14 +10,8 @@ app, rt = fast_app(static_dirs=["./assets"])
 
 md = MarkdownIt("commonmark").enable("table").use(front_matter_plugin).use(footnote_plugin)
 
-fa_cfurl = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0"
 headers = (
-    Link(href=f"{fa_cfurl}/css/all.min.css", rel="stylesheet"),
-    Link(
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css",
-        rel="stylesheet",
-        type="text/css",
-    ),
+    Link(rel="stylesheet", href="/assets/fontawesome/css/all.min.css"),
     Link(rel="stylesheet", href="/assets/styles.css"),
     Script(src="https://unpkg.com/htmx.org@next/dist/htmx.min.js"),
     *HighlightJS(langs=["python", "html", "yaml", "bash", "sh", "powershell", "dockerfile"], dark="a11y-dark"),
