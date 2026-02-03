@@ -25,3 +25,8 @@ app/.sesskey
 
 # Claude Code
 CLAUDE.md
+
+# Node
+node_modules/
+dist/
+npm-debug.log*

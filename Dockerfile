@@ -1,22 +1,12 @@
-FROM ghcr.io/astral-sh/uv:python3.13-bookworm-slim
+FROM node:20-alpine
 
 WORKDIR /app
 
-ENV UV_LINK_MODE=copy \
-    UV_COMPILE_BYTECODE=1 \
-    UV_PYTHON_DOWNLOADS=never \
-    UV_PYTHON=python3.13 \
-    PYTHONPATH=/app
+COPY package.json package-lock.json* ./
+RUN npm install
 
-RUN --mount=type=cache,target=/root/.cache/uv \
-    --mount=type=bind,source=uv.lock,target=uv.lock \
-    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    uv sync --frozen --no-install-project
+COPY . .
+RUN npm run build
 
-ADD . /app
-
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen
-
-WORKDIR /app/src/davidbingmann_de
-CMD ["uv", "run", "main.py"]
+EXPOSE 5001
+CMD ["npm", "run", "preview"]

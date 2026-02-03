@@ -1,28 +1,40 @@
 # davidbingmann.de
 
-A personal website built with Python FastHTML, showcasing my profile, projects, and resume.
+A personal website built with React + Vite, showcasing my profile, projects, and resume.
 
 ## ✨ Features
 
-- **Responsive Design**: Mobile-first approach with hamburger menu navigation
+- **Responsive Design**: Minimal, mono-inspired layout with subtle motion
 - **Social Media Integration**: Links to GitHub, LinkedIn, X/Twitter, and Bluesky
-- **Dynamic Content**: Markdown-based content management with syntax highlighting
 - **Interactive Timeline**: Visual resume presentation
-- **Modern Tech Stack**: FastHTML, Bootstrap, HTMX for optimal performance
+- **Modern Visual Style**: Full-bleed hero, soft gradients, and clean typography
+- **Containerized Deployment**: Docker & Docker Compose
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
-- Python 3.13+
-- [uv](https://github.com/astral-sh/uv) package manager
+- Node.js 20+
+- npm
+
+### Development
+
+```bash
+npm install
+npm run dev
+```
+
+### Production Preview
+
+```bash
+npm run build
+npm run preview
+```
 
 ## 🔧 Tech Stack
 
-- **Backend**: [FastHTML](https://fastht.ml/) - Modern Python web framework
-- **Frontend**: Bootstrap 5, Font Awesome, HTMX
-- **Content**: Markdown with frontmatter support
+- **Frontend**: React, Vite
+- **UI**: Custom CSS
+- **Routing**: React Router
 - **Containerization**: Docker & Docker Compose
 - **Web Server**: Caddy (reverse proxy)
-- **Code Quality**: Ruff (linting and formatting)
-- **Package Management**: uv
