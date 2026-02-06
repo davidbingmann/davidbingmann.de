@@ -428,7 +428,12 @@ p {
   }
 
   .hero-content {
+    animation: none;
     padding: 0 1.25rem 2rem;
+  }
+
+  .hero-command .prompt {
+    transition: none;
   }
 
   .section-body {
@@ -440,7 +445,9 @@ p {
   }
 
   .timeline-item {
-    animation-delay: 0ms !important;
+    opacity: 1;
+    transform: none;
+    animation: none;
   }
 }
 
