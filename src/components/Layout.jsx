@@ -38,6 +38,8 @@ const socialLinks = [
 ];
 
 export default function Layout() {
+  const currentYear = new Date().getFullYear();
+
   return (
     <div className="shell">
       <header className="header">
@@ -76,6 +78,9 @@ export default function Layout() {
             </a>
           ))}
         </div>
+        <NavLink className="footer-impressum" to="/impressum">
+          Impressum (c) {currentYear} David Bingmann
+        </NavLink>
       </footer>
     </div>
   );

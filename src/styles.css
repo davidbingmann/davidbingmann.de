@@ -172,6 +172,16 @@ p {
   box-shadow: 0 20px 40px rgba(21, 20, 18, 0.05);
 }
 
+.section-body h2 {
+  margin: 2rem 0 0.75rem;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+}
+
+.section-body h2:first-child {
+  margin-top: 0;
+}
+
 .section-body a {
   color: var(--text);
   border-bottom: 1px solid var(--text);
@@ -257,6 +267,9 @@ p {
 .footer {
   width: min(900px, 100%);
   padding: 3rem 1.5rem 2.5rem;
+  display: grid;
+  justify-items: center;
+  gap: 1.25rem;
 }
 
 .footer-links {
@@ -267,6 +280,21 @@ p {
   font-size: 0.85rem;
   color: var(--muted);
   text-transform: lowercase;
+}
+
+.footer-impressum {
+  color: var(--muted);
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.footer-impressum:hover,
+.footer-impressum:focus-visible {
+  color: var(--text);
+  border-color: var(--text);
 }
 
 .footer-links a {
