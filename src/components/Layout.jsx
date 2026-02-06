@@ -1,8 +1,6 @@
 import { NavLink, Outlet } from 'react-router-dom';
-import githubIcon from '../assets/icons/github.svg';
-import linkedinIcon from '../assets/icons/linkedin.svg';
-import xIcon from '../assets/icons/x.svg';
-import mailIcon from '../assets/icons/mail.svg';
+import { FaEnvelope, FaGithub, FaLinkedinIn } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 
 const navItems = [
   { to: '/', label: 'home' },
@@ -14,25 +12,25 @@ const socialLinks = [
   {
     label: 'LinkedIn',
     href: 'https://www.linkedin.com/in/david-bingmann-13b897293/',
-    icon: linkedinIcon,
+    Icon: FaLinkedinIn,
     external: true,
   },
   {
     label: 'Mail',
     href: 'mailto:contact@davidbingmann.de',
-    icon: mailIcon,
+    Icon: FaEnvelope,
     external: false,
   },
   {
     label: 'GitHub',
     href: 'https://github.com/davidbingmann',
-    icon: githubIcon,
+    Icon: FaGithub,
     external: true,
   },
   {
     label: 'X',
     href: 'https://x.com/davidbingmann',
-    icon: xIcon,
+    Icon: FaXTwitter,
     external: true,
   },
 ];
@@ -73,14 +71,7 @@ export default function Layout() {
               rel={link.external ? 'noreferrer' : undefined}
               aria-label={link.label}
             >
-              <span
-                className="footer-icon"
-                aria-hidden="true"
-                style={{
-                  WebkitMaskImage: `url(${link.icon})`,
-                  maskImage: `url(${link.icon})`,
-                }}
-              />
+              <link.Icon className="footer-icon" aria-hidden="true" focusable="false" />
               <span className="sr-only">{link.label}</span>
             </a>
           ))}
