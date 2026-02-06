@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -10,20 +10,6 @@
       href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap"
       rel="stylesheet"
     />
-    <script>
-      (() => {
-        try {
-          const stored = localStorage.getItem('theme');
-          const resolved =
-            stored === 'dark' || stored === 'light'
-              ? stored
-              : window.matchMedia?.('(prefers-color-scheme: dark)').matches
-                ? 'dark'
-                : 'light';
-          document.documentElement.dataset.theme = resolved;
-        } catch {}
-      })();
-    </script>
     <title>David Bingmann</title>
   </head>
   <body>

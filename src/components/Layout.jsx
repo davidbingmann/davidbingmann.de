@@ -3,7 +3,6 @@ import githubIcon from '../assets/icons/github.svg';
 import linkedinIcon from '../assets/icons/linkedin.svg';
 import xIcon from '../assets/icons/x.svg';
 import mailIcon from '../assets/icons/mail.svg';
-import { useTheme } from '../hooks/useTheme.js';
 
 const navItems = [
   { to: '/', label: 'home' },
@@ -40,37 +39,23 @@ const socialLinks = [
 
 export default function Layout() {
   const currentYear = new Date().getFullYear();
-  const { theme, toggleTheme } = useTheme();
 
   return (
     <div className="shell">
       <header className="header">
-        <div className="header-row">
-          <nav className="nav-tabs" aria-label="Main navigation">
-            {navItems.map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                className={({ isActive }) =>
-                  `nav-link${isActive ? ' nav-link--active' : ''}`
-                }
-              >
-                {item.label}
-              </NavLink>
-            ))}
-          </nav>
-
-          <button
-            type="button"
-            className="theme-toggle"
-            onClick={toggleTheme}
-            aria-pressed={theme === 'dark'}
-            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-            title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-          >
-            theme: {theme}
-          </button>
-        </div>
+        <nav className="nav-tabs" aria-label="Main navigation">
+          {navItems.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              className={({ isActive }) =>
+                `nav-link${isActive ? ' nav-link--active' : ''}`
+              }
+            >
+              {item.label}
+            </NavLink>
+          ))}
+        </nav>
         <div className="nav-divider" />
       </header>
 
