@@ -1,5 +1,6 @@
 :root {
   color-scheme: light;
+  --page-gutter: 1.5rem;
   --bg: #f5f3ee;
   --bg-top: #ffffff;
   --surface: #ffffff;
@@ -31,6 +32,7 @@
 body {
   margin: 0;
   min-height: 100vh;
+  min-height: 100svh;
   font-family: 'Space Mono', monospace;
   color: var(--text);
   background: radial-gradient(circle at top, var(--bg-top) 0%, var(--bg) 55%);
@@ -62,6 +64,7 @@ p {
 
 .shell {
   min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -69,7 +72,10 @@ p {
 
 .header {
   width: 100%;
-  padding: 2.5rem 1.5rem 0;
+  padding-top: 2.5rem;
+  padding-bottom: 0;
+  padding-left: calc(var(--page-gutter) + env(safe-area-inset-left, 0px));
+  padding-right: calc(var(--page-gutter) + env(safe-area-inset-right, 0px));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -87,12 +93,11 @@ p {
 
 .nav-link {
   color: var(--muted);
-  padding-bottom: 0.5rem;
+  padding: 0.65rem 0.35rem 0.5rem;
   border-bottom: 2px solid transparent;
   transition: color 0.2s ease, border-color 0.2s ease;
 }
 
-.nav-link:hover,
 .nav-link--active {
   color: var(--text);
   border-color: var(--accent);
@@ -107,7 +112,10 @@ p {
 
 .main {
   width: min(900px, 100%);
-  padding: 0 1.5rem 4rem;
+  padding-top: 0;
+  padding-bottom: 4rem;
+  padding-left: calc(var(--page-gutter) + env(safe-area-inset-left, 0px));
+  padding-right: calc(var(--page-gutter) + env(safe-area-inset-right, 0px));
 }
 
 .hero {
@@ -115,9 +123,9 @@ p {
   max-width: 900px;
   margin: 0 auto;
   height: 70vh;
+  height: 70svh;
   min-height: 420px;
-  background-size: cover;
-  background-position: center;
+  background: #0b0b0b;
   position: relative;
   display: flex;
   align-items: flex-end;
@@ -127,15 +135,26 @@ p {
   overflow: hidden;
 }
 
+.hero-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 30%;
+  pointer-events: none;
+}
+
 .hero-overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.55) 70%);
+  z-index: 1;
 }
 
 .hero-content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   text-align: center;
   padding: 0 1.5rem 2.5rem;
   animation: fadeUp 0.8s ease forwards;
@@ -229,10 +248,6 @@ p {
   transition: color 0.2s ease;
 }
 
-.social-links a:hover {
-  color: var(--text);
-}
-
 .empty-note {
   padding: 2rem;
   border: 1px dashed var(--line);
@@ -283,7 +298,10 @@ p {
 
 .footer {
   width: min(900px, 100%);
-  padding: 3rem 1.5rem 2.5rem;
+  padding-top: 3rem;
+  padding-bottom: 2.5rem;
+  padding-left: calc(var(--page-gutter) + env(safe-area-inset-left, 0px));
+  padding-right: calc(var(--page-gutter) + env(safe-area-inset-right, 0px));
   display: grid;
   justify-items: center;
   gap: 1.25rem;
@@ -308,7 +326,6 @@ p {
   transition: color 0.2s ease, border-color 0.2s ease;
 }
 
-.footer-impressum:hover,
 .footer-impressum:focus-visible {
   color: var(--text);
   border-color: var(--text);
@@ -323,11 +340,6 @@ p {
   height: 34px;
   border-radius: 999px;
   transition: color 0.2s ease, background-color 0.2s ease;
-}
-
-.footer-links a:hover {
-  color: var(--text);
-  background-color: var(--hover);
 }
 
 .footer-icon {
@@ -370,10 +382,57 @@ p {
   }
 }
 
+@media (hover: hover) {
+  .nav-link:hover {
+    color: var(--text);
+    border-color: var(--accent);
+  }
+
+  .social-links a:hover {
+    color: var(--text);
+  }
+
+  .footer-impressum:hover {
+    color: var(--text);
+    border-color: var(--text);
+  }
+
+  .footer-links a:hover {
+    color: var(--text);
+    background-color: var(--hover);
+  }
+}
+
 @media (max-width: 720px) {
+  :root {
+    --page-gutter: 1.1rem;
+  }
+
+  .header {
+    padding-top: 1.75rem;
+  }
+
+  .nav-tabs {
+    gap: 1.25rem 1.75rem;
+  }
+
   .hero {
-    height: 60vh;
+    height: 58vh;
+    height: 58svh;
     min-height: 320px;
+    border-radius: 14px;
+  }
+
+  .hero-image {
+    object-position: 50% 24%;
+  }
+
+  .hero-command {
+    font-size: clamp(2rem, 9vw, 3rem);
+  }
+
+  .hero-content {
+    padding: 0 1.25rem 2rem;
   }
 
   .section-body {
@@ -382,6 +441,33 @@ p {
 
   .timeline {
     padding-left: 1rem;
+  }
+
+  .timeline-item {
+    animation-delay: 0ms !important;
+  }
+}
+
+@media (max-width: 420px) {
+  :root {
+    --page-gutter: 0.95rem;
+  }
+
+  .hero-command {
+    font-size: clamp(1.85rem, 10vw, 2.6rem);
+  }
+
+  .hero-command .path {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .section {
+    padding-top: 2.25rem;
+  }
+
+  .section-body {
+    padding: 1.25rem;
   }
 }
 

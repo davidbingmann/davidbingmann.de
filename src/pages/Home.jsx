@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import profilePicture from '../assets/profile_picture.jpeg';
+import profilePicture800 from '../assets/profile_picture_800.jpeg';
+import profilePicture1200 from '../assets/profile_picture_1200.jpeg';
+import profilePicture2000 from '../assets/profile_picture_2000.jpeg';
 
 export default function Home() {
   const [typedCount, setTypedCount] = useState(0);
   const [hidePrompt, setHidePrompt] = useState(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
   const promptRef = useRef(null);
   const [promptWidth, setPromptWidth] = useState(0);
 
@@ -22,7 +25,22 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    let hideTimer;
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const handleMotionChange = () => setReduceMotion(motionQuery.matches);
+
+    handleMotionChange();
+    motionQuery.addEventListener('change', handleMotionChange);
+
+    return () => motionQuery.removeEventListener('change', handleMotionChange);
+  }, []);
+
+  useEffect(() => {
+    if (reduceMotion) {
+      setTypedCount(totalLength);
+      setHidePrompt(true);
+      return undefined;
+    }
+
     const timer = setInterval(() => {
       setTypedCount((current) => {
         if (current >= totalLength) {
@@ -34,19 +52,20 @@ export default function Home() {
 
     return () => {
       clearInterval(timer);
-      if (hideTimer) {
-        clearTimeout(hideTimer);
-      }
     };
-  }, [totalLength]);
+  }, [reduceMotion, totalLength]);
 
   useEffect(() => {
+    if (reduceMotion) {
+      return undefined;
+    }
+
     if (typedCount === totalLength) {
       const timer = setTimeout(() => setHidePrompt(true), 500);
       return () => clearTimeout(timer);
     }
     return undefined;
-  }, [typedCount, totalLength]);
+  }, [reduceMotion, typedCount, totalLength]);
 
   useEffect(() => {
     if (promptText.length === fullPrompt.length && promptRef.current) {
@@ -56,10 +75,16 @@ export default function Home() {
 
   return (
     <div className="home">
-      <section
-        className="hero"
-        style={{ backgroundImage: `url(${profilePicture})` }}
-      >
+      <section className="hero">
+        <img
+          className="hero-image"
+          src={profilePicture1200}
+          srcSet={`${profilePicture800} 722w, ${profilePicture1200} 1083w, ${profilePicture2000} 1806w`}
+          sizes="(max-width: 900px) calc(100vw - 2rem), 852px"
+          alt="Portrait of David Bingmann"
+          decoding="async"
+          fetchPriority="high"
+        />
         <div className="hero-overlay" />
         <div className="hero-content">
           <div className="hero-command">
