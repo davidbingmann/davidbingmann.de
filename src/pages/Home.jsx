@@ -130,7 +130,7 @@ export default function Home() {
             </span>
             <span className="path">{pathText}</span>
           </div>
-          <div className="hero-tagline">bachelor student</div>
+          <div className="hero-tagline">Bachelor&rsquo;s student</div>
         </div>
       </section>
 
