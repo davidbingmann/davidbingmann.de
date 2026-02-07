@@ -169,6 +169,16 @@ p {
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
 }
 
+.hero-tagline {
+  margin-top: 0.85rem;
+  font-size: clamp(1.05rem, 2.2vw, 1.4rem);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
+  opacity: 0.9;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+
 .hero-command .prompt {
   display: inline-block;
   overflow: hidden;
@@ -427,6 +437,11 @@ p {
     font-size: clamp(2rem, 9vw, 3rem);
   }
 
+  .hero-tagline {
+    margin-top: 0.75rem;
+    font-size: clamp(0.95rem, 4vw, 1.2rem);
+  }
+
   .hero-content {
     animation: none;
     padding: 0 1.25rem 2rem;
@@ -458,6 +473,10 @@ p {
 
   .hero-command {
     font-size: clamp(1.85rem, 10vw, 2.6rem);
+  }
+
+  .hero-tagline {
+    margin-top: 0.7rem;
   }
 
   .hero-command .path {
