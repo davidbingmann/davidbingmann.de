@@ -264,6 +264,108 @@ p {
   background: var(--surface);
 }
 
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.tag-row--compact {
+  gap: 0.5rem;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.28rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.tag--active {
+  color: var(--text);
+  border-color: var(--accent);
+  background-color: var(--hover);
+}
+
+.project-list {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.project-card {
+  padding: 1.7rem;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: 0 20px 40px var(--shadow);
+  display: grid;
+  gap: 0.9rem;
+  opacity: 0;
+  transform: translateY(12px);
+  animation: fadeIn 0.5s ease forwards;
+  animation-delay: var(--delay);
+}
+
+.project-card-title {
+  font-size: 1.2rem;
+  letter-spacing: 0.02em;
+}
+
+.project-title-link {
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.project-card-headline {
+  margin: 0;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.project-card-summary {
+  margin: 0;
+}
+
+.project-card-meta {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.project-card-meta a {
+  color: var(--muted);
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.project-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+  text-transform: lowercase;
+}
+
+.project-breadcrumb-link {
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.project-headline {
+  margin-top: 0;
+  color: var(--text);
+  font-weight: 700;
+}
+
 .timeline {
   margin-top: 0.5rem;
   padding-left: 1.5rem;
@@ -397,6 +499,25 @@ p {
     border-color: var(--accent);
   }
 
+  .tag:hover {
+    color: var(--text);
+    border-color: var(--accent);
+  }
+
+  .project-title-link:hover {
+    border-color: var(--text);
+  }
+
+  .project-card-meta a:hover {
+    color: var(--text);
+    border-color: var(--text);
+  }
+
+  .project-breadcrumb-link:hover {
+    color: var(--text);
+    border-color: var(--text);
+  }
+
   .social-links a:hover {
     color: var(--text);
   }
@@ -459,6 +580,12 @@ p {
   }
 
   .timeline-item {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+
+  .project-card {
     opacity: 1;
     transform: none;
     animation: none;

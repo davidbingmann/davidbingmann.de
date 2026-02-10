@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout.jsx';
 import Home from './pages/Home.jsx';
 import Impressum from './pages/Impressum.jsx';
+import Project from './pages/Project.jsx';
 import Projects from './pages/Projects.jsx';
 import Resume from './pages/Resume.jsx';
 
@@ -13,6 +14,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/impressum" element={<Impressum />} />
           <Route path="/projects" element={<Projects />} />
+          <Route path="/projects/:slug" element={<Project />} />
           <Route path="/resume" element={<Resume />} />
         </Route>
       </Routes>
