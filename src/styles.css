@@ -14,8 +14,8 @@
 
 :root[data-theme='dark'] {
   color-scheme: dark;
-  --bg: #10110f;
-  --bg-top: #1a1c18;
+  --bg: #0b0b0b;
+  --bg-top: #0b0b0b;
   --surface: #151613;
   --text: #f5f3ee;
   --muted: #b7b2a8;
@@ -29,13 +29,17 @@
   box-sizing: border-box;
 }
 
+html {
+  background: var(--bg);
+}
+
 body {
   margin: 0;
   min-height: 100vh;
   min-height: 100svh;
   font-family: 'Space Mono', monospace;
   color: var(--text);
-  background: radial-gradient(circle at top, var(--bg-top) 0%, var(--bg) 55%);
+  background: var(--bg);
   overflow-x: hidden;
 }
 
