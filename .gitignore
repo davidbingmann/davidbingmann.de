@@ -16,7 +16,6 @@ venv/
 
 # Logs
 *.log
-caddy_logs/
 
 # MacOS
 .DS_Store
