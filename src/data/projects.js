@@ -9,12 +9,12 @@ export const projects = [
       href: 'https://github.com/davidbingmann/EchoType',
     },
     summary:
-      'A small voice-first tool for writing prompts faster: speak naturally and get clean text in your prompt box.',
+      'I built EchoType because I was looking for a faster and more intuitive way to write prompts for AI agents like Codex or Claude Code, especially longer prompts that are tedious to type.',
     body: [
-      "I built EchoType because I was looking for a faster way to write prompts in agents like Codex or Claude Code.",
-      'Then I noticed something obvious: speaking is the natural way to get thoughts out quickly.',
-      "So EchoType lets you talk, and it turns your speech into text you can use right away as a prompt.",
-      "I used Groq's Whisper transcription because they run special servers where transcribing is super, super fast. You don't really notice any delay.",
+      'I built EchoType because I was looking for a faster and more intuitive way to write prompts for AI agents like Codex or Claude Code, especially longer prompts that are tedious to type.',
+      'While experimenting, I realized something obvious: speaking is the most natural way to get ideas out of your head quickly. When you talk, thoughts flow without friction, whereas typing often slows you down or interrupts your thinking.',
+      'That insight led to EchoType. Instead of typing, you simply speak, and EchoType turns your voice into clean, usable text that you can immediately paste into an AI agent as a prompt.',
+      "To make this experience feel instant, I use Groq's Whisper transcription, which runs on specialized infrastructure optimized for ultra-fast speech-to-text.",
     ],
   },
 ];
