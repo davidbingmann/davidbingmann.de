@@ -44,14 +44,6 @@ export default function Project() {
           </a>
         </p>
 
-        <div className="tag-row tag-row--compact" aria-label="Project tags">
-          {project.tags.map((tag) => (
-            <Link key={tag} className="tag" to={`/projects?tag=${encodeURIComponent(tag)}`}>
-              #{tag}
-            </Link>
-          ))}
-        </div>
-
         {project.body.map((paragraph) => (
           <p key={paragraph}>{paragraph}</p>
         ))}
@@ -59,4 +51,3 @@ export default function Project() {
     </section>
   );
 }
-
