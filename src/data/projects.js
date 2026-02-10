@@ -13,7 +13,7 @@ export const projects = [
     body: [
       'I was looking for a faster and more intuitive way to write prompts for AI agents like Codex or Claude Code, especially longer prompts that are tedious to type.',
       'While experimenting, I realized something obvious: speaking is the most natural way to get ideas out of your head quickly. When you talk, thoughts flow without friction, whereas typing often slows you down or interrupts your thinking.',
-      'That insight led to EchoType. Instead of typing, you simply speak, and EchoType turns your voice into clean, usable text that you can immediately paste into an AI agent as a prompt.',
+      "That insight led to EchoType. Instead of typing, you simply speak, and EchoType turns your voice into clean, usable text that's automatically copied to your clipboard so you can paste it into an AI agent as a prompt without any manual copy step.",
       'To make this experience feel instant, I use the whisper-large model over the Groq API, running on infrastructure optimized for ultra-fast speech-to-text.',
       'If you want to install EchoType, you can find the installation instructions in the GitHub repository.',
     ],
