@@ -33,7 +33,7 @@ export default function Project() {
         <span className="project-breadcrumb-current">{project.slug}</span>
       </div>
 
-      <h1 className="section-title">{project.title}</h1>
+      <h1 className="section-title section-title--case-sensitive">{project.title}</h1>
 
       <div className="section-body">
         <p className="project-headline">{project.headline}</p>
