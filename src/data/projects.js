@@ -1,18 +1,18 @@
 export const projects = [
   {
-    slug: 'kanbanapp',
-    title: 'KanbanApp',
+    slug: 'semestral',
+    title: 'Semestral',
     headline: 'A native macOS app for organizing university coursework.',
     tags: ['macos', 'swiftui', 'productivity', 'university'],
     repo: {
-      label: 'davidbingmann/KanbanApp',
-      href: 'https://github.com/davidbingmann/KanbanApp',
+      label: 'davidbingmann/Semestral',
+      href: 'https://github.com/davidbingmann/Semestral',
     },
     summary:
       "For a long time I was looking for an app to organize my university life — tasks, deadlines, exams, and grades all in one place — but I could never find one that did everything I wanted, so I built my own.",
     body: [
       "For a long time I was looking for an app to organize my university life — tasks, deadlines, exams, and grades all in one place. I tried plenty of to-do apps, calendar apps, and study planners, but none of them combined the features I actually needed without dragging in a lot of clutter I didn't.",
-      "So I built my own. KanbanApp is a native macOS app, written in SwiftUI with SwiftData, designed around the way I actually plan a semester: organized by semester and module, with the same data flowing into a board, a calendar, an exam list, and a grade overview.",
+      "So I built my own. Semestral is a native macOS app, written in SwiftUI with SwiftData, designed around the way I actually plan a semester: organized by semester and module, with the same data flowing into a board, a calendar, an exam list, and a grade overview.",
       "The Board is a classic Kanban with three columns — To Do, In Progress, Done — but with drag-and-drop between columns, deadline-based sorting, urgency-tinted cards that get redder the closer the deadline is, and recurring tasks that automatically roll over to the next occurrence when completed.",
       "The Calendar is a month view of every task deadline and exam date, color-coded by module, so I can see at a glance where the heavy weeks are.",
       "The Exams tab keeps a per-module list of upcoming and past exam dates, with optional time-of-day precision for the ones that actually have a fixed slot, and a portfolio mode for modules that have several deadlines instead of a single exam.",
