@@ -8,7 +8,14 @@ export default function Impressum() {
   return (
     <section className="section">
       <h1 className="section-title">imprint/</h1>
-      <div className="section-body" spellCheck={false}>
+      <div
+        className="section-body"
+        spellCheck={false}
+        translate="no"
+        data-gramm="false"
+        data-gramm_editor="false"
+        data-enable-grammarly="false"
+      >
         <p>
           <strong>Information according to §§ 5, 6 DDG</strong>
         </p>
