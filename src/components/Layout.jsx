@@ -29,7 +29,7 @@ const socialLinks = [
   },
   {
     label: 'X',
-    href: 'https://x.com/davidbingmann',
+    href: 'https://x.com/dxv1d04',
     Icon: FaXTwitter,
     external: true,
   },
