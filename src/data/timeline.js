@@ -1,12 +1,12 @@
 export const timelineItems = [
   {
-    year: 'October 2025',
+    year: 'October 2025 → Present',
     title: 'Switch to University of Trier',
     description:
       'Switch to the University of Trier to study Business Informatics and Artificial Intelligence',
   },
   {
-    year: 'October 2024',
+    year: 'October 2024 → Present',
     title: 'Research Assistant at DFKI',
     description:
       'Start of my part-time job at the German Research Center for Artificial Intelligence (DFKI) alongside my studies',
