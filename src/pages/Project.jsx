@@ -27,7 +27,7 @@ export default function Project() {
     <section className="section">
       <div className="project-breadcrumb">
         <Link className="project-breadcrumb-link" to="/projects">
-          projects/
+          projects
         </Link>
         <span className="project-breadcrumb-sep">/</span>
         <span className="project-breadcrumb-current">{project.slug}</span>
