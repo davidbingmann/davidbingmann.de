@@ -77,7 +77,7 @@ export default function Layout() {
           ))}
         </div>
         <NavLink className="footer-impressum" to="/impressum">
-          Impressum (c) {currentYear} David Bingmann
+          Imprint & Privacy (c) {currentYear} David Bingmann
         </NavLink>
       </footer>
     </div>

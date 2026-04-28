@@ -2,13 +2,13 @@ import { useEffect } from 'react';
 
 export default function Impressum() {
   useEffect(() => {
-    document.title = 'Impressum - David Bingmann';
+    document.title = 'Imprint & Privacy - David Bingmann';
   }, []);
 
   return (
     <section className="section">
-      <h1 className="section-title">impressum/</h1>
-      <div className="section-body">
+      <h1 className="section-title">imprint/</h1>
+      <div className="section-body" spellCheck={false}>
         <p>
           <strong>Information according to §§ 5, 6 DDG</strong>
         </p>
@@ -66,8 +66,61 @@ export default function Impressum() {
           infringement, please let me know so that I can remove the affected
           content immediately.
         </p>
+
+        <div className="legal-fineprint">
+          <h2 id="privacy">Privacy policy</h2>
+          <p>
+            This personal, non-commercial site sets no cookies and uses no
+            analytics, advertising, social plug-ins, or third-party trackers.
+            Web fonts are bundled and served from the same domain. The
+            processing described below is based on Art. 6(1)(f) GDPR
+            (legitimate interest in operating and securing this website).
+          </p>
+          <p>
+            <strong>Controller.</strong> See the imprint above.
+          </p>
+          <p>
+            <strong>Hosting.</strong> This site is hosted by netcup GmbH,
+            Daimlerstraße 25, 76185 Karlsruhe, Germany (server located in the
+            EU). The provider acts as processor under Art. 28 GDPR.
+          </p>
+          <p>
+            <strong>Server log files.</strong> Each HTTP request is recorded
+            with your IP address, User-Agent, requested URL, response status,
+            and timestamp. Logs are kept for a maximum of 14 days and then
+            deleted. They are not merged with other data or used to identify
+            individual visitors.
+          </p>
+          <p>
+            <strong>Aggregate access statistics.</strong> A daily server-side
+            report counts requests per day, broken down into humans, AI agents,
+            and other bots based on the User-Agent. The report contains
+            aggregate counts only; no profile is created and no data is shared
+            with third parties.
+          </p>
+          <p>
+            <strong>External links.</strong> Links to LinkedIn, GitHub, X
+            (Twitter), and email addresses transmit data to the respective
+            providers once you click them; their privacy policies apply.
+          </p>
+          <p>
+            <strong>Your rights.</strong> Under Art. 15–18 and Art. 21 GDPR you
+            may request information, correction, erasure or restriction of your
+            personal data, and object to processing. Contact the email address
+            in the imprint to exercise these rights.
+          </p>
+          <p>
+            <strong>Complaints.</strong> You may lodge a complaint with the
+            competent supervisory authority: Der Landesbeauftragte für den
+            Datenschutz und die Informationsfreiheit Rheinland-Pfalz, Hintere
+            Bleiche 34, 55116 Mainz —{' '}
+            <a href="mailto:poststelle@datenschutz.rlp.de">
+              poststelle@datenschutz.rlp.de
+            </a>
+            .
+          </p>
+        </div>
       </div>
     </section>
   );
 }
-
