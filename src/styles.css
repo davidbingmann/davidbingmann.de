@@ -597,6 +597,11 @@ p {
     transform: none;
     animation: none;
   }
+
+  .footer-impressum {
+    max-width: 100%;
+    text-align: center;
+  }
 }
 
 @media (max-width: 420px) {
