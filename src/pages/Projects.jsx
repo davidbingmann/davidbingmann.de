@@ -19,7 +19,7 @@ export default function Projects() {
           >
             <h2 className="project-card-title">
               <Link className="project-title-link" to={`/projects/${project.slug}`}>
-                {project.title} Project
+                {project.listTitle ?? `${project.title} Project`}
               </Link>
             </h2>
             <p className="project-card-headline">{project.headline}</p>

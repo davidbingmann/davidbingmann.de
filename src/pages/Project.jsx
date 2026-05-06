@@ -40,7 +40,7 @@ export default function Project() {
 
         <p>
           <a href={project.repo.href} target="_blank" rel="noreferrer">
-            GitHub: {project.repo.label}
+            {project.repo.prefix ?? 'GitHub'}: {project.repo.label}
           </a>
         </p>
 
