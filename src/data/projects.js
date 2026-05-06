@@ -1,19 +1,19 @@
 export const projects = [
   {
-    slug: 'seminar-paper-humanoid-robots-industry-5',
-    title: 'Seminar Paper',
-    listTitle: 'Seminar Paper',
+    slug: 'paper-humanoid-robots-industry-5',
+    title: 'Paper',
+    listTitle: 'Paper',
     headline: 'What potential do humanoid robots offer in Industry 5.0?',
-    tags: ['industry-5.0', 'humanoid-robots', 'ai', 'seminar-paper'],
+    tags: ['industry-5.0', 'humanoid-robots', 'ai', 'paper'],
     repo: {
       prefix: 'PDF',
-      label: 'davidbingmann/seminar-paper',
-      href: '/papers/seminar-paper.pdf',
+      label: 'davidbingmann/paper',
+      href: '/papers/paper.pdf',
     },
     summary:
-      'My seminar paper looks at whether humanoid robots can support the shift from Industry 4.0 to Industry 5.0: more resilient, more human-centered, and better suited to real factories.',
+      'My paper looks at whether humanoid robots can support the shift from Industry 4.0 to Industry 5.0: more resilient, more human-centered, and better suited to real factories.',
     body: [
-      'For my seminar paper at the University of Trier, I looked at humanoid robots in the context of Industry 5.0: not as a replacement for humans, but as a possible way to make industrial work more resilient, flexible, and human-centered.',
+      'As part of a seminar at the University of Trier, I wrote this paper on humanoid robots in the context of Industry 5.0: not as a replacement for humans, but as a possible way to make industrial work more resilient, flexible, and human-centered.',
       'The paper discusses why current automation still struggles in human-designed factories, what recent robot learning research makes possible, and where the technical, economic, and regulatory limits still are. You can read the public PDF version above.',
     ],
   },
