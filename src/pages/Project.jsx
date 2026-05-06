@@ -30,7 +30,7 @@ export default function Project() {
           projects
         </Link>
         <span className="project-breadcrumb-sep">/</span>
-        <span className="project-breadcrumb-current">{project.slug}</span>
+        <span className="project-breadcrumb-current">{project.title}</span>
       </div>
 
       <h1 className="section-title section-title--case-sensitive">{project.title}</h1>

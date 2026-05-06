@@ -605,16 +605,20 @@ p {
   }
 
   .hero-command {
-    font-size: clamp(1.85rem, 10vw, 2.6rem);
+    font-size: clamp(1.75rem, 8.7vw, 2.2rem);
   }
 
   .hero-tagline {
     margin-top: 0.7rem;
   }
 
+  .hero-content {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
   .hero-command .path {
-    white-space: normal;
-    overflow-wrap: anywhere;
+    white-space: nowrap;
   }
 
   .section {
