@@ -7,7 +7,10 @@ export default function Impressum() {
 
   return (
     <section className="section">
-      <h1 className="section-title">imprint/</h1>
+      <div className="project-head">
+        <h1 className="section-title">imprint/</h1>
+        <span className="tag">legal</span>
+      </div>
       <div
         className="section-body"
         spellCheck={false}

@@ -1,32 +1,34 @@
 export const timelineItems = [
   {
-    year: 'October 2025 → Present',
-    title: 'Switch to University of Trier',
-    description:
-      'Switch to the University of Trier to study Business Informatics and Artificial Intelligence',
+    period: 'Oct 2025 → present',
+    title: 'University of Trier',
+    description: 'B.Sc. Business Informatics & Artificial Intelligence',
+    category: 'education',
+    current: true,
   },
   {
-    year: 'October 2024 → Present',
-    title: 'Research Assistant at DFKI',
+    period: 'Oct 2024 → present',
+    title: 'Research Assistant — DFKI',
     description:
-      'Start of my part-time job at the German Research Center for Artificial Intelligence (DFKI) alongside my studies',
+      'German Research Center for Artificial Intelligence, part-time alongside my studies',
+    category: 'work',
+    current: true,
   },
   {
-    year: 'October 2024',
-    title: "Start of my Bachelor's degree",
-    description:
-      "Start of my Bachelor's degree: Artificial Intelligence and Data Science at the University of Applied Sciences in Trier",
+    period: 'Oct 2024 → Sep 2025',
+    title: 'University of Applied Sciences Trier',
+    description: 'B.Sc. Artificial Intelligence & Data Science',
+    category: 'education',
   },
   {
-    year: 'May 2024',
-    title: 'Internship at Tesla Automation',
-    description:
-      'Internship from 27/05/2024 until 07/06/2024 in Controls Engineering',
+    period: 'May → Jun 2024',
+    title: 'Intern — Tesla Automation',
+    description: 'Controls Engineering',
+    category: 'internship',
   },
   {
-    year: 'March 2024',
-    title: 'Abitur',
-    description:
-      'Finished my Abitur at the Staatliches Eifelgymnasium in Neuerburg',
+    period: 'Mar 2024',
+    title: 'Abitur — Staatliches Eifelgymnasium Neuerburg',
+    category: 'education',
   },
 ];
