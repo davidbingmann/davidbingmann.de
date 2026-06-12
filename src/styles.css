@@ -117,13 +117,13 @@ p {
 
 .hero {
   width: auto;
-  max-width: min(100%, 640px);
+  max-width: min(100%, 760px);
   aspect-ratio: 1 / 1;
   container-type: inline-size;
   margin: 0 auto;
-  height: min(62vh, 520px);
-  height: min(62svh, 520px);
-  min-height: 400px;
+  height: 70vh;
+  height: 70svh;
+  min-height: 420px;
   background: #0b0b0b;
   position: relative;
   display: flex;
@@ -162,8 +162,8 @@ p {
 .hero-command {
   display: inline-flex;
   align-items: center;
-  font-size: clamp(2rem, 5vw, 2.5rem);
-  font-size: clamp(1.8rem, 8.5cqw, 2.5rem);
+  font-size: clamp(2.2rem, 5vw, 3rem);
+  font-size: clamp(2rem, 8.5cqw, 3rem);
   font-weight: 700;
   line-height: 1.1;
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
@@ -171,7 +171,7 @@ p {
 
 .hero-tagline {
   margin-top: 0.85rem;
-  font-size: clamp(1rem, 2.2vw, 1.2rem);
+  font-size: clamp(1.05rem, 2.2vw, 1.4rem);
   font-weight: 600;
   letter-spacing: 0.06em;
   opacity: 0.9;
@@ -205,7 +205,7 @@ p {
 }
 
 .section-title {
-  font-size: clamp(1.35rem, 2.2vw, 1.7rem);
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
   text-transform: lowercase;
   letter-spacing: 0.04em;
 }
