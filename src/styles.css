@@ -124,7 +124,7 @@ p {
 
 .hero {
   width: 100%;
-  max-width: 900px;
+  max-width: 640px;
   margin: 0 auto;
   height: 70vh;
   height: 70svh;
@@ -167,7 +167,7 @@ p {
 .hero-command {
   display: inline-flex;
   align-items: center;
-  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-size: clamp(2.2rem, 5vw, 3rem);
   font-weight: 700;
   line-height: 1.1;
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
