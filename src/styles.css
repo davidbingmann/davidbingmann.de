@@ -163,7 +163,8 @@ p {
   display: inline-flex;
   align-items: center;
   font-size: clamp(2.2rem, 5vw, 3rem);
-  font-size: clamp(2rem, 8.5cqw, 3rem);
+  /* sized so the longest animation state "~ cd davidbingmann/." (20ch) never exceeds the hero */
+  font-size: clamp(1.4rem, calc((100cqw - 3.5rem) / 12), 3rem);
   font-weight: 700;
   line-height: 1.1;
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
@@ -556,10 +557,6 @@ p {
     border-radius: 14px;
   }
 
-  .hero-command {
-    font-size: clamp(2rem, 9vw, 3rem);
-  }
-
   .hero-tagline {
     margin-top: 0.75rem;
     font-size: clamp(0.95rem, 4vw, 1.2rem);
@@ -603,10 +600,6 @@ p {
 @media (max-width: 420px) {
   :root {
     --page-gutter: 0.95rem;
-  }
-
-  .hero-command {
-    font-size: clamp(1.75rem, 8.7vw, 2.2rem);
   }
 
   .hero-tagline {
