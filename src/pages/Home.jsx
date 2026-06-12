@@ -124,7 +124,7 @@ export default function Home() {
                 className="terminal-photo"
                 src={profilePicture1200}
                 srcSet={`${profilePicture800} 533w, ${profilePicture1200} 800w, ${profilePictureFull} 1000w`}
-                sizes="(max-width: 720px) 64vw, 220px"
+                sizes="(max-width: 720px) 64vw, 250px"
                 alt="Portrait of David Bingmann"
                 decoding="async"
                 fetchPriority="high"
