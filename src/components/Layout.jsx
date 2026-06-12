@@ -54,7 +54,6 @@ export default function Layout() {
             </NavLink>
           ))}
         </nav>
-        <div className="nav-divider" />
       </header>
 
       <main className="main">
