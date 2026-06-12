@@ -18,6 +18,7 @@
   --term-key: #b07d10;
   --term-green: #1f9e4b;
   --term-blue: #2563a8;
+  --term-purple: #7a4fb5;
 }
 
 :root[data-theme='dark'] {
@@ -39,6 +40,7 @@
   --term-key: #febc2e;
   --term-green: #28c840;
   --term-blue: #7eb8f2;
+  --term-purple: #c89bf5;
 }
 
 * {
@@ -538,6 +540,11 @@ p {
 .resume-tag--work {
   color: var(--term-blue);
   border-color: color-mix(in srgb, var(--term-blue) 40%, transparent);
+}
+
+.resume-tag--internship {
+  color: var(--term-purple);
+  border-color: color-mix(in srgb, var(--term-purple) 40%, transparent);
 }
 
 .resume-card-row {

@@ -24,7 +24,7 @@ export const timelineItems = [
     period: 'May → Jun 2024',
     title: 'Intern — Tesla Automation',
     description: 'Controls Engineering',
-    category: 'work',
+    category: 'internship',
   },
   {
     period: 'Mar 2024',
