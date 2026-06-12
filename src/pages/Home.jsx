@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import profilePicture800 from '../assets/profile_picture_800.jpeg';
 import profilePicture1200 from '../assets/profile_picture_1200.jpeg';
-import profilePicture2000 from '../assets/profile_picture_2000.jpeg';
+import profilePictureFull from '../assets/profile_picture.jpeg';
 
 export default function Home() {
   const fullPrompt = '~ cd';
@@ -112,7 +112,7 @@ export default function Home() {
         <img
           className="hero-image"
           src={profilePicture1200}
-          srcSet={`${profilePicture800} 722w, ${profilePicture1200} 1083w, ${profilePicture2000} 1806w`}
+          srcSet={`${profilePicture800} 533w, ${profilePicture1200} 800w, ${profilePictureFull} 1000w`}
           sizes="(max-width: 900px) calc(100vw - 2rem), 852px"
           alt="Portrait of David Bingmann"
           decoding="async"
