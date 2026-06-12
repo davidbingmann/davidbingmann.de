@@ -43,6 +43,15 @@
   --term-purple: #c89bf5;
 }
 
+/* Space Mono draws § and parentheses as small raised glyphs that read as
+   broken superscripts; serve just these characters from a local mono font. */
+@font-face {
+  font-family: 'Space Mono Glyph Fix';
+  src: local('Menlo'), local('Consolas'), local('DejaVu Sans Mono'),
+    local('Courier New');
+  unicode-range: U+00A7, U+0028-0029;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -55,7 +64,7 @@ body {
   margin: 0;
   min-height: 100vh;
   min-height: 100svh;
-  font-family: 'Space Mono', monospace;
+  font-family: 'Space Mono Glyph Fix', 'Space Mono', monospace;
   color: var(--text);
   background: var(--bg);
   overflow-x: hidden;
