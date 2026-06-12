@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { FaEnvelope, FaGithub, FaLinkedinIn } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 import profilePicture800 from '../assets/profile_picture_800.jpeg';
 import profilePicture1200 from '../assets/profile_picture_1200.jpeg';
 import profilePictureFull from '../assets/profile_picture.jpeg';
@@ -18,6 +20,17 @@ const STAGE = {
 // Module-level so the intro only plays on the first visit per page load,
 // not every time the user navigates back to home via the tabs.
 let introPlayed = false;
+
+const socialLinks = [
+  {
+    label: 'LinkedIn',
+    href: 'https://www.linkedin.com/in/david-bingmann-13b897293/',
+    Icon: FaLinkedinIn,
+  },
+  { label: 'Mail', href: 'mailto:contact@davidbingmann.de', Icon: FaEnvelope },
+  { label: 'GitHub', href: 'https://github.com/davidbingmann', Icon: FaGithub },
+  { label: 'X', href: 'https://x.com/dxv1d04', Icon: FaXTwitter },
+];
 
 function useMediaQuery(query) {
   const [matches, setMatches] = useState(
@@ -145,6 +158,19 @@ export default function Home() {
                   <span className="terminal-key">Work</span>
                   Research assistant @ DFKI
                 </p>
+                <div className="terminal-socials">
+                  {socialLinks.map(({ label, href, Icon }) => (
+                    <a
+                      key={href}
+                      href={href}
+                      target={href.startsWith('http') ? '_blank' : undefined}
+                      rel={href.startsWith('http') ? 'noreferrer' : undefined}
+                      aria-label={label}
+                    >
+                      <Icon className="terminal-social-icon" aria-hidden="true" />
+                    </a>
+                  ))}
+                </div>
               </div>
             </div>
           </Reveal>

@@ -289,6 +289,24 @@ p {
   font-weight: 700;
 }
 
+.terminal-socials {
+  display: flex;
+  gap: 1.1rem;
+  margin-top: auto;
+  padding-top: 1rem;
+}
+
+.terminal-socials a {
+  display: inline-flex;
+  color: var(--term-muted);
+  transition: color 0.2s ease;
+}
+
+.terminal-social-icon {
+  width: 21px;
+  height: 21px;
+}
+
 .terminal-about {
   margin: 0.4rem 0 1.2rem;
   color: var(--term-muted);
@@ -755,6 +773,10 @@ p {
     border-color: var(--term-green);
   }
 
+  .terminal-socials a:hover {
+    color: var(--term-text);
+  }
+
   .project-breadcrumb-link:hover {
     color: var(--text);
     border-color: var(--text);
@@ -806,6 +828,10 @@ p {
   .terminal-name,
   .terminal-role {
     text-align: center;
+  }
+
+  .terminal-socials {
+    justify-content: center;
   }
 
   .terminal-name {
