@@ -308,11 +308,14 @@ p {
 }
 
 .section-body {
-  background: var(--surface);
-  font-size: 1.2rem;
-  padding: 2rem;
   border: 1px solid var(--line);
-  box-shadow: 0 20px 40px var(--shadow);
+  border-radius: 10px;
+  background: var(--term-bg);
+  font-size: 1.05rem;
+  padding: 1.5rem 1.6rem;
+  opacity: 0;
+  transform: translateY(14px);
+  animation: fadeIn 0.5s ease forwards;
 }
 
 .section-body h2 {
@@ -371,24 +374,12 @@ p {
   transform: translateY(0);
 }
 
-.social-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  font-size: 0.95rem;
-  text-transform: lowercase;
-}
-
-.social-links a {
-  color: var(--muted);
-  transition: color 0.2s ease;
-}
-
 .empty-note {
   padding: 2rem;
   border: 1px dashed var(--line);
+  border-radius: 10px;
   color: var(--muted);
-  background: var(--surface);
+  background: var(--term-bg);
 }
 
 .project-list {
@@ -761,10 +752,6 @@ p {
     border-color: var(--text);
   }
 
-  .social-links a:hover {
-    color: var(--text);
-  }
-
   .footer-impressum:hover {
     color: var(--text);
     border-color: var(--text);
@@ -809,7 +796,10 @@ p {
 
   .section-body {
     font-size: 1rem;
-    padding: 1.5rem;
+    padding: 1.2rem 1.25rem;
+    opacity: 1;
+    transform: none;
+    animation: none;
   }
 
   .section-body h2 {
