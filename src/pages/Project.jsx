@@ -33,19 +33,36 @@ export default function Project() {
         <span className="project-breadcrumb-current">{project.title}</span>
       </div>
 
-      <h1 className="section-title section-title--case-sensitive">{project.title}</h1>
+      <div className="project-head">
+        <h1 className="section-title section-title--case-sensitive">
+          {project.title}
+        </h1>
+        <span className={`tag tag--${project.type}`}>{project.type}</span>
+      </div>
 
-      <div className="section-body">
+      <div className="project-detail">
         <p className="project-headline">{project.headline}</p>
 
-        <p>
-          <a href={project.repo.href} target="_blank" rel="noreferrer">
-            {project.repo.prefix ?? 'GitHub'}: {project.repo.label}
+        <p className="project-detail-link">
+          <a
+            className="project-card-link"
+            href={project.repo.href}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <span className="project-card-link-arrow">→</span>{' '}
+            {project.repo.linkText}
           </a>
         </p>
 
-        {project.body.map((paragraph) => (
-          <p key={paragraph}>{paragraph}</p>
+        {project.body.map((paragraph, index) => (
+          <p
+            key={paragraph}
+            className="project-detail-paragraph"
+            style={{ '--delay': `${250 + index * 150}ms` }}
+          >
+            {paragraph}
+          </p>
         ))}
       </div>
     </section>

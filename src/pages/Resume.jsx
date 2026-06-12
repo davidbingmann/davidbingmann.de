@@ -20,7 +20,7 @@ export default function Resume() {
               className={`resume-dot${item.current ? ' resume-dot--current' : ''}`}
             />
             <div className="resume-card">
-              <span className={`resume-tag resume-tag--${item.category}`}>
+              <span className={`tag tag--${item.category}`}>
                 {item.category}
               </span>
               <div className="resume-card-row">

@@ -393,29 +393,32 @@ p {
 
 .project-list {
   display: grid;
-  gap: 1.25rem;
+  gap: 1rem;
 }
 
 .project-card {
   position: relative;
-  font-size: 1.2rem;
-  padding: 1.7rem;
   border: 1px solid var(--line);
-  background: var(--surface);
-  box-shadow: 0 20px 40px var(--shadow);
-  display: grid;
-  gap: 0.9rem;
+  border-radius: 10px;
+  background: var(--term-bg);
+  padding: 1.15rem 1.3rem;
+  cursor: pointer;
   opacity: 0;
-  transform: translateY(12px);
+  transform: translateY(14px);
   animation: fadeIn 0.5s ease forwards;
   animation-delay: var(--delay);
-  cursor: pointer;
   transition: border-color 0.2s ease;
 }
 
 .project-card-title {
-  font-size: 1.35rem;
+  margin: 0;
+  font-size: 1.25rem;
   letter-spacing: 0.02em;
+}
+
+.project-card-arrow {
+  color: var(--muted);
+  font-weight: 400;
 }
 
 .project-title-link::after {
@@ -425,27 +428,81 @@ p {
 }
 
 .project-card-headline {
-  margin: 0;
+  margin: 0.5rem 0 0;
+  font-size: 1rem;
   color: var(--text);
   font-weight: 700;
 }
 
 .project-card-summary {
-  margin: 0;
+  margin: 0.45rem 0 0;
+  font-size: 0.95rem;
+  line-height: 1.65;
 }
 
-.project-card-meta {
-  margin: 0;
-  font-size: 0.9rem;
-  color: var(--muted);
+.project-card-foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.35rem 1rem;
+  margin-top: 0.9rem;
 }
 
-.project-card-meta a {
+.project-card-link {
   position: relative;
   z-index: 1;
-  color: var(--muted);
+  font-size: 0.85rem;
+  color: var(--term-green);
   border-bottom: 1px solid transparent;
-  transition: color 0.2s ease, border-color 0.2s ease;
+  transition: border-color 0.2s ease;
+}
+
+.project-card-link-arrow {
+  color: var(--muted);
+}
+
+.project-card-tags {
+  font-size: 0.8rem;
+  color: var(--muted);
+  opacity: 0.75;
+}
+
+.project-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.project-head .tag {
+  margin-bottom: 0;
+}
+
+.project-detail {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--term-bg);
+  padding: 1.5rem 1.6rem;
+  font-size: 1.05rem;
+  opacity: 0;
+  transform: translateY(14px);
+  animation: fadeIn 0.5s ease forwards;
+}
+
+.project-detail-link {
+  margin: 0 0 1.2rem;
+}
+
+.project-detail-paragraph {
+  opacity: 0;
+  transform: translateY(12px);
+  animation: fadeIn 0.5s ease forwards;
+  animation-delay: var(--delay);
+}
+
+.project-detail-paragraph:last-child {
+  margin-bottom: 0;
 }
 
 .project-breadcrumb {
@@ -464,7 +521,7 @@ p {
 }
 
 .project-headline {
-  margin-top: 0;
+  margin: 0 0 0.9rem;
   color: var(--text);
   font-weight: 700;
 }
@@ -520,7 +577,7 @@ p {
   padding: 1.15rem 1.3rem;
 }
 
-.resume-tag {
+.tag {
   display: inline-block;
   margin-bottom: 0.55rem;
   padding: 0.1rem 0.6rem;
@@ -532,17 +589,19 @@ p {
   color: var(--muted);
 }
 
-.resume-tag--education {
+.tag--education,
+.tag--paper {
   color: var(--term-key);
   border-color: color-mix(in srgb, var(--term-key) 40%, transparent);
 }
 
-.resume-tag--work {
+.tag--work,
+.tag--software {
   color: var(--term-blue);
   border-color: color-mix(in srgb, var(--term-blue) 40%, transparent);
 }
 
-.resume-tag--internship {
+.tag--internship {
   color: var(--term-purple);
   border-color: color-mix(in srgb, var(--term-purple) 40%, transparent);
 }
@@ -693,9 +752,8 @@ p {
     border-color: var(--text);
   }
 
-  .project-card-meta a:hover {
-    color: var(--text);
-    border-color: var(--text);
+  .project-card-link:hover {
+    border-color: var(--term-green);
   }
 
   .project-breadcrumb-link:hover {
@@ -786,14 +844,28 @@ p {
   }
 
   .project-card {
-    font-size: 1rem;
+    padding: 1rem 1.1rem;
     opacity: 1;
     transform: none;
     animation: none;
   }
 
   .project-card-title {
-    font-size: 1.2rem;
+    font-size: 1.15rem;
+  }
+
+  .project-detail {
+    padding: 1.2rem 1.25rem;
+    font-size: 1rem;
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+
+  .project-detail-paragraph {
+    opacity: 1;
+    transform: none;
+    animation: none;
   }
 
   .footer-impressum {

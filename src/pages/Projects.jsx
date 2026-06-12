@@ -15,21 +15,31 @@ export default function Projects() {
           <article
             key={project.slug}
             className="project-card"
-            style={{ '--delay': `${index * 120}ms` }}
+            style={{ '--delay': `${index * 180}ms` }}
           >
+            <span className={`tag tag--${project.type}`}>{project.type}</span>
             <h2 className="project-card-title">
               <Link className="project-title-link" to={`/projects/${project.slug}`}>
-                {project.listTitle ?? `${project.title} Project`}
+                {project.title} <span className="project-card-arrow">↗</span>
               </Link>
             </h2>
             <p className="project-card-headline">{project.headline}</p>
             <p className="project-card-summary">{project.summary}</p>
 
-            <p className="project-card-meta">
-              <a href={project.repo.href} target="_blank" rel="noreferrer">
-                {project.repo.label}
+            <div className="project-card-foot">
+              <a
+                className="project-card-link"
+                href={project.repo.href}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span className="project-card-link-arrow">→</span>{' '}
+                {project.repo.linkText}
               </a>
-            </p>
+              <span className="project-card-tags">
+                {project.tags.map((tag) => `#${tag}`).join(' ')}
+              </span>
+            </div>
           </article>
         ))}
       </div>
