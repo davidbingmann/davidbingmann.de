@@ -15,6 +15,10 @@ const STAGE = {
   DONE: 4,
 };
 
+// Module-level so the intro only plays on the first visit per page load,
+// not every time the user navigates back to home via the tabs.
+let introPlayed = false;
+
 function useMediaQuery(query) {
   const [matches, setMatches] = useState(
     () => typeof window !== 'undefined' && window.matchMedia(query).matches
@@ -88,11 +92,13 @@ function Reveal({ open, children }) {
 export default function Home() {
   const reduceMotion = useMediaQuery('(prefers-reduced-motion: reduce)');
   const smallScreen = useMediaQuery('(max-width: 720px)');
+  const [skipIntro] = useState(() => introPlayed);
   const { stage, typedCd, typedCat } = useTerminalTimeline(
-    reduceMotion || smallScreen
+    reduceMotion || smallScreen || skipIntro
   );
 
   useEffect(() => {
+    introPlayed = true;
     document.title = 'David Bingmann';
   }, []);
 
