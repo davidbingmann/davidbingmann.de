@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react';
-import { FaEnvelope, FaGithub, FaLinkedinIn } from 'react-icons/fa';
-import { FaXTwitter } from 'react-icons/fa6';
 import profilePicture800 from '../assets/profile_picture_800.jpeg';
 import profilePicture1200 from '../assets/profile_picture_1200.jpeg';
 import profilePictureFull from '../assets/profile_picture.jpeg';
@@ -16,17 +14,6 @@ const STAGE = {
   ABOUT: 3,
   DONE: 4,
 };
-
-const socialLinks = [
-  {
-    label: 'LinkedIn',
-    href: 'https://www.linkedin.com/in/david-bingmann-13b897293/',
-    Icon: FaLinkedinIn,
-  },
-  { label: 'Mail', href: 'mailto:contact@davidbingmann.de', Icon: FaEnvelope },
-  { label: 'GitHub', href: 'https://github.com/davidbingmann', Icon: FaGithub },
-  { label: 'X', href: 'https://x.com/dxv1d04', Icon: FaXTwitter },
-];
 
 function useMediaQuery(query) {
   const [matches, setMatches] = useState(
@@ -90,6 +77,14 @@ function useTerminalTimeline(instant) {
   return { stage, typedCd, typedCat };
 }
 
+function Reveal({ open, children }) {
+  return (
+    <div className={`terminal-reveal${open ? ' terminal-reveal--open' : ''}`}>
+      <div className="terminal-reveal-inner">{children}</div>
+    </div>
+  );
+}
+
 export default function Home() {
   const reduceMotion = useMediaQuery('(prefers-reduced-motion: reduce)');
   const smallScreen = useMediaQuery('(max-width: 720px)');
@@ -118,7 +113,7 @@ export default function Home() {
             {stage === STAGE.TYPING_CD && <span className="terminal-cursor" />}
           </p>
 
-          {stage >= STAGE.PROFILE && (
+          <Reveal open={stage >= STAGE.PROFILE}>
             <div className="terminal-profile">
               <img
                 className="terminal-photo"
@@ -130,39 +125,26 @@ export default function Home() {
                 fetchPriority="high"
               />
               <div className="terminal-facts">
-                <p className="terminal-name">david bingmann</p>
-                <p className="terminal-role">bachelor&rsquo;s student</p>
+                <p className="terminal-name">David Bingmann</p>
+                <p className="terminal-role">Bachelor&rsquo;s student</p>
                 <hr className="terminal-rule" />
                 <p className="terminal-fact">
-                  <span className="terminal-key">study</span>
-                  business informatics &amp; ai
+                  <span className="terminal-key">Study</span>
+                  Business Informatics &amp; AI
                 </p>
                 <p className="terminal-fact">
-                  <span className="terminal-key">uni</span>
-                  university of trier
+                  <span className="terminal-key">Uni</span>
+                  University of Trier
                 </p>
                 <p className="terminal-fact">
-                  <span className="terminal-key">work</span>
-                  research assistant @ dfki
+                  <span className="terminal-key">Work</span>
+                  Research assistant @ DFKI
                 </p>
-                <div className="terminal-socials">
-                  {socialLinks.map(({ label, href, Icon }) => (
-                    <a
-                      key={href}
-                      href={href}
-                      target={href.startsWith('http') ? '_blank' : undefined}
-                      rel={href.startsWith('http') ? 'noreferrer' : undefined}
-                      aria-label={label}
-                    >
-                      <Icon className="terminal-social-icon" aria-hidden="true" />
-                    </a>
-                  ))}
-                </div>
               </div>
             </div>
-          )}
+          </Reveal>
 
-          {stage >= STAGE.TYPING_CAT && (
+          <Reveal open={stage >= STAGE.TYPING_CAT}>
             <p className="terminal-line">
               <span className="terminal-cwd">~/davidbingmann</span>{' '}
               <span className="terminal-dollar">$</span>{' '}
@@ -171,9 +153,9 @@ export default function Home() {
                 <span className="terminal-cursor" />
               )}
             </p>
-          )}
+          </Reveal>
 
-          {stage >= STAGE.ABOUT && (
+          <Reveal open={stage >= STAGE.ABOUT}>
             <p className="terminal-about">
               My name is David Bingmann and I am currently studying Business
               Informatics &amp; Artificial Intelligence at the University of
@@ -183,15 +165,15 @@ export default function Home() {
               <a href="mailto:contact@davidbingmann.de">mail</a> &mdash; I look
               forward to connecting!
             </p>
-          )}
+          </Reveal>
 
-          {stage >= STAGE.DONE && (
+          <Reveal open={stage >= STAGE.DONE}>
             <p className="terminal-line">
               <span className="terminal-cwd">~/davidbingmann</span>{' '}
               <span className="terminal-dollar">$</span>{' '}
               <span className="terminal-cursor terminal-cursor--blink" />
             </p>
-          )}
+          </Reveal>
         </div>
       </section>
     </div>
