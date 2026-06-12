@@ -674,16 +674,6 @@ p {
   gap: 1.25rem;
 }
 
-.footer-links {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1.5rem;
-  font-size: 0.85rem;
-  color: var(--muted);
-  text-transform: lowercase;
-}
-
 .footer-impressum {
   color: var(--muted);
   font-size: 0.95rem;
@@ -696,23 +686,6 @@ p {
 .footer-impressum:focus-visible {
   color: var(--text);
   border-color: var(--text);
-}
-
-.footer-links a {
-  color: var(--muted);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 999px;
-  transition: color 0.2s ease, background-color 0.2s ease;
-}
-
-.footer-icon {
-  width: 18px;
-  height: 18px;
-  display: block;
 }
 
 .sr-only {
@@ -785,11 +758,6 @@ p {
   .footer-impressum:hover {
     color: var(--text);
     border-color: var(--text);
-  }
-
-  .footer-links a:hover {
-    color: var(--text);
-    background-color: var(--hover);
   }
 }
 
