@@ -792,11 +792,21 @@ p {
 
   .terminal-profile {
     flex-direction: column;
+    align-items: center;
     gap: 1rem;
   }
 
   .terminal-photo {
-    width: min(240px, 70%);
+    width: min(240px, 64%);
+  }
+
+  .terminal-facts {
+    width: 100%;
+  }
+
+  .terminal-name,
+  .terminal-role {
+    text-align: center;
   }
 
   .terminal-name {
@@ -806,9 +816,6 @@ p {
   .section-body {
     font-size: 1rem;
     padding: 1.2rem 1.25rem;
-    opacity: 1;
-    transform: none;
-    animation: none;
   }
 
   .section-body h2 {
@@ -817,11 +824,6 @@ p {
 
   .resume-timeline {
     padding-left: 1.2rem;
-  }
-
-  .resume-timeline::before {
-    transform: none;
-    animation: none;
   }
 
   .resume-dot {
@@ -836,17 +838,14 @@ p {
     font-size: 1.05rem;
   }
 
-  .resume-item {
-    opacity: 1;
-    transform: none;
-    animation: none;
+  .resume-card-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.15rem;
   }
 
   .project-card {
     padding: 1rem 1.1rem;
-    opacity: 1;
-    transform: none;
-    animation: none;
   }
 
   .project-card-title {
@@ -856,15 +855,6 @@ p {
   .project-detail {
     padding: 1.2rem 1.25rem;
     font-size: 1rem;
-    opacity: 1;
-    transform: none;
-    animation: none;
-  }
-
-  .project-detail-paragraph {
-    opacity: 1;
-    transform: none;
-    animation: none;
   }
 
   .footer-impressum {

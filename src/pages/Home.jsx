@@ -91,10 +91,9 @@ function Reveal({ open, children }) {
 
 export default function Home() {
   const reduceMotion = useMediaQuery('(prefers-reduced-motion: reduce)');
-  const smallScreen = useMediaQuery('(max-width: 720px)');
   const [skipIntro] = useState(() => introPlayed);
   const { stage, typedCd, typedCat } = useTerminalTimeline(
-    reduceMotion || smallScreen || skipIntro
+    reduceMotion || skipIntro
   );
 
   useEffect(() => {
@@ -125,7 +124,7 @@ export default function Home() {
                 className="terminal-photo"
                 src={profilePicture1200}
                 srcSet={`${profilePicture800} 533w, ${profilePicture1200} 800w, ${profilePictureFull} 1000w`}
-                sizes="(max-width: 720px) 70vw, 220px"
+                sizes="(max-width: 720px) 64vw, 220px"
                 alt="Portrait of David Bingmann"
                 decoding="async"
                 fetchPriority="high"
