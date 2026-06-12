@@ -123,8 +123,10 @@ p {
 }
 
 .hero {
-  width: 100%;
-  max-width: 640px;
+  width: auto;
+  max-width: min(100%, 640px);
+  aspect-ratio: 1 / 1;
+  container-type: inline-size;
   margin: 0 auto;
   height: 70vh;
   height: 70svh;
@@ -168,6 +170,7 @@ p {
   display: inline-flex;
   align-items: center;
   font-size: clamp(2.2rem, 5vw, 3rem);
+  font-size: clamp(2rem, 8.5cqw, 3rem);
   font-weight: 700;
   line-height: 1.1;
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
