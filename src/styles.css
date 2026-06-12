@@ -77,7 +77,7 @@ p {
 .header {
   width: 100%;
   padding-top: 2.5rem;
-  padding-bottom: 0;
+  padding-bottom: 1.75rem;
   padding-left: calc(var(--page-gutter) + env(safe-area-inset-left, 0px));
   padding-right: calc(var(--page-gutter) + env(safe-area-inset-right, 0px));
   display: flex;
