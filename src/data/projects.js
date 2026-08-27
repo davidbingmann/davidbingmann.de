@@ -1,5 +1,30 @@
 export const projects = [
   {
+    slug: 'semestral',
+    title: 'Semestral',
+    type: 'software',
+    headline: 'Your whole semester in one place: tasks, exams, deadlines, grades.',
+    tags: ['swiftui', 'ios', 'macos', 'productivity'],
+    repo: {
+      href: 'https://apps.apple.com/de/app/semestral/id6782685471',
+      linkText: 'apps.apple.com/de/app/semestral',
+    },
+    summary:
+      'Semestral keeps tasks, exams, deadlines and grades for a semester in one place. It started as source code on GitHub and now runs natively on Mac, iPhone and iPad.',
+    body: [
+      'Semestral is the app I built to keep my semester in one place: tasks, exams, deadlines, grades.',
+      "For a while it was source code on GitHub. It's now on the App Store and runs natively on Mac, iPhone and iPad.",
+      'The distance between those two things was bigger than I expected.',
+      'When I was the only user, I knew everything the app never said out loud. That a semester has to exist before a module can. Which button opens which sheet. Why an empty board is empty. The app could stay quiet because I already had the answers.',
+      'Hand it to someone else and all of that turns into questions. Where do I start? What is this screen for? Why does this button do nothing? Answering those inside the app was most of the work after the GitHub version.',
+      'The rest went into everything around the features: iCloud sync so your semester is the same on all three devices, layouts that hold up from an iPhone screen to a full-width Mac window, empty states that say what to do next, data written by version 1.0 that still has to open in whatever comes after it.',
+      "Then the feel of it. Dragging a card should feel physical. Colours should mean something, so you recognise a module at a glance and a card tints redder as its deadline gets closer. I needed none of that while I was the only one looking at the screen. It's the reason I open the app in the morning without thinking about it.",
+      "Working means the path I take runs. Production-ready means every other path runs too: the wrong order, the empty state, the device I don't own, the version I ship next year.",
+      'Writing the features taught me SwiftUI. Shipping them taught me what it costs to hand software to someone else.',
+      "If you're studying too, you can find Semestral on the App Store above.",
+    ],
+  },
+  {
     slug: 'echotype',
     title: 'EchoType',
     type: 'software',
