@@ -19,6 +19,9 @@ const socialLinks = [
   { label: 'Mail', href: 'mailto:contact@davidbingmann.de', Icon: FaEnvelope },
 ];
 
+// Looked up by label so the bio's links cannot drift from the icon row.
+const social = Object.fromEntries(socialLinks.map(({ label, href }) => [label, href]));
+
 const software = projects.filter((project) => project.type === 'software');
 const papers = projects.filter((project) => project.type === 'paper');
 
@@ -82,12 +85,13 @@ export default function Home() {
           I study Business Informatics &amp; Artificial Intelligence at the
           University of Trier and work as a research assistant at the German
           Research Center for Artificial Intelligence (DFKI). The projects
-          below started as problems I had myself. If you want to talk about any
-          of them,{' '}
-          <ExternalLink href="mailto:contact@davidbingmann.de">
-            write to me
-          </ExternalLink>
-          .
+          below started as problems I had myself. If you want to talk about
+          them, or about AI in general,{' '}
+          <ExternalLink href={social.Mail}>send me an email</ExternalLink>. You
+          can also find me on{' '}
+          <ExternalLink href={social.LinkedIn}>LinkedIn</ExternalLink>,{' '}
+          <ExternalLink href={social.GitHub}>GitHub</ExternalLink> and{' '}
+          <ExternalLink href={social.X}>X</ExternalLink>.
         </p>
       </div>
 
