@@ -1,7 +1,10 @@
 // Newest first. `year` is the anchor numeral, `until` the small label under it
 // (omit for a single-year entry). `logo` holds the organisation's mark; the
 // column is a fixed width, so an entry without one leaves an empty tile slot.
-// Adding a logo here also means adding the owner to the trademark list in
+// Adding a logo takes four steps: crop the file down to the mark itself and
+// save it as WebP at roughly 200px in ../assets/logos, give it a mode in
+// MODES in scripts/make_dark_logos.py and run that, import both files and set
+// `logo: { src, dark, alt }` below, and add the owner to the trademark list in
 // src/pages/Impressum.jsx.
 //
 // Logo files are pre-trimmed to the mark itself, so each one fills the square
@@ -10,17 +13,27 @@
 // Hochschule Trier the stacked block without its strapline, Trier the shield
 // without its wordmark — every name is spelled out in the entry text next to
 // the logo anyway.
+//
+// Each mark comes twice. The plain file is ink on an opaque white rectangle,
+// which is what the light page wants; the -dark file is the same mark cut out
+// of that rectangle. scripts/make_dark_logos.py derives the second set from
+// the first and explains what it does to each mark.
 import ExternalLink from '../components/ExternalLink.jsx';
 import dfkiLogo from '../assets/logos/dfki.webp';
+import dfkiLogoDark from '../assets/logos/dfki-dark.webp';
 import eifelgymnasiumLogo from '../assets/logos/eifelgymnasium.webp';
+import eifelgymnasiumLogoDark from '../assets/logos/eifelgymnasium-dark.webp';
 import hsTrierLogo from '../assets/logos/hs-trier.webp';
+import hsTrierLogoDark from '../assets/logos/hs-trier-dark.webp';
 import teslaLogo from '../assets/logos/tesla.webp';
+import teslaLogoDark from '../assets/logos/tesla-dark.webp';
 import uniTrierLogo from '../assets/logos/uni-trier.webp';
+import uniTrierLogoDark from '../assets/logos/uni-trier-dark.webp';
 export const timelineItems = [
   {
     year: '2025',
     until: 'to present',
-    logo: { src: uniTrierLogo, alt: 'University of Trier' },
+    logo: { src: uniTrierLogo, dark: uniTrierLogoDark, alt: 'University of Trier' },
     body: (
       <>
         I study Business Informatics &amp; Artificial Intelligence (B.Sc.) at the{' '}
@@ -33,7 +46,7 @@ export const timelineItems = [
   {
     year: '2024',
     until: 'to present',
-    logo: { src: dfkiLogo, alt: 'DFKI' },
+    logo: { src: dfkiLogo, dark: dfkiLogoDark, alt: 'DFKI' },
     body: (
       <>
         Alongside my studies I work as a research assistant at the{' '}
@@ -47,7 +60,11 @@ export const timelineItems = [
   {
     year: '2024',
     until: 'to 2025',
-    logo: { src: hsTrierLogo, alt: 'University of Applied Sciences Trier' },
+    logo: {
+      src: hsTrierLogo,
+      dark: hsTrierLogoDark,
+      alt: 'University of Applied Sciences Trier',
+    },
     body: (
       <>
         I started out in Artificial Intelligence &amp; Data Science (B.Sc.) at
@@ -61,7 +78,7 @@ export const timelineItems = [
   },
   {
     year: '2024',
-    logo: { src: teslaLogo, alt: 'Tesla' },
+    logo: { src: teslaLogo, dark: teslaLogoDark, alt: 'Tesla' },
     body: (
       <>
         I interned in Controls Engineering at{' '}
@@ -74,7 +91,11 @@ export const timelineItems = [
   },
   {
     year: '2024',
-    logo: { src: eifelgymnasiumLogo, alt: 'Staatliches Eifelgymnasium Neuerburg' },
+    logo: {
+      src: eifelgymnasiumLogo,
+      dark: eifelgymnasiumLogoDark,
+      alt: 'Staatliches Eifelgymnasium Neuerburg',
+    },
     body: (
       <>
         Abitur at{' '}

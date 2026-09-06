@@ -7,10 +7,11 @@ publications) plus project detail pages and an Impressum page.
 
 - **Frontend**: React + Vite
 - **Routing**: React Router (home page plus two sub-page routes)
-- **Styling**: hand-written CSS (`src/styles.css`). Light only, no web fonts,
-  no CSS framework, no scroll animations. A single 860px column set in a serif
-  (Charter, falling back to Georgia), with the plain-document structure of
-  karpathy.ai: head, timeline, publications, projects.
+- **Styling**: hand-written CSS (`src/styles.css`). Light or dark, following
+  the reader's system setting; no web fonts, no CSS framework, no scroll
+  animations. A single 860px column set in a serif (Charter, falling back to
+  Georgia), with the plain-document structure of karpathy.ai: head, timeline,
+  publications, projects.
 - **Icons**: `react-icons`
 - **Content**: `src/data/timeline.jsx` (career timeline) and
   `src/data/projects.js` (projects and papers) drive the home page.
@@ -30,15 +31,13 @@ publications) plus project detail pages and an Impressum page.
 
 - **Timeline** (`src/data/timeline.jsx`): each entry has a `year` (the large
   numeral), an optional `until` label under it, an optional `logo`, and a
-  `body` written as JSX so it can contain links. To show an organisation logo,
-  crop the file down to the mark itself, save it as WebP at roughly 200px in
-  `src/assets/logos/`, import it, and set `logo: { src, alt }`. Add the owner
-  to the trademark list in `src/pages/Impressum.jsx` at the same time. Every
-  tile is
-  the same square whatever shape the mark is, and rows have a fixed height so
-  the gaps between logos stay identical. Both come from the tokens at the top
-  of `src/styles.css` (`--logo-box`, `--logo-gutter`); an entry whose text grows
-  past that height falls out of the rhythm on its own.
+  `body` written as JSX so it can contain links. Adding an organisation logo
+  takes a few steps beyond dropping a file in `src/assets/logos/`; they are
+  listed at the top of `src/data/timeline.jsx`, next to the entries themselves.
+  Every tile is the same square whatever shape the mark is, and rows have a
+  fixed height so the gaps between logos stay identical. Both come from the
+  tokens at the top of `src/styles.css` (`--logo-box`, `--logo-gutter`); an
+  entry whose text grows past that height falls out of the rhythm on its own.
 - **Projects** (`src/data/projects.js`): `type: 'software'` entries render in
   the projects section, `type: 'paper'` entries in publications (papers also
   carry a `venue`). `link` is the repo, store or PDF the entry points at, and

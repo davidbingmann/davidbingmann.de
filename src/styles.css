@@ -1,11 +1,19 @@
-/* A plain, light, single-column document in the spirit of karpathy.ai, set in
-   a serif with the year as the timeline's anchor. No web fonts, no framework,
-   no scroll animations. */
+/* A plain, single-column document in the spirit of karpathy.ai, set in a serif
+   with the year as the timeline's anchor. No web fonts, no framework, no
+   scroll animations.
+
+   Light by default, dark when the reader's system asks for it. Every colour
+   goes through the tokens below, so the dark half is one @media block that
+   restates them and nothing else. */
 
 :root {
+  color-scheme: light dark;
   --ink: #1a1a1a;
   --soft: #6b6b6b;
-  --faint: #c9c6c0;
+  /* The year numerals, their label, the dots and the spine. Deliberately
+     between --rule and --soft: at the old hairline grey the numerals barely
+     registered, at --soft they competed with the body text. */
+  --faint: #a3a09a;
   --rule: #e3e0da;
   --link: #1f4b7a;
   --paper: #fff;
@@ -30,6 +38,24 @@
   --dot-ring: 2px;
 }
 
+/* Dark. The light half spends three greys between the text and the paper:
+   --soft for quiet text, --faint a step below it for the timeline, --rule a
+   step below that for hairlines. The spread does not survive the inversion —
+   a line that still reads at 12% on white disappears at 12% on black — so the
+   dark half collapses all three onto --soft. Everything that is not body text
+   ends up there: labels, numerals, dots, the spine, every rule and circle and
+   tile outline. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink: #e8e5df;
+    --soft: #9b968e;
+    --faint: var(--soft);
+    --rule: var(--soft);
+    --link: #8ab0da;
+    --paper: #151412;
+  }
+}
+
 body {
   margin: 0;
   background: var(--paper);
@@ -45,8 +71,12 @@ img {
   max-width: 100%;
 }
 
+/* A link takes the colour of whatever it sits in, so one in the fine print,
+   the footer or a publication's meta line stays as quiet as the sentence
+   around it. The underline is what marks it as a link; the link colour itself
+   only shows on hover. */
 a {
-  color: var(--ink);
+  color: inherit;
   text-decoration: underline;
   text-decoration-color: var(--link);
   text-underline-offset: 2px;
@@ -174,7 +204,7 @@ h1 {
   position: relative;
   display: flex;
   align-items: center;
-  border-left: var(--spine) solid var(--rule);
+  border-left: var(--spine) solid var(--faint);
 }
 
 .logo-tile {
@@ -191,7 +221,10 @@ h1 {
   background: var(--paper);
 }
 
-/* contain, never cover or a forced square: every mark keeps its own aspect
+/* The tile is the <picture> itself, so the mark's box is a direct child of it
+   and max-height below has a definite height to resolve against.
+
+   contain, never cover or a forced square: every mark keeps its own aspect
    ratio and is centred in the tile, whatever shape it came in. */
 .logo-tile img {
   max-width: 100%;
@@ -373,7 +406,7 @@ h1 {
     position: relative;
     min-height: 0;
     padding-left: 18px;
-    border-left: var(--spine) solid var(--rule);
+    border-left: var(--spine) solid var(--faint);
   }
 
   .yr {

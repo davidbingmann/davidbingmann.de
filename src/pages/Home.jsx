@@ -62,14 +62,18 @@ export default function Home() {
           <div className="ico">
             <div className="dot" />
             {item.logo && (
-              <span className="logo-tile">
+              <picture className="logo-tile">
+                <source
+                  srcSet={item.logo.dark}
+                  media="(prefers-color-scheme: dark)"
+                />
                 <img
                   src={item.logo.src}
                   alt={item.logo.alt}
                   loading="lazy"
                   decoding="async"
                 />
-              </span>
+              </picture>
             )}
           </div>
           <div className="desc">{item.body}</div>
