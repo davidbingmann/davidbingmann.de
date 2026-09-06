@@ -1,0 +1,13 @@
+# The static server *inside* the app container. Not to be confused with the
+# Caddyfile at the repo root, which is the host's reverse proxy and TLS
+# terminator. The host proxies to this on port 5001.
+:5001 {
+	root * /srv
+	encode zstd gzip
+
+	# The paper used to live at a generic filename; keep that link working.
+	redir /papers/paper.pdf /papers/bingmann-humanoid-robots-industry-5-0.pdf permanent
+	# Client-side routing: unknown paths fall back to the SPA shell.
+	try_files {path} /index.html
+	file_server
+}

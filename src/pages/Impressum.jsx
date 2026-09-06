@@ -89,9 +89,9 @@ export default function Impressum() {
             This personal, non-commercial site sets no cookies and uses no
             analytics, advertising, social plug-ins, or third-party trackers.
             No web fonts are loaded; the site uses the fonts already installed
-            on your device. The
-            processing described below is based on Art. 6(1)(f) GDPR
-            (legitimate interest in operating and securing this website).
+            on your device. No access statistics are collected or sent
+            anywhere. What little processing remains is based on Art. 6(1)(f)
+            GDPR (legitimate interest in operating and securing this website).
           </p>
           <p>
             <strong>Controller.</strong> See the imprint above.
@@ -102,18 +102,11 @@ export default function Impressum() {
             EU). The provider acts as processor under Art. 28 GDPR.
           </p>
           <p>
-            <strong>Server log files.</strong> Each HTTP request is recorded
-            with your IP address, User-Agent, requested URL, response status,
-            and timestamp. Logs are kept for a maximum of 14 days and then
-            deleted. They are not merged with other data or used to identify
-            individual visitors.
-          </p>
-          <p>
-            <strong>Aggregate access statistics.</strong> A daily server-side
-            report counts requests per day, broken down into humans, AI agents,
-            and other bots based on the User-Agent. The report contains
-            aggregate counts only; no profile is created and no data is shared
-            with third parties.
+            <strong>Server log files.</strong> This site writes no access log,
+            so no IP addresses, User-Agents or requested URLs are stored by me.
+            Requests are processed in memory and not recorded. The hosting
+            provider may log at infrastructure level for operation and security
+            under its own agreement; see below.
           </p>
           <p>
             <strong>External links.</strong> Links to LinkedIn, GitHub, X

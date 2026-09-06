@@ -1,0 +1,10 @@
+.git
+.github
+.idea
+.superpowers
+node_modules
+dist
+docs
+*.md
+*.png
+.DS_Store

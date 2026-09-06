@@ -49,7 +49,7 @@ export const projects = [
     venue: 'Seminar paper, University of Trier',
     headline: 'What potential do humanoid robots offer in Industry 5.0?',
     link: {
-      href: '/papers/paper.pdf',
+      href: '/papers/bingmann-humanoid-robots-industry-5-0.pdf',
       label: 'Read the paper (PDF)',
     },
     body: [
