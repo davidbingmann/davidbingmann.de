@@ -19,8 +19,8 @@ const socialLinks = [
   { label: 'Mail', href: 'mailto:contact@davidbingmann.de', Icon: FaEnvelope },
 ];
 
-// Looked up by label so the bio's links cannot drift from the icon row.
-const social = Object.fromEntries(socialLinks.map(({ label, href }) => [label, href]));
+// Taken from the icon row so the address is not written on the page twice.
+const mailHref = socialLinks.find(({ label }) => label === 'Mail').href;
 
 const software = projects.filter((project) => project.type === 'software');
 const papers = projects.filter((project) => project.type === 'paper');
@@ -87,11 +87,7 @@ export default function Home() {
           Research Center for Artificial Intelligence (DFKI). The projects
           below started as problems I had myself. If you want to talk about
           them, or about AI in general,{' '}
-          <ExternalLink href={social.Mail}>send me an email</ExternalLink>. You
-          can also find me on{' '}
-          <ExternalLink href={social.LinkedIn}>LinkedIn</ExternalLink>,{' '}
-          <ExternalLink href={social.GitHub}>GitHub</ExternalLink> and{' '}
-          <ExternalLink href={social.X}>X</ExternalLink>.
+          <ExternalLink href={mailHref}>send me an email</ExternalLink>.
         </p>
       </div>
 
