@@ -84,10 +84,21 @@ export default function Home() {
       <div className="prose">
         <p>
           I study Business Informatics &amp; Artificial Intelligence at the
-          University of Trier and work as a research assistant at the German
-          Research Center for Artificial Intelligence (DFKI). The projects
-          below started as problems I had myself. If you want to talk about
-          them, or about AI in general, I'm always up for it.
+          University of Trier and work as a student research assistant at the
+          German Research Center for Artificial Intelligence (DFKI), where I
+          started in October 2024. I began in AI &amp; Data Science at
+          Hochschule Trier and moved to Uni Trier in 2025, for a stronger
+          grounding in systems and business alongside the technical side.
+        </p>
+        <p>
+          At DFKI I build Python multi-agent systems and AI-IoT applications
+          for factory environments. On the side I build small tools; shipping
+          one teaches me more than reading about it does.
+        </p>
+        <p>
+          The part I care about is the engineering that gets AI research to
+          actually run. If you want to talk about applied AI, agentic systems,
+          or how research turns into production, I'm always up for it.
         </p>
       </div>
 
