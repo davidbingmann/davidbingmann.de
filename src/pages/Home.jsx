@@ -83,7 +83,7 @@ export default function Home() {
           University of Trier and work as a research assistant at the German
           Research Center for Artificial Intelligence (DFKI). The projects
           below started as problems I had myself. If you want to talk about
-          them, or about AI in general, get in touch.
+          them, or about AI in general, I'm always up for it.
         </p>
       </div>
 
