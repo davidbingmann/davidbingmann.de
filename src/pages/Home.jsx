@@ -1,25 +1,12 @@
-import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import ExternalLink from '../components/ExternalLink.jsx';
 import { FaEnvelope, FaGithub, FaLinkedinIn } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
-import profilePicture800 from '../assets/profile_picture_800.jpeg';
-import profilePicture1200 from '../assets/profile_picture_1200.jpeg';
-import profilePictureFull from '../assets/profile_picture.jpeg';
-
-const COMMAND_CD = 'cd davidbingmann/.';
-const COMMAND_CAT = 'cat about.txt';
-const TYPE_INTERVAL = 90;
-
-const STAGE = {
-  TYPING_CD: 0,
-  PROFILE: 1,
-  TYPING_CAT: 2,
-  ABOUT: 3,
-  DONE: 4,
-};
-
-// Module-level so the intro only plays on the first visit per page load,
-// not every time the user navigates back to home via the tabs.
-let introPlayed = false;
+import profilePicture400 from '../assets/profile_picture_400.webp';
+import profilePicture600 from '../assets/profile_picture_600.webp';
+import { timelineItems } from '../data/timeline.jsx';
+import { projects } from '../data/projects.js';
+import { useDocumentTitle } from '../hooks/useDocumentTitle.js';
 
 const socialLinks = [
   {
@@ -27,186 +14,90 @@ const socialLinks = [
     href: 'https://www.linkedin.com/in/david-bingmann-13b897293/',
     Icon: FaLinkedinIn,
   },
-  { label: 'Mail', href: 'mailto:contact@davidbingmann.de', Icon: FaEnvelope },
   { label: 'GitHub', href: 'https://github.com/davidbingmann', Icon: FaGithub },
   { label: 'X', href: 'https://x.com/dxv1d04', Icon: FaXTwitter },
+  { label: 'Mail', href: 'mailto:contact@davidbingmann.de', Icon: FaEnvelope },
 ];
 
-function useMediaQuery(query) {
-  const [matches, setMatches] = useState(
-    () => typeof window !== 'undefined' && window.matchMedia(query).matches
-  );
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia(query);
-    const handleChange = (event) => setMatches(event.matches);
-
-    setMatches(mediaQuery.matches);
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, [query]);
-
-  return matches;
-}
-
-function useTerminalTimeline(instant) {
-  const [stage, setStage] = useState(instant ? STAGE.DONE : STAGE.TYPING_CD);
-  const [typedCd, setTypedCd] = useState(instant ? COMMAND_CD.length : 0);
-  const [typedCat, setTypedCat] = useState(instant ? COMMAND_CAT.length : 0);
-
-  useEffect(() => {
-    if (instant) {
-      setStage(STAGE.DONE);
-      setTypedCd(COMMAND_CD.length);
-      setTypedCat(COMMAND_CAT.length);
-      return undefined;
-    }
-
-    let delay;
-    let action;
-
-    if (stage === STAGE.TYPING_CD && typedCd < COMMAND_CD.length) {
-      delay = TYPE_INTERVAL;
-      action = () => setTypedCd((count) => count + 1);
-    } else if (stage === STAGE.TYPING_CD) {
-      delay = 400;
-      action = () => setStage(STAGE.PROFILE);
-    } else if (stage === STAGE.PROFILE) {
-      delay = 900;
-      action = () => setStage(STAGE.TYPING_CAT);
-    } else if (stage === STAGE.TYPING_CAT && typedCat < COMMAND_CAT.length) {
-      delay = TYPE_INTERVAL;
-      action = () => setTypedCat((count) => count + 1);
-    } else if (stage === STAGE.TYPING_CAT) {
-      delay = 400;
-      action = () => setStage(STAGE.ABOUT);
-    } else if (stage === STAGE.ABOUT) {
-      delay = 500;
-      action = () => setStage(STAGE.DONE);
-    } else {
-      return undefined;
-    }
-
-    const timer = setTimeout(action, delay);
-    return () => clearTimeout(timer);
-  }, [instant, stage, typedCd, typedCat]);
-
-  return { stage, typedCd, typedCat };
-}
-
-function Reveal({ open, children }) {
-  return (
-    <div className={`terminal-reveal${open ? ' terminal-reveal--open' : ''}`}>
-      <div className="terminal-reveal-inner">{children}</div>
-    </div>
-  );
-}
+const software = projects.filter((project) => project.type === 'software');
+const papers = projects.filter((project) => project.type === 'paper');
 
 export default function Home() {
-  const reduceMotion = useMediaQuery('(prefers-reduced-motion: reduce)');
-  const [skipIntro] = useState(() => introPlayed);
-  const { stage, typedCd, typedCat } = useTerminalTimeline(
-    reduceMotion || skipIntro
-  );
-
-  useEffect(() => {
-    introPlayed = true;
-    document.title = 'David Bingmann';
-  }, []);
+  useDocumentTitle();
 
   return (
-    <div className="home">
-      <section className="terminal" aria-label="About David Bingmann">
-        <div className="terminal-bar">
-          <span className="terminal-dot terminal-dot--close" />
-          <span className="terminal-dot terminal-dot--minimize" />
-          <span className="terminal-dot terminal-dot--zoom" />
-          <span className="terminal-title">david@bingmann.de — zsh</span>
+    <>
+      <div id="dhead">
+        <div id="dpic">
+          <img
+            src={profilePicture400}
+            srcSet={`${profilePicture400} 2x, ${profilePicture600} 3x`}
+            alt="Portrait of David Bingmann"
+            fetchPriority="high"
+          />
         </div>
-        <div className="terminal-body">
-          <p className="terminal-line">
-            <span className="terminal-cwd">~</span>{' '}
-            <span className="terminal-dollar">$</span>{' '}
-            {COMMAND_CD.slice(0, typedCd)}
-            {stage === STAGE.TYPING_CD && <span className="terminal-cursor" />}
+        <div>
+          <h1>David Bingmann</h1>
+          <p className="lede">Fascinated by machines that think 🧠🤖</p>
+          <div id="dico">
+            {socialLinks.map(({ label, href, Icon }) => (
+              <ExternalLink key={href} className="iico" href={href} aria-label={label}>
+                <Icon aria-hidden="true" />
+              </ExternalLink>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <h2 className="ctitle">Background</h2>
+      {timelineItems.map((item, index) => (
+        <div className="entry" key={index}>
+          <div className="yr">
+            <span className="num">{item.year}</span>
+            {item.until && <small>{item.until}</small>}
+          </div>
+          <div className="ico">
+            <div className="dot" />
+            {item.logo && (
+              <span className="logo-tile">
+                <img
+                  src={item.logo.src}
+                  alt={item.logo.alt}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </span>
+            )}
+          </div>
+          <div className="desc">{item.body}</div>
+        </div>
+      ))}
+
+      <h2 className="ctitle">Publications</h2>
+      {papers.map((project) => (
+        <div className="pub" key={project.slug}>
+          <p className="ptitle">
+            <Link to={`/projects/${project.slug}`}>{project.title}</Link>
           </p>
-
-          <Reveal open={stage >= STAGE.PROFILE}>
-            <div className="terminal-profile">
-              <img
-                className="terminal-photo"
-                src={profilePicture1200}
-                srcSet={`${profilePicture800} 533w, ${profilePicture1200} 800w, ${profilePictureFull} 1000w`}
-                sizes="(max-width: 720px) 64vw, 290px"
-                alt="Portrait of David Bingmann"
-                decoding="async"
-                fetchPriority="high"
-              />
-              <div className="terminal-facts">
-                <p className="terminal-name">David Bingmann</p>
-                <p className="terminal-role">Bachelor&rsquo;s student</p>
-                <hr className="terminal-rule" />
-                <p className="terminal-fact">
-                  <span className="terminal-key">Study</span>
-                  Business Informatics &amp; AI
-                </p>
-                <p className="terminal-fact">
-                  <span className="terminal-key">Uni</span>
-                  University of Trier
-                </p>
-                <p className="terminal-fact">
-                  <span className="terminal-key">Work</span>
-                  Research assistant @ DFKI
-                </p>
-                <div className="terminal-socials">
-                  {socialLinks.map(({ label, href, Icon }) => (
-                    <a
-                      key={href}
-                      href={href}
-                      target={href.startsWith('http') ? '_blank' : undefined}
-                      rel={href.startsWith('http') ? 'noreferrer' : undefined}
-                      aria-label={label}
-                    >
-                      <Icon className="terminal-social-icon" aria-hidden="true" />
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </Reveal>
-
-          <Reveal open={stage >= STAGE.TYPING_CAT}>
-            <p className="terminal-line">
-              <span className="terminal-cwd">~/davidbingmann</span>{' '}
-              <span className="terminal-dollar">$</span>{' '}
-              {COMMAND_CAT.slice(0, typedCat)}
-              {stage === STAGE.TYPING_CAT && (
-                <span className="terminal-cursor" />
-              )}
-            </p>
-          </Reveal>
-
-          <Reveal open={stage >= STAGE.ABOUT}>
-            <p className="terminal-about">
-              My name is David Bingmann and I am currently studying Business
-              Informatics &amp; Artificial Intelligence at the University of
-              Trier. In addition to my studies, I work as a research assistant
-              at the German Research Center for Artificial Intelligence (DFKI).
-              Feel free to check out my social media channels or write me a{' '}
-              <a href="mailto:contact@davidbingmann.de">mail</a> &mdash; I look
-              forward to connecting!
-            </p>
-          </Reveal>
-
-          <Reveal open={stage >= STAGE.DONE}>
-            <p className="terminal-line">
-              <span className="terminal-cwd">~/davidbingmann</span>{' '}
-              <span className="terminal-dollar">$</span>{' '}
-              <span className="terminal-cursor terminal-cursor--blink" />
-            </p>
-          </Reveal>
+          <p className="pub-venue">{project.venue}</p>
+          <p className="pub-meta">
+            David Bingmann &middot;{' '}
+            <ExternalLink href={project.link.href}>
+              {project.link.label}
+            </ExternalLink>
+          </p>
         </div>
-      </section>
-    </div>
+      ))}
+
+      <h2 className="ctitle">Projects</h2>
+      {software.map((project) => (
+        <div className="project" key={project.slug}>
+          <p className="ptitle">
+            <Link to={`/projects/${project.slug}`}>{project.title}</Link>
+          </p>
+          <p>{project.summary}</p>
+        </div>
+      ))}
+    </>
   );
 }

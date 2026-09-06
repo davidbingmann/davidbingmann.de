@@ -1,30 +1,62 @@
 # davidbingmann.de
 
-My personal website (profile, projects, resume, and an Impressum page).
+My personal website: a single-page profile (about, timeline, projects,
+publications) plus project detail pages and an Impressum page.
 
 ## How It's Built
 
 - **Frontend**: React + Vite
-- **Routing**: React Router (a small SPA with a few routes)
-- **Styling**: hand-written CSS (`src/styles.css`) using CSS custom properties and a `data-theme` attribute on `index.html`
+- **Routing**: React Router (home page plus two sub-page routes)
+- **Styling**: hand-written CSS (`src/styles.css`). Light only, no web fonts,
+  no CSS framework, no scroll animations. A single 860px column set in a serif
+  (Charter, falling back to Georgia), with the plain-document structure of
+  karpathy.ai: head, timeline, publications, projects.
 - **Icons**: `react-icons`
-- **Content**: mostly plain React components; the resume is driven by `src/data/timeline.js`
+- **Content**: `src/data/timeline.jsx` (career timeline) and
+  `src/data/projects.js` (projects and papers) drive the home page.
 
 ## How It's Programmed
 
-- `src/main.jsx` renders `<App />`; `src/App.jsx` defines the client-side routes and wraps everything in `src/components/Layout.jsx`.
-- `src/components/Layout.jsx` keeps navigation and social links as simple arrays and maps them to `NavLink`/`<a>` elements.
-- `src/pages/Home.jsx` implements the hero "typed command" effect with a small `useEffect`-driven timer (typing, then hiding the prompt).
-- `src/pages/Resume.jsx` renders the timeline by mapping `timelineItems`; each item sets a CSS variable (`--delay`) for a staggered reveal animation.
+- `src/main.jsx` renders `<App />`; `src/App.jsx` defines the routes and wraps
+  them in `src/components/Layout.jsx`.
+- `src/components/Layout.jsx` is only the shared footer plus an `<Outlet />`;
+  there is no navigation bar. Sub-pages carry their own "back" link.
+- `src/pages/Home.jsx` renders the whole home document: head (photo, name,
+  social icons), the timeline, projects, publications.
+- `/projects` and `/resume` redirect to `/`, since both now live on the home
+  page.
+
+## Content You Edit By Hand
+
+- **Timeline** (`src/data/timeline.jsx`): each entry has a `year` (the large
+  numeral), an optional `until` label under it, an optional `logo`, and a
+  `body` written as JSX so it can contain links. To show an organisation logo,
+  crop the file down to the mark itself, save it as WebP at roughly 200px in
+  `src/assets/logos/`, import it, and set `logo: { src, alt }`. Add the owner
+  to the trademark list in `src/pages/Impressum.jsx` at the same time. Every
+  tile is
+  the same square whatever shape the mark is, and rows have a fixed height so
+  the gaps between logos stay identical. Both come from the tokens at the top
+  of `src/styles.css` (`--logo-box`, `--logo-gutter`); an entry whose text grows
+  past that height falls out of the rhythm on its own.
+- **Projects** (`src/data/projects.js`): `type: 'software'` entries render in
+  the projects section, `type: 'paper'` entries in publications (papers also
+  carry a `venue`). `link` is the repo, store or PDF the entry points at, and
+  it appears only on the detail page at `/projects/<slug>`, not in the home
+  page preview. `body` is the text of that page.
 
 ## Code Layout
 
-- `index.html`: HTML shell (loads the font, sets the initial theme, mounts `#root`)
+- `index.html`: HTML shell (mounts `#root`)
 - `src/main.jsx`: React entry point (renders `<App />` and imports global styles)
-- `src/App.jsx`: route table (`/`, `/projects`, `/resume`, `/impressum`)
-- `src/components/Layout.jsx`: shared page chrome (nav + footer + `<Outlet />`)
+- `src/App.jsx`: route table (`/`, `/projects/:slug`, `/impressum`)
+- `src/components/Layout.jsx`: the page container, shared footer and `<Outlet />`
+- `src/components/BackLink.jsx`: the way back to the home page from a sub page
+- `src/components/ExternalLink.jsx`: outward links, opened in a new tab
+- `src/components/ScrollToTop.jsx`: resets scroll on navigation, honours anchors
+- `src/hooks/useDocumentTitle.js`: sets the tab title
 - `src/pages/*`: page components
-- `src/data/timeline.js`: resume timeline data
+- `src/data/*`: timeline and project content
 - `src/assets/*` and `public/*`: images and static assets (e.g. `favicon.ico`)
 
 ## Hosting Files (Descriptive)

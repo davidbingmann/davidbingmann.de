@@ -1,24 +1,14 @@
-import { useEffect } from 'react';
+import BackLink from '../components/BackLink.jsx';
+import { useDocumentTitle } from '../hooks/useDocumentTitle.js';
 
 export default function Impressum() {
-  useEffect(() => {
-    document.title = 'Imprint & Privacy - David Bingmann';
-  }, []);
+  useDocumentTitle('Imprint & Privacy');
 
   return (
-    <section className="section">
-      <div className="project-head">
-        <h1 className="section-title">imprint/</h1>
-        <span className="tag">legal</span>
-      </div>
-      <div
-        className="section-body"
-        spellCheck={false}
-        translate="no"
-        data-gramm="false"
-        data-gramm_editor="false"
-        data-enable-grammarly="false"
-      >
+    <>
+      <BackLink />
+      <div className="prose" translate="no">
+        <h1 className="page-title">Imprint &amp; Privacy</h1>
         <p>
           <strong>Information according to §§ 5, 6 DDG</strong>
         </p>
@@ -77,12 +67,29 @@ export default function Impressum() {
           content immediately.
         </p>
 
-        <div className="legal-fineprint">
+        <h2>Image credits</h2>
+        <p>
+          The organisation logos in the background section are trademarks of
+          their respective owners: University of Trier, German Research Center
+          for Artificial Intelligence (DFKI), Trier University of Applied
+          Sciences, Tesla, Inc., and Staatliches Eifelgymnasium Neuerburg. They
+          appear here only to identify the institutions named in the
+          accompanying text and do not indicate any endorsement of, or
+          affiliation with, this website. All other images on this site were
+          created by me.
+        </p>
+        <p>
+          If you hold rights to one of these marks and object to its use here,
+          write to the address above and I will remove it.
+        </p>
+
+        <div className="fineprint">
           <h2 id="privacy">Privacy policy</h2>
           <p>
             This personal, non-commercial site sets no cookies and uses no
             analytics, advertising, social plug-ins, or third-party trackers.
-            Web fonts are bundled and served from the same domain. The
+            No web fonts are loaded; the site uses the fonts already installed
+            on your device. The
             processing described below is based on Art. 6(1)(f) GDPR
             (legitimate interest in operating and securing this website).
           </p>
@@ -131,6 +138,6 @@ export default function Impressum() {
           </p>
         </div>
       </div>
-    </section>
+    </>
   );
 }

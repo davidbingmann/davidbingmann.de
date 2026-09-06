@@ -4,10 +4,9 @@ export const projects = [
     title: 'Semestral',
     type: 'software',
     headline: 'Your whole semester in one place: tasks, exams, deadlines, grades.',
-    tags: ['swiftui', 'ios', 'macos', 'productivity'],
-    repo: {
+    link: {
       href: 'https://apps.apple.com/de/app/semestral/id6782685471',
-      linkText: 'apps.apple.com/de/app/semestral',
+      label: 'apps.apple.com/de/app/semestral',
     },
     summary:
       'Semestral keeps tasks, exams, deadlines and grades for a semester in one place. It started as source code on GitHub and now runs natively on Mac, iPhone and iPad.',
@@ -29,10 +28,9 @@ export const projects = [
     title: 'EchoType',
     type: 'software',
     headline: 'Speak your prompts instead of typing.',
-    tags: ['agents', 'ai', 'productivity', 'voice'],
-    repo: {
+    link: {
       href: 'https://github.com/davidbingmann/EchoType',
-      linkText: 'github.com/davidbingmann/EchoType',
+      label: 'github.com/davidbingmann/EchoType',
     },
     summary:
       'I was looking for a faster and more intuitive way to write prompts for AI agents like Codex or Claude Code, especially longer prompts that are tedious to type.',
@@ -48,14 +46,12 @@ export const projects = [
     slug: 'paper-humanoid-robots-industry-5',
     title: 'Humanoid Robots in Industry 5.0',
     type: 'paper',
+    venue: 'Seminar paper, University of Trier',
     headline: 'What potential do humanoid robots offer in Industry 5.0?',
-    tags: ['industry-5.0', 'humanoid-robots', 'ai', 'paper'],
-    repo: {
+    link: {
       href: '/papers/paper.pdf',
-      linkText: 'paper.pdf',
+      label: 'Read the paper (PDF)',
     },
-    summary:
-      'My paper looks at whether humanoid robots can support the shift from Industry 4.0 to Industry 5.0: more resilient, more human-centered, and better suited to real factories.',
     body: [
       'As part of a seminar at the University of Trier, I wrote this paper on humanoid robots in the context of Industry 5.0: not as a replacement for humans, but as a possible way to make industrial work more resilient, flexible, and human-centered.',
       'The paper discusses why current automation still struggles in human-designed factories, what recent robot learning research makes possible, and where the technical, economic, and regulatory limits still are. You can read the public PDF version above.',
