@@ -140,11 +140,10 @@ h1 {
 }
 
 .yr {
+  align-self: center;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: flex-end;
-  height: var(--logo-box);
   padding: 0 18px 0 0;
 }
 
@@ -166,8 +165,12 @@ h1 {
   margin-top: 5px;
 }
 
+/* Stretches over the full row so the spine stays unbroken, and centres the
+   tile inside it so year, dot, logo and text share one axis at any length. */
 .ico {
   position: relative;
+  display: flex;
+  align-items: center;
   border-left: var(--spine) solid var(--rule);
 }
 
@@ -199,7 +202,7 @@ h1 {
    sits outside this element's containing block, hence the negative half. */
 .dot {
   position: absolute;
-  top: calc(var(--logo-box) / 2);
+  top: 50%;
   left: calc(var(--spine) / -2 - var(--dot-size) / 2 - var(--dot-ring));
   transform: translateY(-50%);
   width: var(--dot-size);
@@ -209,8 +212,11 @@ h1 {
   border: var(--dot-ring) solid var(--paper);
 }
 
+/* Symmetric padding keeps the text centred while still guaranteeing a gap to
+   the next entry once the text outgrows the row's minimum height. */
 .desc {
-  padding: 0 0 30px 16px;
+  align-self: center;
+  padding: var(--logo-gutter) 0 var(--logo-gutter) 16px;
 }
 
 /* Publications and projects */
@@ -362,10 +368,9 @@ h1 {
   }
 
   .yr {
+    align-self: start;
     flex-direction: row;
     align-items: baseline;
-    justify-content: flex-start;
-    height: auto;
     gap: 10px;
     padding: 0 0 8px;
   }
@@ -381,6 +386,7 @@ h1 {
 
   .ico {
     position: static;
+    display: block;
     border: 0;
   }
 
@@ -394,6 +400,7 @@ h1 {
   }
 
   .desc {
+    align-self: start;
     padding: 0 0 28px;
   }
 }
