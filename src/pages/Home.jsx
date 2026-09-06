@@ -19,9 +19,6 @@ const socialLinks = [
   { label: 'Mail', href: 'mailto:contact@davidbingmann.de', Icon: FaEnvelope },
 ];
 
-// Taken from the icon row so the address is not written on the page twice.
-const mailHref = socialLinks.find(({ label }) => label === 'Mail').href;
-
 const software = projects.filter((project) => project.type === 'software');
 const papers = projects.filter((project) => project.type === 'paper');
 
@@ -86,8 +83,7 @@ export default function Home() {
           University of Trier and work as a research assistant at the German
           Research Center for Artificial Intelligence (DFKI). The projects
           below started as problems I had myself. If you want to talk about
-          them, or about AI in general,{' '}
-          <ExternalLink href={mailHref}>send me an email</ExternalLink>.
+          them, or about AI in general, get in touch.
         </p>
       </div>
 
