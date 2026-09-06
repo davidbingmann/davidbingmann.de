@@ -29,9 +29,12 @@ export default function Home() {
     <>
       <div id="dhead">
         <div id="dpic">
+          {/* The slot is 190px wide, 240px below the 700px breakpoint; both
+              mirror --portrait-w in styles.css. */}
           <img
             src={profilePicture400}
-            srcSet={`${profilePicture400} 2x, ${profilePicture600} 3x`}
+            srcSet={`${profilePicture400} 400w, ${profilePicture600} 600w`}
+            sizes="(max-width: 700px) 240px, 190px"
             alt="Portrait of David Bingmann"
             fetchPriority="high"
           />
@@ -72,6 +75,21 @@ export default function Home() {
           <div className="desc">{item.body}</div>
         </div>
       ))}
+
+      <h2 className="ctitle">Bio</h2>
+      <div className="prose">
+        <p>
+          I study Business Informatics &amp; Artificial Intelligence at the
+          University of Trier and work as a research assistant at the German
+          Research Center for Artificial Intelligence (DFKI). The projects
+          below started as problems I had myself. If you want to talk about any
+          of them,{' '}
+          <ExternalLink href="mailto:contact@davidbingmann.de">
+            write to me
+          </ExternalLink>
+          .
+        </p>
+      </div>
 
       <h2 className="ctitle">Publications</h2>
       {papers.map((project) => (

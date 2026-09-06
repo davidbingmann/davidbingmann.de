@@ -21,6 +21,10 @@
   --logo-pad: 9px;
   --logo-gutter: 14px;
   /* The timeline spine and the marker that sits on it. */
+  /* The portrait's slot. Mirrored by the sizes attribute in Home.jsx, since
+     the browser cannot read a CSS width when it picks a srcSet candidate. */
+  --portrait-w: 190px;
+  --portrait-h: 230px;
   --spine: 1px;
   --dot-size: 9px;
   --dot-ring: 2px;
@@ -67,10 +71,9 @@ a:hover {
   padding: 64px 0 40px;
 }
 
-/* Keep in sync with the sizes attribute on the portrait in Home.jsx. */
 #dpic img {
-  width: 190px;
-  height: 230px;
+  width: var(--portrait-w);
+  height: var(--portrait-h);
   object-fit: cover;
   object-position: 50% 20%;
   border-radius: 14px;
@@ -341,13 +344,19 @@ h1 {
 
 @media (max-width: 700px) {
   :root {
-    --logo-box: 78px;
-    --logo-pad: 7px;
+    --portrait-w: 240px;
+    --portrait-h: 290px;
   }
 
   #dhead {
     flex-direction: column;
+    align-items: center;
+    text-align: center;
     padding-top: 40px;
+  }
+
+  #dico {
+    justify-content: center;
   }
 
   h1 {
