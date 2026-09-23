@@ -36,10 +36,9 @@ export const timelineItems = [
     logo: { src: uniTrierLogo, dark: uniTrierLogoDark, alt: 'University of Trier' },
     body: (
       <>
-        I study Business Informatics &amp; Artificial Intelligence (B.Sc.) at the{' '}
-        <ExternalLink href="https://www.uni-trier.de/">University of Trier</ExternalLink>. It is also
-        where I wrote my seminar paper on humanoid robots in Industry 5.0, which
-        you can find under publications below.
+        I'm studying Business Informatics &amp; Artificial Intelligence (B.Sc.)
+        at the{' '}
+        <ExternalLink href="https://www.uni-trier.de/">University of Trier</ExternalLink>.
       </>
     ),
   },
@@ -49,7 +48,7 @@ export const timelineItems = [
     logo: { src: dfkiLogo, dark: dfkiLogoDark, alt: 'DFKI' },
     body: (
       <>
-        Alongside my studies I work as a research assistant at the{' '}
+        Alongside my studies, I work as a student research assistant at the{' '}
         <ExternalLink href="https://www.dfki.de/">
           German Research Center for Artificial Intelligence (DFKI)
         </ExternalLink>
@@ -63,16 +62,16 @@ export const timelineItems = [
     logo: {
       src: hsTrierLogo,
       dark: hsTrierLogoDark,
-      alt: 'University of Applied Sciences Trier',
+      alt: 'Trier University of Applied Sciences',
     },
     body: (
       <>
-        I started out in Artificial Intelligence &amp; Data Science (B.Sc.) at
-        the{' '}
+        I started out with Artificial Intelligence &amp; Data Science (B.Sc.)
+        at{' '}
         <ExternalLink href="https://www.hochschule-trier.de/">
-          University of Applied Sciences Trier
+          Trier University of Applied Sciences
         </ExternalLink>{' '}
-        before moving over to the University of Trier.
+        before switching to the University of Trier.
       </>
     ),
   },
@@ -81,7 +80,7 @@ export const timelineItems = [
     logo: { src: teslaLogo, dark: teslaLogoDark, alt: 'Tesla' },
     body: (
       <>
-        I interned in Controls Engineering at{' '}
+        I did an internship in Controls Engineering at{' '}
         <ExternalLink href="https://teslaautomation.de/en/">
           Tesla Automation
         </ExternalLink>
@@ -98,7 +97,7 @@ export const timelineItems = [
     },
     body: (
       <>
-        Abitur at{' '}
+        I completed my Abitur at{' '}
         <ExternalLink href="https://www.eifel-gymnasium.de/">
           Staatliches Eifelgymnasium Neuerburg
         </ExternalLink>

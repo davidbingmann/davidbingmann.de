@@ -18,7 +18,7 @@ export default function Project() {
           <>
             <h1 className="page-title">Project not found</h1>
             <p>
-              That project does not exist. <Link to="/">Back to the start</Link>.
+              This project doesn't exist. <Link to="/">Back to the homepage</Link>.
             </p>
           </>
         ) : (
