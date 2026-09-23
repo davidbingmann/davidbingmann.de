@@ -69,14 +69,14 @@ export default function Impressum() {
 
         <h2>Image credits</h2>
         <p>
-          The organisation logos in the background section are trademarks of
+          The organization logos in the background section are trademarks of
           their respective owners: University of Trier, German Research Center
           for Artificial Intelligence (DFKI), Trier University of Applied
           Sciences, Tesla, Inc., and Staatliches Eifelgymnasium Neuerburg. They
           appear here only to identify the institutions named in the
           accompanying text and do not indicate any endorsement of, or
           affiliation with, this website. On a dark background some of them are
-          shown in a single-colour negative version, so that a mark drawn in
+          shown in a single-color negative version, so that a mark drawn in
           dark ink stays visible. All other images on this site were created by
           me.
         </p>
