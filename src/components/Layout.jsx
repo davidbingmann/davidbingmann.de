@@ -1,5 +1,6 @@
 import { Link, Outlet } from 'react-router-dom';
 import ScrollToTop from './ScrollToTop.jsx';
+import ViewBeacon from './ViewBeacon.jsx';
 
 export default function Layout() {
   const currentYear = new Date().getFullYear();
@@ -7,9 +8,11 @@ export default function Layout() {
   return (
     <div className="container">
       <ScrollToTop />
+      <ViewBeacon />
       <Outlet />
       <footer className="footer">
-        <Link to="/impressum">Imprint &amp; Privacy</Link> &middot; &copy;{' '}
+        <Link to="/impressum">Imprint &amp; Privacy</Link> &middot;{' '}
+        <Link to="/insights">Insights</Link> &middot; &copy;{' '}
         {currentYear} David Bingmann
       </footer>
     </div>

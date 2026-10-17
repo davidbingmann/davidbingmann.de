@@ -8,3 +8,4 @@ docs
 *.md
 *.png
 .DS_Store
+insights-service

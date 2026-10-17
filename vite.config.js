@@ -3,6 +3,10 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
+  server: {
+    // In production the host Caddy routes this to the insights service.
+    proxy: { '/api/insights': 'http://localhost:5003' },
+  },
   build: {
     // Keep every logo a file of its own. Vite inlines assets under 4 kB as
     // base64 in the JS bundle, which would put the small marks — light and

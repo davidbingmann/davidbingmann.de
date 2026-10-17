@@ -36,7 +36,20 @@ services:
     networks:
       - my_network
 
+  insights:
+    build: ./insights-service
+    container_name: mywebsite_insights
+    restart: unless-stopped
+    volumes:
+      - insights_data:/data
+    labels:
+      # Locally built image; Watchtower cannot pull it and retries every 5 min.
+      - com.centurylinklabs.watchtower.enable=false
+    networks:
+      - my_network
+
 volumes:
+  insights_data:
   caddy_data:
   caddy_config:
 

@@ -64,4 +64,5 @@ This repo also keeps the hosting setup I use for the site:
 
 - `Dockerfile`: builds the Vite app and serves it via Vite's preview server
 - `docker-compose.yml`: wires the app container to Caddy (plus Watchtower)
-- `Caddyfile`: reverse-proxy + compression + a small set of security headers
+- `Caddyfile`: reverse-proxy + compression + a small set of security headers, and the `/api/insights` route
+- `insights-service/`: the cookie-free visitor counter behind the `/insights` page, linked from the footer (standard-library Python, SQLite in the `insights_data` volume). `src/components/ViewBeacon.jsx` reports each route change to it; visitors are told apart by a daily-salted hash that never leaves memory, so only per-day counts are stored. Locally: `DB_PATH=./insights.db uv run --no-project --python 3.12 insights-service/app.py` next to `npm run dev`, which proxies `/api/insights` to port 5003

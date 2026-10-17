@@ -15,5 +15,8 @@ davidbingmann.de {
             roll_keep_for 336h
         }
     }
+    @insights path /api/insights /api/insights/*
+    reverse_proxy @insights mywebsite_insights:5003
+
     reverse_proxy mywebsite_app:5001
 }

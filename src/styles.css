@@ -17,6 +17,9 @@
   --rule: #e3e0da;
   --link: #1f4b7a;
   --paper: #fff;
+  /* The Insights section's change against the previous 30 days. */
+  --up: #3d8a5c;
+  --down: #b3583f;
   --sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI',
     sans-serif;
   --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -53,6 +56,8 @@
     --rule: var(--soft);
     --link: #8ab0da;
     --paper: #151412;
+    --up: #7dbf95;
+    --down: #de9077;
   }
 }
 
@@ -296,6 +301,181 @@ h1 {
   font-size: 17px;
 }
 
+/* Insights */
+.insight-lede {
+  color: var(--soft);
+  margin: 0 0 32px;
+  max-width: 60ch;
+}
+
+.insight-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px 56px;
+  margin: 0 0 40px;
+}
+
+.insight-stats dt {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  color: var(--soft);
+  font-size: 16px;
+}
+
+.insight-stats dd {
+  margin: 2px 0 0;
+  font-size: 36px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.insight-stats .insight-top {
+  font-size: 26px;
+  line-height: 1.6;
+}
+
+.insight-change {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+.insight-change.is-up {
+  color: var(--up);
+}
+
+.insight-change.is-down {
+  color: var(--down);
+}
+
+.insight-chart {
+  margin: 0;
+}
+
+.insight-plot {
+  position: relative;
+  height: 200px;
+  margin-top: 12px;
+}
+
+.insight-plot svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  touch-action: pan-y;
+}
+
+/* The viewBox stretches to the column; keep strokes their drawn width. */
+.insight-plot line,
+.insight-plot path {
+  vector-effect: non-scaling-stroke;
+  fill: none;
+}
+
+.insight-grid {
+  stroke: var(--rule);
+  stroke-dasharray: 3 5;
+}
+
+.insight-gridlabel {
+  position: absolute;
+  left: 0;
+  z-index: 1;
+  transform: translateY(-50%);
+  padding-right: 6px;
+  background: var(--paper);
+  line-height: 1;
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.insight-line {
+  stroke: var(--ink);
+  stroke-width: 2px;
+  stroke-linecap: round;
+}
+
+.insight-line.is-previous {
+  stroke: var(--rule);
+  stroke-width: 3px;
+}
+
+.insight-crosshair {
+  stroke: var(--soft);
+  stroke-width: 1px;
+}
+
+.insight-dot {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--ink);
+  border: 2px solid var(--paper);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.insight-dot.is-previous {
+  background: var(--faint);
+}
+
+.insight-tooltip {
+  position: absolute;
+  top: 0;
+  margin-left: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 8px 12px;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: var(--paper);
+  font-family: var(--sans);
+  font-size: 13px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.insight-tooltip.is-left {
+  transform: translateX(-100%);
+  margin-left: -14px;
+}
+
+.insight-tooltip-prev {
+  color: var(--soft);
+}
+
+.insight-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 24px;
+  margin-top: 18px;
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--soft);
+}
+
+.insight-key {
+  display: inline-block;
+  width: 18px;
+  height: 2px;
+  margin-right: 6px;
+  vertical-align: middle;
+  background: var(--ink);
+}
+
+.insight-key.is-previous {
+  height: 3px;
+  background: var(--rule);
+}
+
 /* Sub pages */
 .backlink {
   display: inline-flex;
@@ -398,6 +578,18 @@ h1 {
 
   .page-title {
     font-size: 32px;
+  }
+
+  .insight-stats {
+    gap: 24px 28px;
+  }
+
+  .insight-stats dd {
+    font-size: 30px;
+  }
+
+  .insight-stats .insight-top {
+    font-size: 22px;
   }
 
   /* The three columns stack; the spine moves onto the entry itself. */

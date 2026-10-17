@@ -89,11 +89,12 @@ export default function Impressum() {
           <h2 id="privacy">Privacy policy</h2>
           <p>
             This personal, non-commercial site sets no cookies and uses no
-            analytics, advertising, social plug-ins, or third-party trackers.
+            third-party analytics, advertising, social plug-ins, or trackers.
             No web fonts are loaded; the site uses the fonts already installed
-            on your device. No access statistics are collected or sent
-            anywhere. What little processing remains is based on Art. 6(1)(f)
-            GDPR (legitimate interest in operating and securing this website).
+            on your device. The only statistics are the visitor counts this
+            server keeps itself, described below. What little processing
+            remains is based on Art. 6(1)(f) GDPR (legitimate interest in
+            operating this website and knowing how much it is read).
           </p>
           <p>
             <strong>Controller.</strong> See the imprint above.
@@ -109,6 +110,18 @@ export default function Impressum() {
             Requests are processed in memory and not recorded. The hosting
             provider may log at infrastructure level for operation and security
             under its own agreement; see below.
+          </p>
+          <p>
+            <strong>Visitor counts.</strong> When you open a page, your browser
+            tells this server which page it was. To count each visitor once a
+            day, the server combines your IP address and browser identifier
+            with a random key that exists only in memory and is replaced every
+            day, and turns them into a one-way hash. Only the number of
+            visitors and views per day and page is stored; the IP address,
+            browser identifier and hash are never written to disk, and
+            yesterday's hashes cannot be linked to today's. If your browser
+            sends Do Not Track or Global Privacy Control, you are not counted.
+            The totals are public on the Insights page.
           </p>
           <p>
             <strong>External links.</strong> Links to LinkedIn, GitHub, X
