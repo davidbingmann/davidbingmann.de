@@ -889,6 +889,17 @@ h1 {
   max-width: 68ch;
 }
 
+.admin-fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.admin-fieldset:disabled {
+  opacity: 0.6;
+}
+
 .admin-form-title {
   font-size: 26px;
   font-weight: normal;

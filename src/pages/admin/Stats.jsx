@@ -153,7 +153,6 @@ const PAGE_TITLES = {
 const formatHour = (key) =>
   new Date(`${key}:00:00Z`).toLocaleTimeString('en-GB', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' });
 
-/** One bar per hour of the last 24. */
 function HourChart({ hours }) {
   const [hover, setHover] = useState(null);
   const max = Math.max(1, ...hours.map((h) => h.views));

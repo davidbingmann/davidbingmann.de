@@ -21,6 +21,8 @@ import traceback
 import urllib.error
 import urllib.parse
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor
+from datetime import date
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -48,8 +50,9 @@ SLUG = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 # The panel cleans file names before it sends them; this only checks.
 FILE_NAME = re.compile(r"^(?P<stem>[a-z0-9]+(-[a-z0-9]+)*)\.(?P<extension>[a-z]+)$")
 DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
-# The project link is rendered as a plain <a href>; never javascript: or data:.
-LINK = re.compile(r"^(https?://|/(?!/))", re.IGNORECASE)
+# The project link is rendered as a plain <a href>; never javascript: or data:,
+# and never `//host` or `/\host`, which browsers read as another site.
+LINK = re.compile(r"^(https?://|/(?![/\\]))", re.IGNORECASE)
 
 
 class Conflict(Exception):
@@ -62,9 +65,6 @@ class Invalid(Exception):
 
 class Unreadable(Exception):
     """A content file on the branch is not a JSON list, so it cannot be edited safely."""
-
-
-# Storage
 
 
 class GitHubStore:
@@ -252,6 +252,14 @@ def clean_project(entry: dict) -> dict:
     return clean
 
 
+def is_real_date(text: str) -> bool:
+    try:
+        date.fromisoformat(text)
+    except ValueError:
+        return False
+    return bool(DATE.match(text))
+
+
 def clean_post(entry: dict) -> dict:
     clean = {
         "slug": text(entry, "slug", limit=80),
@@ -260,8 +268,8 @@ def clean_post(entry: dict) -> dict:
         "summary": text(entry, "summary", required=False, limit=1000),
         "body": text(entry, "body", limit=200_000),
     }
-    if not DATE.match(clean["date"]):
-        raise Invalid(f"The date of “{clean['title']}” must look like 2026-11-10.")
+    if not is_real_date(clean["date"]):
+        raise Invalid(f"The date of “{clean['title']}” must be a real date written like 2026-11-10.")
     return clean
 
 
@@ -307,6 +315,17 @@ def clean_uploads(files) -> list[tuple[str, bytes]]:
     return uploads
 
 
+def github_error(code: int) -> str:
+    if code in (401, 403):
+        return (
+            f"GitHub refused the request ({code}). The token on the server may have expired "
+            "or be missing a permission (Contents read/write, Actions read)."
+        )
+    if code == 404:
+        return f"GitHub could not find {GITHUB_REPO} or its {GITHUB_BRANCH} branch with this token."
+    return f"GitHub answered with an error ({code}). Try again shortly."
+
+
 def read_collection(path: str) -> dict:
     data, sha = store.read(path)
     if data is None:
@@ -320,15 +339,13 @@ def read_collection(path: str) -> dict:
     return {"items": items, "sha": sha}
 
 
-# HTTP
-
-
 class AdminHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         route = urllib.parse.urlsplit(self.path).path.rstrip("/")
         if route == "/api/admin/content":
             try:
-                content = {name: read_collection(path) for name, path in COLLECTIONS.items()}
+                with ThreadPoolExecutor(len(COLLECTIONS)) as pool:
+                    content = dict(zip(COLLECTIONS, pool.map(read_collection, COLLECTIONS.values()), strict=True))
             except Unreadable as error:
                 return self._respond(502, {"error": str(error)})
             return self._respond(200, content)
@@ -381,9 +398,12 @@ class AdminHandler(BaseHTTPRequestHandler):
     def handle_one_request(self):
         try:
             super().handle_one_request()
-        except urllib.error.URLError as error:
+        except urllib.error.HTTPError as error:
+            print(f"GitHub answered {error.code}: {error.reason}", flush=True)
+            self._respond(502, {"error": github_error(error.code)})
+        except (urllib.error.URLError, TimeoutError) as error:
             print(f"GitHub request failed: {error}", flush=True)
-            self._respond(502, {"error": "GitHub could not be reached or refused the request. Try again shortly."})
+            self._respond(502, {"error": "GitHub could not be reached. Try again shortly."})
         except Exception:  # noqa: BLE001 - every request still gets an answer
             traceback.print_exc()
             self._respond(500, {"error": "The admin service ran into an error. Its log has the details."})

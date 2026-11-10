@@ -80,7 +80,7 @@ This repo also keeps the hosting setup I use for the site:
 - `Caddyfile`: the host's reverse proxy: TLS, compression, security headers, no access log, the `/api/semestral/feedback` and `/api/insights/hit` routes, and the admin panel behind Authelia's `forward_auth`
 - `insights-service/`: the page-view counter behind the admin panel's statistics (standard-library Python, SQLite in the `insights_data` volume). `src/components/ViewBeacon.jsx` reports each route change to it, and it adds one to that page's counter for the day and for the hour (hours are kept two days). Only `/api/insights/hit` is public; the numbers are at `/api/admin/insights`, behind the admin login. It deliberately records nothing about the visitor (no IP, no User-Agent, no unique visitors): that is the plain counting the DSK guidance for digital services describes (para. 88), and anything more would bring the §25 TDDDG consent question back. Locally: `DB_PATH=./insights.db uv run --no-project --python 3.12 insights-service/app.py` next to `npm run dev`, which proxies `/api/insights` and `/api/admin/insights` to port 5003
 - `authelia/configuration.yml`: the login in front of the admin panel (Authelia, pinned in `docker-compose.yml`); see "Setting Up the Admin Panel on the Server" below. `authelia/prune_auth_log.py` deletes its sign-in records (with IP addresses) after 30 days, as the privacy text says
-- `admin-service/`: the admin panel's backend (standard-library Python). It reads `src/content/*.json` from `main`, and each save becomes one commit through the GitHub API: the content file plus the PDFs and images the entry brings along (`public/papers/`, `public/images/`). Picked files stay in the browser until Publish, so a cancelled form publishes nothing; once published, a file stays in the public Git history even after it is deleted; CI and Watchtower then deploy as usual, so an edit is live roughly 5 to 10 minutes later. It accepts writes only with the site's own `Origin`, a second lock next to the login cookie's `SameSite=Lax`, and it shares a Docker network (`admin_net`) only with Caddy, Authelia and the insights service. Locally: `CONTENT_DIR=. ALLOWED_ORIGIN=http://localhost:5173 uv run --no-project --python 3.12 admin-service/app.py` writes into this checkout instead of GitHub, and `npm run dev` proxies `/api/admin` to port 5004 (locally there is no login)
+- `admin-service/`: the admin panel's backend (standard-library Python). It reads `src/content/*.json` from `main`, and each save becomes one commit through the GitHub API: the content file plus the PDFs and images the entry brings along (`public/papers/`, `public/images/`). Picked files stay in the browser until Publish, so a cancelled form publishes nothing; once published, a file stays in the public Git history even after it is deleted; CI and Watchtower then deploy as usual, so an edit is live roughly 5 to 10 minutes later. It accepts writes only with the site's own `Origin`, a second lock next to the login cookie's `SameSite=Lax`, and it shares a Docker network (`admin_net`) with Caddy alone. Locally: `CONTENT_DIR=. ALLOWED_ORIGIN=http://localhost:5173 uv run --no-project --python 3.12 admin-service/app.py` writes into this checkout instead of GitHub, and `npm run dev` proxies `/api/admin` to port 5004 (locally there is no login)
 - `feedback-service/`: the Semestral app's feedback endpoint; it reads its SMTP credentials from `.env`, which stays on the server and out of git
 - `/semestral`: the Semestral product, privacy and support pages are not in this repo. They live in a separate private repository and run in their own `semestral_site` container, and the host Caddy reverse-proxies `/semestral` to it (see the `@semestral` block and the `semestral_site` service in `docker-compose.yml`)
 
@@ -90,7 +90,7 @@ The server checkout must match this repo. The feedback route and service used to
 
 The panel sits behind Authelia (`authelia/configuration.yml`): a password
 first, then a passkey or a 30-second code from an authenticator app. Three
-wrong attempts lock the account for an hour. Caddy sends every `/admin` and
+wrong attempts lock the account for ten minutes. Caddy sends every `/admin` and
 `/api/admin` request through Authelia before anything else sees it; the login
 page itself is at `/auth`.
 
@@ -124,9 +124,8 @@ page itself is at `/auth`.
    the panel reads them.
 3. Fetch `admin-service/`, `authelia/` and the new `insights-service/app.py`
    into the server checkout, add the `auth`, `auth_log_prune` and `admin`
-   services, their secrets, the `admin_net` network (Caddy joins it, and
-   `insights` moves onto it) and `SECRETS_DIR` in `.env` to the server's
-   `docker-compose.yml`,
+   services, their secrets, the `admin_net` network (only Caddy and `admin`
+   join it) and `SECRETS_DIR` in `.env` to the server's `docker-compose.yml`,
    and the `/auth` and admin blocks and the narrowed `/api/insights/hit` route
    to its Caddyfile.
 4. `docker compose up -d --build auth auth_log_prune admin insights`; after
@@ -134,9 +133,10 @@ page itself is at `/auth`.
    off, because it names the IP of every failed sign-in; to debug a start that
    fails, switch its logging driver to `json-file` for a while.)
 5. `docker exec mywebsite_caddy caddy validate --config /etc/caddy/Caddyfile
-   --adapter caddyfile`, and only if that passes, `docker exec mywebsite_caddy
-   caddy reload --config /etc/caddy/Caddyfile --adapter caddyfile` (a reload
-   keeps the old configuration if the new one fails).
+   --adapter caddyfile`, and only if that passes, `docker compose up -d caddy`.
+   Caddy has to be recreated, not just reloaded: a reload cannot attach it to
+   the new `admin_net` network, and without it the admin service is out of
+   reach. The recreate interrupts every site on the host for a few seconds.
 6. Open `https://davidbingmann.de/admin` and sign in with the password. Then
    register both second factors, an authenticator app and a passkey, so losing
    one device does not lock you out. Each registration asks for a one-time code,

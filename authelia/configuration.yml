@@ -70,16 +70,19 @@ session:
       authelia_url: 'https://davidbingmann.de/auth'
       default_redirection_url: 'https://davidbingmann.de/admin'
 
-# Three wrong attempts within ten minutes lock the account for an hour. Only by
-# user, not by IP: behind Docker's port forwarding every client may share one
-# address, and an IP ban would then lock out everyone, the owner included.
+# Three wrong attempts within ten minutes lock the account for ten minutes.
+# Guessing is hopeless anyway (a long random password, then a second factor);
+# the lock only slows it down, and kept short it costs little when a stranger
+# who knows the user name trips it on purpose. Only by user, not by IP: behind
+# Docker's port forwarding every client may share one address, and an IP ban
+# would then lock out everyone, the owner included.
 # Lift a ban early with: docker exec mywebsite_auth authelia storage bans user revoke <user>
 regulation:
   modes:
     - 'user'
   max_retries: 3
   find_time: '10 minutes'
-  ban_time: '1 hour'
+  ban_time: '10 minutes'
 
 storage:
   local:

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Markdown from '../../components/Markdown.jsx';
 import { formatPostDate, newestFirst } from '../../content/posts.js';
 import { MAX_FILE_MB, fileTarget, slugify, toBase64 } from './api.js';
@@ -74,12 +74,18 @@ const write = (entry, key, value) => {
   return tail ? { ...entry, [head]: { ...entry[head], [tail]: value } } : { ...entry, [head]: value };
 };
 
-export default function Editor({ kindName, items, onSave }) {
+export default function Editor({ kindName, items, onSave, onEditingChange }) {
   const kind = KINDS[kindName];
   // { index, draft, slugTouched, files }: files are picked but not yet sent.
   const [editing, setEditing] = useState(null);
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState(null); // { tone, text }
+  const isEditing = Boolean(editing);
+
+  useEffect(() => {
+    onEditingChange?.(isEditing);
+    return () => onEditingChange?.(false);
+  }, [isEditing, onEditingChange]);
 
   const belongs = (entry) => !kind.type || entry.type === kind.type;
   let indices = items.map((entry, index) => index).filter((index) => belongs(items[index]));
@@ -130,6 +136,10 @@ export default function Editor({ kindName, items, onSave }) {
         }}
         onPublish={async () => {
           const { index, draft, files } = editing;
+          // The form is locked from here on: what is sent is this draft, so
+          // nothing typed meanwhile may be lost when the editor closes.
+          setBusy(true);
+          setStatus(null);
           // Only files the entry still points to; one whose link was removed
           // again is never sent.
           const text = JSON.stringify(draft);
@@ -140,6 +150,7 @@ export default function Editor({ kindName, items, onSave }) {
             );
           } catch (error) {
             setStatus({ tone: 'error', text: error.message });
+            setBusy(false);
             return;
           }
           const next = index === -1 ? [...items, draft] : items.map((entry, i) => (i === index ? draft : entry));
@@ -233,7 +244,13 @@ function Status({ status }) {
 }
 
 function EntryForm({ kind, editing, setEditing, busy, status, onCancel, onPublish }) {
-  const { index, draft } = editing;
+  const { index, draft, files } = editing;
+
+  // Local addresses of the picked files, so the preview can show them.
+  const filesRef = useRef(files);
+  filesRef.current = files;
+  useEffect(() => () => filesRef.current.forEach((f) => URL.revokeObjectURL(f.preview)), []);
+  const previews = Object.fromEntries(files.map((f) => [f.url, f.preview]));
 
   // Always builds on the latest draft, so a change that lands later (like an
   // inserted image) never undoes what was typed in between. `value` may be a
@@ -250,10 +267,11 @@ function EntryForm({ kind, editing, setEditing, busy, status, onCancel, onPublis
   const stage = (file) => {
     const target = fileTarget(file.name);
     if (file.size > MAX_FILE_MB * 1024 * 1024) throw new Error(`${file.name} is larger than ${MAX_FILE_MB} MB.`);
-    setEditing((current) => ({
-      ...current,
-      files: [...current.files.filter((f) => f.url !== target.url), { ...target, file }],
-    }));
+    if (files.some((f) => f.url === target.url)) {
+      throw new Error(`A file named ${target.name} is already added. Rename one of the two and add it again.`);
+    }
+    const staged = { ...target, file, preview: URL.createObjectURL(file) };
+    setEditing((current) => ({ ...current, files: [...current.files, staged] }));
     return target.url;
   };
 
@@ -266,29 +284,32 @@ function EntryForm({ kind, editing, setEditing, busy, status, onCancel, onPublis
       }}
     >
       <h2 className="admin-form-title">{index === -1 ? `New ${kind.noun}` : `Edit “${read(draft, 'title')}”`}</h2>
-      {kind.fields.map((field) => (
-        <Field
-          key={field.key}
-          field={field}
-          value={read(draft, field.key)}
-          onChange={(v) => change(field.key, v)}
-          stage={stage}
-        />
-      ))}
-      <Status status={status} />
-      <div className="admin-toolbar">
-        <button type="submit" className="admin-button is-primary" disabled={busy}>
-          {busy ? 'Publishing…' : 'Publish'}
-        </button>
-        <button type="button" className="admin-button" disabled={busy} onClick={onCancel}>
-          Cancel
-        </button>
-      </div>
+      <fieldset className="admin-fieldset" disabled={busy}>
+        {kind.fields.map((field) => (
+          <Field
+            key={field.key}
+            field={field}
+            value={read(draft, field.key)}
+            onChange={(v) => change(field.key, v)}
+            stage={stage}
+            previews={previews}
+          />
+        ))}
+        <Status status={status} />
+        <div className="admin-toolbar">
+          <button type="submit" className="admin-button is-primary">
+            {busy ? 'Publishing…' : 'Publish'}
+          </button>
+          <button type="button" className="admin-button" onClick={onCancel}>
+            Cancel
+          </button>
+        </div>
+      </fieldset>
     </form>
   );
 }
 
-function Field({ field, value, onChange, stage }) {
+function Field({ field, value, onChange, stage, previews }) {
   const id = `field-${field.key}`;
   const hint = typeof field.hint === 'function' ? field.hint(value) : field.hint;
   const common = { id, value, required: !field.optional, onChange: (event) => onChange(event.target.value) };
@@ -300,7 +321,9 @@ function Field({ field, value, onChange, stage }) {
         {field.optional && <span className="admin-optional"> (optional)</span>}
       </label>
       {field.kind === 'textarea' && <textarea rows={3} {...common} />}
-      {field.kind === 'markdown' && <MarkdownField field={field} common={common} onChange={onChange} stage={stage} />}
+      {field.kind === 'markdown' && (
+        <MarkdownField field={field} common={common} onChange={onChange} stage={stage} previews={previews} />
+      )}
       {field.kind === 'date' && <input type="date" {...common} />}
       {field.kind === 'pdf' && <PdfField common={common} onChange={onChange} stage={stage} />}
       {!field.kind && (
@@ -358,7 +381,7 @@ function PdfField({ common, onChange, stage }) {
   );
 }
 
-function MarkdownField({ field, common, onChange, stage }) {
+function MarkdownField({ field, common, onChange, stage, previews }) {
   const [preview, setPreview] = useState(false);
   const area = useRef(null);
   const upload = useFilePicker(stage, (url) =>
@@ -385,7 +408,7 @@ function MarkdownField({ field, common, onChange, stage }) {
       </div>
       {preview ? (
         <div className="admin-preview prose">
-          <Markdown source={common.value} />
+          <Markdown source={common.value} localImages={previews} />
         </div>
       ) : (
         <textarea ref={area} rows={16} className="is-markdown" {...common} />

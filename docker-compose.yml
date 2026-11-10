@@ -104,7 +104,7 @@ services:
       # Locally built image; Watchtower cannot pull it and retries every 5 min.
       - com.centurylinklabs.watchtower.enable=false
     networks:
-      - admin_net
+      - my_network
 
   # Login in front of the admin panel: password, then a passkey or a one-time
   # code. Configuration in ./authelia; the user file, secrets and database live
@@ -143,7 +143,7 @@ services:
       # Pinned: a new login service version must never arrive unreviewed.
       - com.centurylinklabs.watchtower.enable=false
     networks:
-      - admin_net
+      - my_network
 
   # Authelia keeps its records with IP addresses (sign-in attempts, one-time
   # codes, IP bans) forever; this deletes them after 30 days, as the privacy
@@ -226,7 +226,8 @@ networks:
   # Only Caddy and the MCP server: the other containers cannot reach it directly.
   studip_mcp_net:
     driver: bridge
-  # Only Caddy and the admin panel's services (login, admin, statistics), so
-  # no other container can reach the service that holds the GitHub token.
+  # Only Caddy and the admin service, which holds the GitHub token and trusts
+  # Caddy to have checked the login. Every other container, including the
+  # internet-facing ones, stays off it.
   admin_net:
     driver: bridge

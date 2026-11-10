@@ -67,6 +67,15 @@ export default function Admin() {
   const [content, setContent] = useState(null);
   const [error, setError] = useState(null);
   const [savedAt, setSavedAt] = useState(null);
+  // An open entry lives only in this page; leaving it would lose it.
+  const [editingOpen, setEditingOpen] = useState(false);
+
+  useEffect(() => {
+    if (!editingOpen) return undefined;
+    const warn = (event) => event.preventDefault();
+    window.addEventListener('beforeunload', warn);
+    return () => window.removeEventListener('beforeunload', warn);
+  }, [editingOpen]);
 
   useEffect(() => {
     loadContent().then(setContent, (e) => setError(e.message));
@@ -83,7 +92,13 @@ export default function Admin() {
 
   const editor = (kindName) =>
     content ? (
-      <Editor key={kindName} kindName={kindName} items={content[KINDS[kindName].collection].items} onSave={save} />
+      <Editor
+        key={kindName}
+        kindName={kindName}
+        items={content[KINDS[kindName].collection].items}
+        onSave={save}
+        onEditingChange={setEditingOpen}
+      />
     ) : (
       <p className="insight-lede">{error || 'Loading the content…'}</p>
     );
@@ -98,7 +113,16 @@ export default function Admin() {
       </header>
       <nav className="admin-tabs" aria-label="Admin sections">
         {TABS.map((tab) => (
-          <NavLink key={tab.to} to={tab.to} end={tab.end}>
+          <NavLink
+            key={tab.to}
+            to={tab.to}
+            end={tab.end}
+            onClick={(event) => {
+              if (editingOpen && !window.confirm('Leave this entry? Everything not yet published is lost.')) {
+                event.preventDefault();
+              }
+            }}
+          >
             {tab.label}
           </NavLink>
         ))}
