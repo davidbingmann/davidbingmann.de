@@ -331,11 +331,6 @@ h1 {
   font-variant-numeric: tabular-nums;
 }
 
-.insight-stats .insight-top {
-  font-size: 26px;
-  line-height: 1.6;
-}
-
 .insight-change {
   font-family: var(--sans);
   font-size: 14px;
@@ -588,10 +583,6 @@ h1 {
     font-size: 30px;
   }
 
-  .insight-stats .insight-top {
-    font-size: 22px;
-  }
-
   /* The three columns stack; the spine moves onto the entry itself. */
   .entry {
     grid-template-columns: 1fr;
@@ -699,10 +690,6 @@ h1 {
 
 .admin-build.is-error {
   color: var(--down);
-}
-
-.admin-tabs + .admin-build:empty {
-  display: none;
 }
 
 .admin-tabs + :not(.admin-build) {

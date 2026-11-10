@@ -15,7 +15,7 @@ DB_PATH = os.environ.get("DB_PATH", "/data/db.sqlite3")
 KEEP_DAYS = int(os.environ.get("KEEP_DAYS", "30"))
 
 # Every table of Authelia 4.39 with an IP column, and the column that dates a
-# row. Check this list against the schema before moving to a new version.
+# row. unpruned_ip_tables() warns if a new version adds one that is missing.
 TABLES = {
     "authentication_logs": "time",
     "one_time_code": "issued",
@@ -24,9 +24,21 @@ TABLES = {
 }
 
 
+def unpruned_ip_tables(db: sqlite3.Connection) -> list[str]:
+    tables = [name for (name,) in db.execute("SELECT name FROM sqlite_master WHERE type = 'table'")]
+    return [
+        table
+        for table in tables
+        if table not in TABLES
+        and any(column == "ip" or column.endswith("_ip") for _, column, *_ in db.execute(f"PRAGMA table_info({table})"))
+    ]
+
+
 def prune() -> dict[str, int]:
     deleted = {}
     with sqlite3.connect(DB_PATH, timeout=30) as db:
+        if missing := unpruned_ip_tables(db):
+            print(f"WARNING: these tables hold IP addresses and are never pruned: {missing}", flush=True)
         for table, column in TABLES.items():
             # Authelia stores times as "YYYY-MM-DD HH:MM:SS.ffffff+00:00"
             # (UTC), which sorts correctly against SQLite's own UTC timestamps.

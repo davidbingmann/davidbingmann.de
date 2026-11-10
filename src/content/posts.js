@@ -1,12 +1,12 @@
 import posts from './posts.json';
 
-/** Newest first, whatever order the file keeps them in. */
-export const postsByDate = [...posts].sort((a, b) => b.date.localeCompare(a.date));
+export const newestFirst = (a, b) => b.date.localeCompare(a.date);
 
-export const formatPostDate = (iso) =>
-  new Date(`${iso}T00:00:00Z`).toLocaleDateString('en-US', {
-    timeZone: 'UTC',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  });
+/** Newest first, whatever order the file keeps them in. */
+export const postsByDate = [...posts].sort(newestFirst);
+
+/** A "YYYY-MM-DD" date, read as that calendar day wherever the reader is. */
+export const formatDate = (iso, options) =>
+  new Date(`${iso}T00:00:00Z`).toLocaleDateString('en-US', { timeZone: 'UTC', ...options });
+
+export const formatPostDate = (iso) => formatDate(iso, { day: 'numeric', month: 'long', year: 'numeric' });

@@ -50,7 +50,11 @@ def hour_key(moment: datetime) -> str:
     return moment.strftime("%Y-%m-%dT%H")
 
 
+pruned_hour = None
+
+
 def record_view(path: str):
+    global pruned_hour
     now = datetime.now(UTC)
     with lock:
         db.execute(
@@ -61,7 +65,10 @@ def record_view(path: str):
             "INSERT INTO hours VALUES (?, 1) ON CONFLICT DO UPDATE SET count = count + 1",
             (hour_key(now),),
         )
-        db.execute("DELETE FROM hours WHERE hour < ?", (hour_key(now - timedelta(hours=HOURS * 2)),))
+        # Hours older than two days go once an hour, not on every view.
+        if pruned_hour != hour_key(now):
+            db.execute("DELETE FROM hours WHERE hour < ?", (hour_key(now - timedelta(hours=HOURS * 2)),))
+            pruned_hour = hour_key(now)
         db.commit()
 
 

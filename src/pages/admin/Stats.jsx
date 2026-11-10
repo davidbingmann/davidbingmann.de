@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { formatDate } from '../../content/posts.js';
 import { loadStats } from './api.js';
 import posts from '../../content/posts.json';
 import projects from '../../content/projects.json';
@@ -8,10 +9,8 @@ const H = 200;
 const GRID_LINES = 4;
 
 const formatNumber = (n) => n.toLocaleString('en-US');
-const formatDay = (iso, options) =>
-  new Date(`${iso}T00:00:00Z`).toLocaleDateString('en-US', { timeZone: 'UTC', ...options });
 
-const sum = (days, key) => days.reduce((total, day) => total + day[key], 0);
+const sum = (entries) => entries.reduce((total, entry) => total + entry.views, 0);
 
 /** A curve through every point that never overshoots it (Fritsch–Carlson), so
     a quiet day is never drawn below zero or a peak above its real value. */
@@ -76,7 +75,8 @@ function Change({ current, previous }) {
 
 function Chart({ current, previous }) {
   const [hover, setHover] = useState(null);
-  const ceiling = niceCeiling(Math.max(...current.map((d) => d.views), ...previous.map((d) => d.views)));
+  const peak = Math.max(...current.map((d) => d.views));
+  const ceiling = niceCeiling(Math.max(peak, ...previous.map((d) => d.views)));
   const x = (i) => (i / (current.length - 1)) * W;
   const y = (value) => H - (value / ceiling) * H;
   const line = (days) => smoothPath(days.map((d, i) => [x(i), y(d.views)]));
@@ -88,6 +88,7 @@ function Chart({ current, previous }) {
   };
 
   const day = hover === null ? null : current[hover];
+  const left = `${(hover / (current.length - 1)) * 100}%`;
 
   return (
     <figure className="insight-chart">
@@ -104,9 +105,7 @@ function Chart({ current, previous }) {
           viewBox={`0 0 ${W} ${H}`}
           preserveAspectRatio="none"
           role="img"
-          aria-label={`Daily page views over the last 30 days, peaking at ${formatNumber(
-            Math.max(...current.map((d) => d.views))
-          )}`}
+          aria-label={`Daily page views over the last 30 days, peaking at ${formatNumber(peak)}`}
           onPointerMove={onPointerMove}
           onPointerLeave={() => setHover(null)}
         >
@@ -119,13 +118,13 @@ function Chart({ current, previous }) {
         </svg>
         {day && (
           <>
-            <span className="insight-dot is-previous" style={{ left: `${(hover / (current.length - 1)) * 100}%`, top: `${(y(previous[hover].views) / H) * 100}%` }} />
-            <span className="insight-dot" style={{ left: `${(hover / (current.length - 1)) * 100}%`, top: `${(y(day.views) / H) * 100}%` }} />
+            <span className="insight-dot is-previous" style={{ left, top: `${(y(previous[hover].views) / H) * 100}%` }} />
+            <span className="insight-dot" style={{ left, top: `${(y(day.views) / H) * 100}%` }} />
             <div
               className={`insight-tooltip ${hover > current.length / 2 ? 'is-left' : ''}`}
-              style={{ left: `${(hover / (current.length - 1)) * 100}%` }}
+              style={{ left }}
             >
-              <strong>{formatDay(day.day, { weekday: 'short', day: 'numeric', month: 'short' })}</strong>
+              <strong>{formatDate(day.day, { weekday: 'short', day: 'numeric', month: 'short' })}</strong>
               <span>{formatNumber(day.views)} views</span>
               <span className="insight-tooltip-prev">
                 {formatNumber(previous[hover].views)} views 30 days earlier
@@ -165,13 +164,13 @@ function HourChart({ hours }) {
       <div
         className="hour-plot"
         role="img"
-        aria-label={`Page views per hour over the last 24 hours, ${formatNumber(sum(hours, 'views'))} in total`}
+        aria-label={`Page views per hour over the last 24 hours, ${formatNumber(sum(hours))} in total`}
         onPointerLeave={() => setHover(null)}
       >
         {hours.map((h, i) => (
           <div key={h.hour} className="hour-slot" onPointerEnter={() => setHover(i)}>
             <span
-              className={`hour-bar ${h.views === 0 ? 'is-empty' : ''} ${hover === i ? 'is-hover' : ''}`}
+              className={`hour-bar ${hover === i ? 'is-hover' : ''}`}
               style={{ height: `${(h.views / max) * 100}%` }}
             />
           </div>
@@ -237,15 +236,16 @@ export default function Stats() {
   const previous = data.days.slice(0, half);
   const current = data.days.slice(half);
   const today = current[current.length - 1];
-  const hours = data.hours || [];
+  const { hours } = data;
   const thisHour = hours[hours.length - 1];
+  const total = sum(current);
 
   return (
     <>
       <dl className="insight-stats">
         <div>
-          <dt>Views in 30 days <Change current={sum(current, 'views')} previous={sum(previous, 'views')} /></dt>
-          <dd>{formatNumber(sum(current, 'views'))}</dd>
+          <dt>Views in 30 days <Change current={total} previous={sum(previous)} /></dt>
+          <dd>{formatNumber(total)}</dd>
         </div>
         <div>
           <dt>Today (UTC)</dt>
@@ -253,11 +253,11 @@ export default function Stats() {
         </div>
         <div>
           <dt>Last 24 hours</dt>
-          <dd>{formatNumber(sum(hours, 'views'))}</dd>
+          <dd>{formatNumber(sum(hours))}</dd>
         </div>
         <div>
           <dt>This hour (UTC)</dt>
-          <dd>{formatNumber(thisHour?.views ?? 0)}</dd>
+          <dd>{formatNumber(thisHour.views)}</dd>
         </div>
       </dl>
 
@@ -265,8 +265,8 @@ export default function Stats() {
       <HourChart hours={hours} />
 
       <h2 className="admin-heading">
-        {formatDay(current[0].day, { day: 'numeric', month: 'short' })} to{' '}
-        {formatDay(today.day, { day: 'numeric', month: 'short' })}
+        {formatDate(current[0].day, { day: 'numeric', month: 'short' })} to{' '}
+        {formatDate(today.day, { day: 'numeric', month: 'short' })}
       </h2>
       <Chart current={current} previous={previous} />
 

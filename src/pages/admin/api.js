@@ -32,19 +32,13 @@ export const saveCollection = (name, items, sha, message, files = []) =>
 const FOLDERS = { pdf: '/papers', png: '/images', jpg: '/images', jpeg: '/images', webp: '/images' };
 export const MAX_FILE_MB = 20;
 
-/** The name and address a file will have on the site. Cleaned exactly like
-    upload_name() in admin-service/app.py, which checks it again. */
+/** The name and address a file will have on the site; the admin service
+    accepts only names cleaned like this (FILE_NAME in admin-service/app.py). */
 export function fileTarget(fileName) {
   const dot = fileName.lastIndexOf('.');
   const extension = fileName.slice(dot + 1).toLowerCase();
   if (dot < 0 || !FOLDERS[extension]) throw new Error('Only PDF, PNG, JPEG and WebP files can be added.');
-  const stem = fileName
-    .slice(0, dot)
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .slice(0, 80)
-    .replace(/^-+|-+$/g, '');
+  const stem = slugify(fileName.slice(0, dot));
   if (!stem) throw new Error('The file needs a name.');
   const name = `${stem}.${extension}`;
   return { name, url: `${FOLDERS[extension]}/${name}` };

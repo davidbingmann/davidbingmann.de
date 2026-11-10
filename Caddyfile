@@ -25,20 +25,18 @@ davidbingmann.de {
     reverse_proxy @authelia mywebsite_auth:9091
 
     # Admin panel: the page and its API only answer after a full two-factor
-    # login. Everything routed to the admin services below sits inside these
-    # paths, so nothing reaches them without passing Authelia first.
+    # login. The admin services are reachable only from inside this block, so
+    # nothing gets to them without passing Authelia first; the page itself
+    # falls through to the app below once the login has passed.
     @admin path /admin /admin/* /api/admin /api/admin/*
-    forward_auth @admin mywebsite_auth:9091 {
-        uri /api/authz/forward-auth
-        copy_headers Remote-User Remote-Groups Remote-Name Remote-Email
+    route @admin {
+        forward_auth mywebsite_auth:9091 {
+            uri /api/authz/forward-auth
+            copy_headers Remote-User Remote-Groups Remote-Name Remote-Email
+        }
+        reverse_proxy /api/admin/insights mywebsite_insights:5003
+        reverse_proxy /api/admin/* mywebsite_admin:5004
     }
-    @adminstats path /api/admin/insights
-    reverse_proxy @adminstats mywebsite_insights:5003
-    @adminapi {
-        path /api/admin/*
-        not path /api/admin/insights
-    }
-    reverse_proxy @adminapi mywebsite_admin:5004
 
     # Semestral product pages: their own container.
     @semestral path /semestral /semestral/*

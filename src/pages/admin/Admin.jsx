@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { NavLink, Navigate, Route, Routes } from 'react-router-dom';
+import ExternalLink from '../../components/ExternalLink.jsx';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle.js';
 import { loadBuild, loadContent, saveCollection } from './api.js';
-import Editor from './Editor.jsx';
+import Editor, { KINDS } from './Editor.jsx';
 import Stats from './Stats.jsx';
 
 const TABS = [
@@ -50,9 +51,7 @@ function BuildStatus({ savedAt }) {
     return (
       <p className="admin-build is-error">
         The build of {message} failed, so the site still shows the version before it.{' '}
-        <a href={build.url} target="_blank" rel="noopener noreferrer">
-          See what went wrong
-        </a>
+        <ExternalLink href={build.url}>See what went wrong</ExternalLink>
       </p>
     );
   }
@@ -82,9 +81,9 @@ export default function Admin() {
     [content]
   );
 
-  const editor = (kindName, collection) =>
+  const editor = (kindName) =>
     content ? (
-      <Editor key={kindName} kindName={kindName} items={content[collection].items} onSave={save} />
+      <Editor key={kindName} kindName={kindName} items={content[KINDS[kindName].collection].items} onSave={save} />
     ) : (
       <p className="insight-lede">{error || 'Loading the content…'}</p>
     );
@@ -107,9 +106,9 @@ export default function Admin() {
       <BuildStatus savedAt={savedAt} />
       <Routes>
         <Route index element={<Stats />} />
-        <Route path="projects" element={editor('projects', 'projects')} />
-        <Route path="publications" element={editor('publications', 'projects')} />
-        <Route path="posts" element={editor('posts', 'posts')} />
+        <Route path="projects" element={editor('projects')} />
+        <Route path="publications" element={editor('publications')} />
+        <Route path="posts" element={editor('posts')} />
         <Route path="*" element={<Navigate to="/admin" replace />} />
       </Routes>
     </div>

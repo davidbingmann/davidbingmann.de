@@ -34,21 +34,19 @@ COLLECTIONS = {
     "projects": "src/content/projects.json",
     "posts": "src/content/posts.json",
 }
-# Where an upload lands in the repo, and the URL it is served at once built.
-UPLOAD_DIRS = {
-    "pdf": ("public/papers", "/papers"),
-    "png": ("public/images", "/images"),
-    "jpg": ("public/images", "/images"),
-    "jpeg": ("public/images", "/images"),
-    "webp": ("public/images", "/images"),
-}
+# The folder under public/ that each kind of upload lands in.
+UPLOAD_FOLDERS = {"pdf": "papers", "png": "images", "jpg": "images", "jpeg": "images", "webp": "images"}
 MAX_CONTENT = 2 * 1024 * 1024
 MAX_FILE = 20 * 1024 * 1024
-MAX_FILES = 10
+# All files of one save together. A save is held in memory a few times over
+# (request, decoded files, the blob being sent), and the container has 256 MB.
+MAX_FILES_TOTAL = 30 * 1024 * 1024
 # A save carries its files base64-encoded in the JSON body.
-MAX_REQUEST = MAX_CONTENT + MAX_FILES * MAX_FILE * 4 // 3 + 64 * 1024
+MAX_REQUEST = MAX_CONTENT + MAX_FILES_TOTAL * 4 // 3 + 64 * 1024
 
 SLUG = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
+# The panel cleans file names before it sends them; this only checks.
+FILE_NAME = re.compile(r"^(?P<stem>[a-z0-9]+(-[a-z0-9]+)*)\.(?P<extension>[a-z]+)$")
 DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 # The project link is rendered as a plain <a href>; never javascript: or data:.
 LINK = re.compile(r"^(https?://|/(?!/))", re.IGNORECASE)
@@ -84,48 +82,45 @@ class GitHubStore:
         with urllib.request.urlopen(request, timeout=30) as response:
             return response.read() if raw else json.load(response)
 
-    def _contents_url(self, path: str) -> str:
-        return f"https://api.github.com/repos/{GITHUB_REPO}/contents/{urllib.parse.quote(path)}"
-
-    def read(self, path: str) -> tuple[bytes | None, str | None]:
-        url = f"{self._contents_url(path)}?ref={GITHUB_BRANCH}"
-        try:
-            file = self._request("GET", url)
-        except urllib.error.HTTPError as error:
-            if error.code == 404:
-                return None, None
-            raise
-        if file.get("encoding") == "base64":
-            return base64.b64decode(file["content"]), file["sha"]
-        # Above 1 MB GitHub leaves the content out of this answer; reading it
-        # as empty would let the next save wipe the whole collection.
-        return self._request("GET", url, raw=True), file["sha"]
-
     def _api(self, path: str) -> str:
         return f"https://api.github.com/repos/{GITHUB_REPO}/{path}"
 
-    def _sha_at(self, path: str, ref: str) -> str | None:
+    def _contents(self, path: str, ref: str) -> dict | None:
+        """The file's metadata at that ref, or None if it does not exist there."""
         try:
-            return self._request("GET", f"{self._contents_url(path)}?ref={ref}")["sha"]
+            return self._request("GET", self._api(f"contents/{urllib.parse.quote(path)}?ref={ref}"))
         except urllib.error.HTTPError as error:
             if error.code == 404:
                 return None
             raise
 
-    def commit(self, path: str, data: bytes, sha: str | None, uploads: list, message: str) -> str:
-        """One commit with the content file and the uploads; returns the content file's new sha."""
+    def read(self, path: str) -> tuple[bytes | None, str | None]:
+        file = self._contents(path, GITHUB_BRANCH)
+        if file is None:
+            return None, None
+        if file.get("encoding") == "base64":
+            return base64.b64decode(file["content"]), file["sha"]
+        # Above 1 MB GitHub leaves the content out of this answer; reading it
+        # as empty would let the next save wipe the whole collection.
+        url = self._api(f"contents/{urllib.parse.quote(path)}?ref={GITHUB_BRANCH}")
+        return self._request("GET", url, raw=True), file["sha"]
+
+    def commit(self, files: list[tuple[str, bytes]], sha: str | None, message: str) -> str:
+        """One commit: files[0] is the content file, expected at `sha`; the rest
+        are new uploads. Returns the content file's new sha."""
         head = self._request("GET", self._api(f"git/ref/heads/{GITHUB_BRANCH}"))["object"]["sha"]
-        if self._sha_at(path, head) != sha:
+        current = self._contents(files[0][0], head)
+        if (current and current["sha"]) != sha:
             raise Conflict(CHANGED)
-        for upload_path, served_at, _ in uploads:
-            if self._sha_at(upload_path, head) is not None:
-                raise Conflict(exists(served_at))
+        for path, _ in files[1:]:
+            if self._contents(path, head) is not None:
+                raise Conflict(exists(path))
         tree = []
-        for file_path, file_data in [(path, data), *[(p, d) for p, _, d in uploads]]:
+        for path, data in files:
             blob = self._request(
-                "POST", self._api("git/blobs"), {"content": base64.b64encode(file_data).decode(), "encoding": "base64"}
+                "POST", self._api("git/blobs"), {"content": base64.b64encode(data).decode(), "encoding": "base64"}
             )
-            tree.append({"path": file_path, "mode": "100644", "type": "blob", "sha": blob["sha"]})
+            tree.append({"path": path, "mode": "100644", "type": "blob", "sha": blob["sha"]})
         base_tree = self._request("GET", self._api(f"git/commits/{head}"))["tree"]["sha"]
         new_tree = self._request("POST", self._api("git/trees"), {"base_tree": base_tree, "tree": tree})["sha"]
         new_commit = self._request(
@@ -141,7 +136,7 @@ class GitHubStore:
         return tree[0]["sha"]
 
     def latest_build(self) -> dict | None:
-        url = f"https://api.github.com/repos/{GITHUB_REPO}/actions/runs?branch={GITHUB_BRANCH}&event=push&per_page=1"
+        url = self._api(f"actions/runs?branch={GITHUB_BRANCH}&event=push&per_page=1")
         runs = self._request("GET", url).get("workflow_runs") or []
         if not runs:
             return None
@@ -169,21 +164,21 @@ class LocalStore:
         data = file.read_bytes()
         return data, hashlib.sha1(data).hexdigest()
 
-    def commit(self, path: str, data: bytes, sha: str | None, uploads: list, message: str) -> str:
+    def commit(self, files: list[tuple[str, bytes]], sha: str | None, message: str) -> str:
         with self.lock:
-            if self.read(path)[1] != sha:
+            if self.read(files[0][0])[1] != sha:
                 raise Conflict(CHANGED)
-            for upload_path, served_at, _ in uploads:
-                if (self.root / upload_path).exists():
-                    raise Conflict(exists(served_at))
-            for file_path, file_data in [*[(p, d) for p, _, d in uploads], (path, data)]:
-                file = self.root / file_path
+            for path, _ in files[1:]:
+                if (self.root / path).exists():
+                    raise Conflict(exists(path))
+            for path, data in files:
+                file = self.root / path
                 file.parent.mkdir(parents=True, exist_ok=True)
                 temporary = file.with_suffix(file.suffix + ".tmp")
-                temporary.write_bytes(file_data)
+                temporary.write_bytes(data)
                 temporary.replace(file)
-            print(f"committed {path} and {len(uploads)} file(s): {message}", flush=True)
-            return hashlib.sha1(data).hexdigest()
+            print(f"committed {len(files)} file(s): {message}", flush=True)
+            return hashlib.sha1(files[0][1]).hexdigest()
 
     def latest_build(self) -> dict | None:
         return None
@@ -192,8 +187,12 @@ class LocalStore:
 CHANGED = "The content changed somewhere else in the meantime. Reload the page and try again."
 
 
-def exists(served_at: str) -> str:
-    return f"{served_at} already exists. Rename the file and add it again."
+def served_at(path: str) -> str:
+    return "/" + path.removeprefix("public/")
+
+
+def exists(path: str) -> str:
+    return f"{served_at(path)} already exists. Rename the file and add it again."
 
 
 def open_store():
@@ -245,7 +244,8 @@ def clean_project(entry: dict) -> dict:
             f"The link of “{clean['title']}” must start with https:// or be a path on this site like /papers/…."
         )
     if href:
-        clean["link"] = {"href": href, "label": text(link, "label", required=False) or href}
+        # An empty label is kept empty; the pages show the address instead.
+        clean["link"] = {"href": href, "label": text(link, "label", required=False)}
     if kind == "software":
         clean["summary"] = text(entry, "summary", limit=1000)
     clean["body"] = text(entry, "body", required=False, limit=200_000)
@@ -279,41 +279,31 @@ def clean_collection(name: str, items) -> list[dict]:
     return clean
 
 
-def upload_name(filename: str) -> tuple[str, str]:
-    stem, _, extension = filename.rpartition(".")
-    extension = extension.lower()
-    if extension not in UPLOAD_DIRS:
-        raise Invalid("Only PDF, PNG, JPEG and WebP files can be uploaded.")
-    # Stripped again after cutting, so naming an already cleaned name again
-    # gives the same name; the panel cleans names the same way.
-    slug = re.sub(r"[^a-z0-9]+", "-", stem.lower()).strip("-")[:80].strip("-")
-    if not slug:
-        raise Invalid("The file needs a name.")
-    repo_dir, url_dir = UPLOAD_DIRS[extension]
-    name = f"{slug}.{extension}"
-    return f"{repo_dir}/{name}", f"{url_dir}/{name}"
-
-
-def clean_uploads(files) -> list[tuple[str, str, bytes]]:
+def clean_uploads(files) -> list[tuple[str, bytes]]:
+    """The files a save brings along, as (path in the repo, content)."""
     if not files:
         return []
-    if not isinstance(files, list) or len(files) > MAX_FILES:
-        raise Invalid(f"A save can bring at most {MAX_FILES} files.")
-    uploads, seen = [], set()
+    if not isinstance(files, list):
+        raise Invalid("The files did not arrive intact. Add them again.")
+    uploads, total = [], 0
     for file in files:
-        if not isinstance(file, dict) or not isinstance(file.get("name"), str):
-            raise Invalid("Every file needs a name.")
-        path, served_at = upload_name(file["name"])
-        if path.rsplit("/", 1)[1] != file["name"] or path in seen:
-            raise Invalid(f"The file name {file['name']} is not usable; rename the file and add it again.")
-        seen.add(path)
+        name = file.get("name") if isinstance(file, dict) else None
+        match = FILE_NAME.match(name or "")
+        if not match or len(match["stem"]) > 80 or match["extension"] not in UPLOAD_FOLDERS:
+            raise Invalid(f"The file name {name} is not usable; rename the file and add it again.")
+        path = f"public/{UPLOAD_FOLDERS[match['extension']]}/{name}"
+        if any(path == other for other, _ in uploads):
+            raise Invalid(f"{name} was added twice.")
         try:
             data = base64.b64decode(file.get("data") or "", validate=True)
         except ValueError as error:
-            raise Invalid(f"{file['name']} did not arrive intact. Add it again.") from error
+            raise Invalid(f"{name} did not arrive intact. Add it again.") from error
+        total += len(data)
         if not data or len(data) > MAX_FILE:
-            raise Invalid(f"{file['name']} must be smaller than {MAX_FILE // (1024 * 1024)} MB.")
-        uploads.append((path, served_at, data))
+            raise Invalid(f"{name} must be smaller than {MAX_FILE // (1024 * 1024)} MB.")
+        if total > MAX_FILES_TOTAL:
+            raise Invalid(f"The files of one save must stay under {MAX_FILES_TOTAL // (1024 * 1024)} MB together.")
+        uploads.append((path, data))
     return uploads
 
 
@@ -351,13 +341,16 @@ class AdminHandler(BaseHTTPRequestHandler):
         name = route.removeprefix("/api/admin/content/")
         if name not in COLLECTIONS:
             return self._respond(404, {"error": "Not found."})
-        body = self._read_body(MAX_REQUEST)
+        body = self._read_body()
         if body is None:
             return None
         try:
             payload = json.loads(body)
+            del body
             items = clean_collection(name, payload.get("items"))
-            uploads = clean_uploads(payload.get("files"))
+            # Decoded once; drop the base64 copies so a save with files does
+            # not hold every file in memory three times.
+            uploads = clean_uploads(payload.pop("files", None))
         except (ValueError, AttributeError):
             return self._respond(400, {"error": "The request is not valid JSON."})
         except Invalid as error:
@@ -367,12 +360,12 @@ class AdminHandler(BaseHTTPRequestHandler):
         if len(data) > MAX_CONTENT:
             return self._respond(413, {"error": "The content is too long to save in one file."})
         try:
-            sha = store.commit(COLLECTIONS[name], data, payload.get("sha"), uploads, message)
+            sha = store.commit([(COLLECTIONS[name], data), *uploads], payload.get("sha"), message)
         except Conflict as error:
             return self._respond(409, {"error": str(error)})
         return self._respond(200, {"sha": sha, "items": items})
 
-    def _read_body(self, limit: int) -> bytes | None:
+    def _read_body(self) -> bytes | None:
         # The login cookie is SameSite=Lax, which already keeps it off
         # cross-site writes; this is a second lock that holds even if that
         # cookie setting ever changes.
@@ -380,7 +373,7 @@ class AdminHandler(BaseHTTPRequestHandler):
             self._respond(403, {"error": "Writes are only accepted from the admin page."})
             return None
         length = int(self.headers.get("Content-Length") or 0)
-        if length <= 0 or length > limit:
+        if length <= 0 or length > MAX_REQUEST:
             self._respond(413, {"error": "The save is too large. Leave out some files and try again."})
             return None
         return self.rfile.read(length)

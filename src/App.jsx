@@ -3,9 +3,11 @@ import { BrowserRouter, Navigate, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout.jsx';
 import Home from './pages/Home.jsx';
 import Impressum from './pages/Impressum.jsx';
-import Post from './pages/Post.jsx';
-import Project from './pages/Project.jsx';
 
+// Pages with a Markdown body load with the renderer only when opened, so the
+// home page never downloads it. Layout shows them inside a Suspense.
+const Post = lazy(() => import('./pages/Post.jsx'));
+const Project = lazy(() => import('./pages/Project.jsx'));
 // Loaded only when /admin is opened, so visitors never download it. Caddy
 // sends every /admin and /api/admin request through the Authelia login first.
 const Admin = lazy(() => import('./pages/admin/Admin.jsx'));

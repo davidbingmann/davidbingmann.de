@@ -116,7 +116,7 @@ export default function Home() {
           <p className="pub-meta">
             David Bingmann &middot;{' '}
             <ExternalLink href={project.link.href}>
-              {project.link.label}
+              {project.link.label || project.link.href}
             </ExternalLink>
           </p>
         </div>

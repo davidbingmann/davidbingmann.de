@@ -42,8 +42,7 @@ def release_slot(ip: str, now: float):
 
 class FeedbackHandler(BaseHTTPRequestHandler):
     def do_POST(self):
-        # Caddy proxies the full path; tolerate a stripped prefix too.
-        if self.path.rstrip("/") not in ("/api/semestral/feedback", ""):
+        if self.path.rstrip("/") != "/api/semestral/feedback":
             return self._respond(404, ok=False)
 
         length = int(self.headers.get("Content-Length") or 0)

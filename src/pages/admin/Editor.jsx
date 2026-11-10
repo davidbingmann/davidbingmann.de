@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import Markdown from '../../components/Markdown.jsx';
-import { formatPostDate } from '../../content/posts.js';
+import { formatPostDate, newestFirst } from '../../content/posts.js';
 import { MAX_FILE_MB, fileTarget, slugify, toBase64 } from './api.js';
 
 const today = () => {
@@ -11,6 +11,12 @@ const today = () => {
 const PUBLIC_NOTE =
   'Added files go public with Publish, together with the entry. After that they stay in the public history of the repository, even if you delete them later.';
 
+const slugField = (folder) => ({
+  key: 'slug',
+  label: 'URL name',
+  hint: (v) => `davidbingmann.de/${folder}/${v || '…'}`,
+});
+
 export const KINDS = {
   projects: {
     collection: 'projects',
@@ -20,7 +26,7 @@ export const KINDS = {
     blank: () => ({ type: 'software', title: '', slug: '', headline: '', summary: '', link: { href: '', label: '' }, body: '' }),
     fields: [
       { key: 'title', label: 'Title' },
-      { key: 'slug', label: 'URL name', hint: (v) => `davidbingmann.de/projects/${v || '…'}` },
+      slugField('projects'),
       { key: 'headline', label: 'Headline', hint: 'One sentence under the title on the project page.' },
       { key: 'summary', label: 'Summary', kind: 'textarea', hint: 'Shown on the home page.' },
       { key: 'link.href', label: 'Link', hint: 'The repository, App Store page or website.', optional: true },
@@ -36,7 +42,7 @@ export const KINDS = {
     blank: () => ({ type: 'paper', title: '', slug: '', venue: '', headline: '', link: { href: '', label: '' }, body: '' }),
     fields: [
       { key: 'title', label: 'Title' },
-      { key: 'slug', label: 'URL name', hint: (v) => `davidbingmann.de/projects/${v || '…'}` },
+      slugField('projects'),
       { key: 'venue', label: 'Venue', hint: 'For example “Seminar paper, University of Trier”.' },
       { key: 'headline', label: 'Headline', hint: 'The question or claim of the paper, in one sentence.' },
       { key: 'link.href', label: 'Paper', kind: 'pdf', hint: `Add the PDF or paste a link to it. ${PUBLIC_NOTE}` },
@@ -47,11 +53,13 @@ export const KINDS = {
   posts: {
     collection: 'posts',
     noun: 'post',
+    // Shown newest first, like on the site; the date sets the order.
+    byDate: true,
     describe: (entry) => formatPostDate(entry.date),
     blank: () => ({ title: '', slug: '', date: today(), summary: '', body: '' }),
     fields: [
       { key: 'title', label: 'Title' },
-      { key: 'slug', label: 'URL name', hint: (v) => `davidbingmann.de/posts/${v || '…'}` },
+      slugField('posts'),
       { key: 'date', label: 'Date', kind: 'date' },
       { key: 'summary', label: 'Summary', kind: 'textarea', hint: 'Shown on the home page.', optional: true },
       { key: 'body', label: 'Text', kind: 'markdown', images: true },
@@ -75,7 +83,7 @@ export default function Editor({ kindName, items, onSave }) {
 
   const belongs = (entry) => !kind.type || entry.type === kind.type;
   let indices = items.map((entry, index) => index).filter((index) => belongs(items[index]));
-  if (kindName === 'posts') indices = indices.sort((a, b) => items[b].date.localeCompare(items[a].date));
+  if (kind.byDate) indices = indices.sort((a, b) => newestFirst(items[a], items[b]));
 
   const publish = async (next, message, after, files) => {
     setBusy(true);
@@ -170,7 +178,7 @@ export default function Editor({ kindName, items, onSave }) {
                   <span className="admin-list-meta">{kind.describe(entry)}</span>
                 </div>
                 <div className="admin-list-actions">
-                  {kindName !== 'posts' && (
+                  {!kind.byDate && (
                     <>
                       <button
                         type="button"
