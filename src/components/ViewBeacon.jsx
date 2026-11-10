@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 
 /**
  * Tells the site's own insights service which page was opened. Only the path
- * is sent; the service counts visitors without cookies (see insights-service).
+ * is sent; the service adds one to that page's counter (see insights-service).
  * Client-side navigation never reaches the server, hence a beacon per route.
  */
 export default function ViewBeacon() {

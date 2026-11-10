@@ -8,4 +8,8 @@ docs
 *.md
 *.png
 .DS_Store
+.env
+authelia
+admin-service
+feedback-service
 insights-service

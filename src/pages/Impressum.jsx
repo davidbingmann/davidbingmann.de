@@ -91,8 +91,8 @@ export default function Impressum() {
             This personal, non-commercial site sets no cookies and uses no
             third-party analytics, advertising, social plug-ins, or trackers.
             No web fonts are loaded; the site uses the fonts already installed
-            on your device. The only statistics are the visitor counts this
-            server keeps itself, described below. What little processing
+            on your device. The only statistics are the page counts this server
+            keeps itself, described below. What little processing
             remains is based on Art. 6(1)(f) GDPR (legitimate interest in
             operating this website and knowing how much it is read).
           </p>
@@ -107,21 +107,29 @@ export default function Impressum() {
           <p>
             <strong>Server log files.</strong> This site writes no access log,
             so no IP addresses, User-Agents or requested URLs are stored by me.
-            Requests are processed in memory and not recorded. The hosting
+            Apart from the page counts described below, requests are processed
+            in memory and not recorded. The hosting
             provider may log at infrastructure level for operation and security
             under its own agreement; see below.
           </p>
           <p>
-            <strong>Visitor counts.</strong> When you open a page, your browser
-            tells this server which page it was. To count each visitor once a
-            day, the server combines your IP address and browser identifier
-            with a random key that exists only in memory and is replaced every
-            day, and turns them into a one-way hash. Only the number of
-            visitors and views per day and page is stored; the IP address,
-            browser identifier and hash are never written to disk, and
-            yesterday's hashes cannot be linked to today's. If your browser
-            sends Do Not Track or Global Privacy Control, you are not counted.
-            The totals are public on the Insights page.
+            <strong>Admin sign-in.</strong> The site has a sign-in page for its
+            owner only. Every sign-in attempt there is recorded with its IP
+            address, time and the user name tried, to detect and block password
+            guessing (Art. 6(1)(f) GDPR). These records are deleted after 30
+            days. Visitors who don't use the sign-in page are not affected.
+          </p>
+          <p>
+            <strong>Page counts.</strong> When you open a page, the site's own
+            script tells this server which page it was, and the server adds
+            one to the counter for that page and day. Nothing else is
+            recorded: no IP address, no browser details, nothing that could
+            tell visitors apart or recognize you on a later visit. The request
+            headers are only checked in memory to skip bots and browsers that
+            send Do Not Track or Global Privacy Control; those views are not
+            counted. The counts are kept for as long as this site runs, and
+            only I can see them. Besides the count per day there is one per
+            hour, which is deleted after two days.
           </p>
           <p>
             <strong>External links.</strong> Links to LinkedIn, GitHub, X

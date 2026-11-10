@@ -9,7 +9,10 @@ dist/
 
 # Virtual Environments
 venv/
-.env/
+.venv/
+
+# Secrets (SMTP credentials for the feedback service live here on the server)
+.env
 
 # PyCharm Specific
 .idea/
