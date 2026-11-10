@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import BackLink from '../components/BackLink.jsx';
-import projects from '../content/projects.json';
-import { useDocumentTitle } from '../hooks/useDocumentTitle.js';
+import { loadStats } from './api.js';
+import posts from '../../content/posts.json';
+import projects from '../../content/projects.json';
 
 const W = 800;
 const H = 200;
@@ -77,10 +76,10 @@ function Change({ current, previous }) {
 
 function Chart({ current, previous }) {
   const [hover, setHover] = useState(null);
-  const ceiling = niceCeiling(Math.max(...current.map((d) => d.visitors), ...previous.map((d) => d.visitors)));
+  const ceiling = niceCeiling(Math.max(...current.map((d) => d.views), ...previous.map((d) => d.views)));
   const x = (i) => (i / (current.length - 1)) * W;
   const y = (value) => H - (value / ceiling) * H;
-  const line = (days) => smoothPath(days.map((d, i) => [x(i), y(d.visitors)]));
+  const line = (days) => smoothPath(days.map((d, i) => [x(i), y(d.views)]));
 
   const onPointerMove = (event) => {
     const box = event.currentTarget.getBoundingClientRect();
@@ -105,8 +104,8 @@ function Chart({ current, previous }) {
           viewBox={`0 0 ${W} ${H}`}
           preserveAspectRatio="none"
           role="img"
-          aria-label={`Daily visitors over the last 30 days, peaking at ${formatNumber(
-            Math.max(...current.map((d) => d.visitors))
+          aria-label={`Daily page views over the last 30 days, peaking at ${formatNumber(
+            Math.max(...current.map((d) => d.views))
           )}`}
           onPointerMove={onPointerMove}
           onPointerLeave={() => setHover(null)}
@@ -120,95 +119,159 @@ function Chart({ current, previous }) {
         </svg>
         {day && (
           <>
-            <span className="insight-dot is-previous" style={{ left: `${(hover / (current.length - 1)) * 100}%`, top: `${(y(previous[hover].visitors) / H) * 100}%` }} />
-            <span className="insight-dot" style={{ left: `${(hover / (current.length - 1)) * 100}%`, top: `${(y(day.visitors) / H) * 100}%` }} />
+            <span className="insight-dot is-previous" style={{ left: `${(hover / (current.length - 1)) * 100}%`, top: `${(y(previous[hover].views) / H) * 100}%` }} />
+            <span className="insight-dot" style={{ left: `${(hover / (current.length - 1)) * 100}%`, top: `${(y(day.views) / H) * 100}%` }} />
             <div
               className={`insight-tooltip ${hover > current.length / 2 ? 'is-left' : ''}`}
               style={{ left: `${(hover / (current.length - 1)) * 100}%` }}
             >
               <strong>{formatDay(day.day, { weekday: 'short', day: 'numeric', month: 'short' })}</strong>
-              <span>{formatNumber(day.visitors)} visitors · {formatNumber(day.views)} views</span>
+              <span>{formatNumber(day.views)} views</span>
               <span className="insight-tooltip-prev">
-                {formatNumber(previous[hover].visitors)} visitors 30 days earlier
+                {formatNumber(previous[hover].views)} views 30 days earlier
               </span>
             </div>
           </>
         )}
       </div>
       <figcaption className="insight-legend">
-        <span><i className="insight-key" /> Visitors per day</span>
+        <span><i className="insight-key" /> Views per day</span>
         <span><i className="insight-key is-previous" /> The 30 days before</span>
       </figcaption>
     </figure>
   );
 }
 
-export default function Insights() {
-  useDocumentTitle('Insights');
-  const [data, setData] = useState(null);
-  const [failed, setFailed] = useState(false);
+const PAGE_TITLES = {
+  '/': 'Home page',
+  '/impressum': 'Imprint & Privacy',
+  ...Object.fromEntries(projects.map((p) => [`/projects/${p.slug}`, p.title])),
+  ...Object.fromEntries(posts.map((p) => [`/posts/${p.slug}`, p.title])),
+};
 
-  useEffect(() => {
-    fetch('/api/insights')
-      .then((response) => (response.ok ? response.json() : Promise.reject()))
-      .then(setData)
-      .catch(() => setFailed(true));
-  }, []);
+// Days are counted in UTC, so the hours are shown in UTC too; otherwise
+// "Today" and the hour chart would disagree for an hour or two after midnight.
+const formatHour = (key) =>
+  new Date(`${key}:00:00Z`).toLocaleTimeString('en-GB', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' });
+
+/** One bar per hour of the last 24. */
+function HourChart({ hours }) {
+  const [hover, setHover] = useState(null);
+  const max = Math.max(1, ...hours.map((h) => h.views));
+  const hovered = hover === null ? null : hours[hover];
 
   return (
-    <>
-      <BackLink />
-      <h1 className="page-title">Insights</h1>
-      {data?.days?.length ? (
-        <Stats data={data} />
-      ) : (
-        <p className="insight-lede">
-          {failed ? "The numbers can't be loaded right now. Try again later." : 'Loading the numbers…'}
-        </p>
-      )}
-    </>
+    <figure className="insight-chart">
+      <div
+        className="hour-plot"
+        role="img"
+        aria-label={`Page views per hour over the last 24 hours, ${formatNumber(sum(hours, 'views'))} in total`}
+        onPointerLeave={() => setHover(null)}
+      >
+        {hours.map((h, i) => (
+          <div key={h.hour} className="hour-slot" onPointerEnter={() => setHover(i)}>
+            <span
+              className={`hour-bar ${h.views === 0 ? 'is-empty' : ''} ${hover === i ? 'is-hover' : ''}`}
+              style={{ height: `${(h.views / max) * 100}%` }}
+            />
+          </div>
+        ))}
+        {hovered && (
+          <div
+            className={`insight-tooltip ${hover > hours.length / 2 ? 'is-left' : ''}`}
+            style={{ left: `${((hover + 0.5) / hours.length) * 100}%` }}
+          >
+            <strong>{formatHour(hovered.hour)}</strong>
+            <span>{formatNumber(hovered.views)} views</span>
+          </div>
+        )}
+      </div>
+      <div className="hour-axis" aria-hidden="true">
+        {hours.map((h, i) => (
+          <span key={h.hour}>{i % 6 === 0 ? formatHour(h.hour) : ''}</span>
+        ))}
+      </div>
+    </figure>
   );
 }
 
-function Stats({ data }) {
+function PageTable({ paths }) {
+  if (!paths.length) return <p className="insight-lede">No page has been opened in the last 30 days.</p>;
+  return (
+    <table className="admin-table">
+      <thead>
+        <tr>
+          <th scope="col">Page</th>
+          <th scope="col" className="is-number">Views</th>
+        </tr>
+      </thead>
+      <tbody>
+        {paths.map(({ path, views }) => (
+          <tr key={path}>
+            <td>
+              <a href={path} target="_blank" rel="noopener noreferrer">
+                {PAGE_TITLES[path] || path}
+              </a>
+            </td>
+            <td className="is-number">{formatNumber(views)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
+export default function Stats() {
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    loadStats().then(setData, (e) => setError(e.message));
+  }, []);
+
+  if (!data?.days?.length) {
+    return <p className="insight-lede">{error || 'Loading the numbers…'}</p>;
+  }
+
   const half = data.days.length / 2;
   const previous = data.days.slice(0, half);
   const current = data.days.slice(half);
   const today = current[current.length - 1];
-
-  const titles = Object.fromEntries(projects.map((p) => [`/projects/${p.slug}`, p]));
-  const topProject = data.paths.map((p) => titles[p.path]).find(Boolean);
+  const hours = data.hours || [];
+  const thisHour = hours[hours.length - 1];
 
   return (
     <>
-      <p className="insight-lede">
-        Who's been stopping by from {formatDay(current[0].day, { day: 'numeric', month: 'short' })} to{' '}
-        {formatDay(today.day, { day: 'numeric', month: 'short' })}, counted on this server without cookies
-        or third-party trackers. <Link to="/impressum#privacy">How the counting works</Link>.
-      </p>
-
       <dl className="insight-stats">
         <div>
-          <dt>Visitors <Change current={sum(current, 'visitors')} previous={sum(previous, 'visitors')} /></dt>
-          <dd>{formatNumber(sum(current, 'visitors'))}</dd>
-        </div>
-        <div>
-          <dt>Views <Change current={sum(current, 'views')} previous={sum(previous, 'views')} /></dt>
+          <dt>Views in 30 days <Change current={sum(current, 'views')} previous={sum(previous, 'views')} /></dt>
           <dd>{formatNumber(sum(current, 'views'))}</dd>
         </div>
         <div>
-          <dt>Today</dt>
-          <dd>{formatNumber(today.visitors)}</dd>
+          <dt>Today (UTC)</dt>
+          <dd>{formatNumber(today.views)}</dd>
         </div>
         <div>
-          <dt>Most-read project</dt>
-          <dd className="insight-top">
-            {topProject ? <Link to={`/projects/${topProject.slug}`}>{topProject.title}</Link> : '–'}
-          </dd>
+          <dt>Last 24 hours</dt>
+          <dd>{formatNumber(sum(hours, 'views'))}</dd>
+        </div>
+        <div>
+          <dt>This hour (UTC)</dt>
+          <dd>{formatNumber(thisHour?.views ?? 0)}</dd>
         </div>
       </dl>
 
+      <h2 className="admin-heading">Last 24 hours, in UTC</h2>
+      <HourChart hours={hours} />
+
+      <h2 className="admin-heading">
+        {formatDay(current[0].day, { day: 'numeric', month: 'short' })} to{' '}
+        {formatDay(today.day, { day: 'numeric', month: 'short' })}
+      </h2>
       <Chart current={current} previous={previous} />
+
+      <h2 className="admin-heading">Pages in the last 30 days</h2>
+      <PageTable paths={data.paths} />
     </>
   );
 }

@@ -1,32 +1,34 @@
-"""Cookie-free visitor counter for the site's Insights section.
+"""Page-view counter behind the admin panel's statistics.
 
-A visitor is recognised only within one day, by a hash of the IP address and
-User-Agent salted with a secret that lives in memory and is replaced at
-midnight (UTC). Neither the IP, the User-Agent nor the hash is ever written to
-disk; the database holds nothing but per-day counts.
+Each view adds one to a counter for that page and day, and nothing else is
+recorded: no IP address, no User-Agent, nothing that tells visitors apart.
+This is the plain counting the German supervisory authorities describe in
+their guidance for digital services (OH Digitale Dienste, para. 88); counting
+unique visitors would need more than that. Besides the per-day counts there is
+one per hour, kept for two days, so the panel can show the last 24 hours.
 """
 
-import hashlib
 import json
 import os
 import re
-import secrets
 import sqlite3
 import threading
-from datetime import date, datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 DB_PATH = os.environ.get("DB_PATH", "/data/insights.db")
 PORT = int(os.environ.get("PORT", "5003"))
 
 HIT_PATH = "/api/insights/hit"
-STATS_PATH = "/api/insights"
+# Caddy puts this path behind the Authelia login; this service never checks it.
+STATS_PATH = "/api/admin/insights"
 DAYS = 30
+HOURS = 24
 
 # Only the routes the site actually has, so nobody can fill the table with
 # made-up paths.
-COUNTED_PATH = re.compile(r"^/(impressum|insights|projects/[a-z0-9-]{1,80})?$")
-BOT_UA = re.compile(r"bot|crawl|spider|slurp|preview|headless|lighthouse|curl|wget|python", re.I)
+COUNTED_PATH = re.compile(r"^/(impressum|(projects|posts)/[a-z0-9-]{1,80})?$")
+BOT_UA = re.compile(r"bot|crawl|spider|slurp|preview|headless|lighthouse|curl|wget|python", re.IGNORECASE)
 
 db = sqlite3.connect(DB_PATH, check_same_thread=False)
 db.executescript(
@@ -35,47 +37,39 @@ db.executescript(
         day TEXT NOT NULL, path TEXT NOT NULL, count INTEGER NOT NULL,
         PRIMARY KEY (day, path)
     );
-    CREATE TABLE IF NOT EXISTS visitors (
-        day TEXT PRIMARY KEY, count INTEGER NOT NULL
+    CREATE TABLE IF NOT EXISTS hours (
+        hour TEXT PRIMARY KEY, count INTEGER NOT NULL
     );
+    DROP TABLE IF EXISTS visitors;
     """
 )
 lock = threading.Lock()
 
-# Today's salt and the visitor hashes seen today. Memory only, by design: a
-# restart forgets them, at the cost of counting someone twice on that day.
-salt_day: str | None = None
-salt = b""
-seen: set[str] = set()
+
+def hour_key(moment: datetime) -> str:
+    return moment.strftime("%Y-%m-%dT%H")
 
 
-def today() -> str:
-    return datetime.now(timezone.utc).date().isoformat()
-
-
-def record_hit(path: str, ip: str, user_agent: str):
-    global salt_day, salt, seen
-    day = today()
+def record_view(path: str):
+    now = datetime.now(UTC)
     with lock:
-        if salt_day != day:
-            salt_day, salt, seen = day, secrets.token_bytes(32), set()
-        visitor = hashlib.sha256(salt + f"{ip}\n{user_agent}".encode()).hexdigest()
         db.execute(
             "INSERT INTO views VALUES (?, ?, 1) ON CONFLICT DO UPDATE SET count = count + 1",
-            (day, path),
+            (now.date().isoformat(), path),
         )
-        if visitor not in seen:
-            seen.add(visitor)
-            db.execute(
-                "INSERT INTO visitors VALUES (?, 1) ON CONFLICT DO UPDATE SET count = count + 1",
-                (day,),
-            )
+        db.execute(
+            "INSERT INTO hours VALUES (?, 1) ON CONFLICT DO UPDATE SET count = count + 1",
+            (hour_key(now),),
+        )
+        db.execute("DELETE FROM hours WHERE hour < ?", (hour_key(now - timedelta(hours=HOURS * 2)),))
         db.commit()
 
 
 def stats() -> dict:
-    """Daily counts for this period and the one before it, oldest first."""
-    end = date.fromisoformat(today())
+    """Daily counts for this period and the one before it, plus the last 24
+    hours, all oldest first. Hours are UTC, as "YYYY-MM-DDTHH"."""
+    now = datetime.now(UTC)
+    end = now.date()
     start = end - timedelta(days=DAYS * 2 - 1)
     with lock:
         views = dict(
@@ -84,19 +78,21 @@ def stats() -> dict:
                 (start.isoformat(),),
             ).fetchall()
         )
-        visitors = dict(
-            db.execute("SELECT day, count FROM visitors WHERE day >= ?", (start.isoformat(),)).fetchall()
-        )
         paths = db.execute(
             "SELECT path, SUM(count) AS n FROM views WHERE day > ? GROUP BY path ORDER BY n DESC",
             ((end - timedelta(days=DAYS)).isoformat(),),
         ).fetchall()
+        hours = dict(db.execute("SELECT hour, count FROM hours").fetchall())
 
     days = []
     for offset in range(DAYS * 2):
         day = (start + timedelta(days=offset)).isoformat()
-        days.append({"day": day, "visitors": visitors.get(day, 0), "views": views.get(day, 0)})
-    return {"days": days, "paths": [{"path": p, "views": n} for p, n in paths]}
+        days.append({"day": day, "views": views.get(day, 0)})
+    last_hours = []
+    for offset in range(HOURS - 1, -1, -1):
+        key = hour_key(now - timedelta(hours=offset))
+        last_hours.append({"hour": key, "views": hours.get(key, 0)})
+    return {"days": days, "hours": last_hours, "paths": [{"path": p, "views": n} for p, n in paths]}
 
 
 class InsightsHandler(BaseHTTPRequestHandler):
@@ -109,11 +105,11 @@ class InsightsHandler(BaseHTTPRequestHandler):
             return self._respond(413, {"ok": False})
         path = self.rfile.read(length).decode(errors="replace").strip()
 
-        user_agent = self.headers.get("User-Agent") or ""
+        # Headers are only looked at to skip bots and opted-out browsers.
+        is_bot = BOT_UA.search(self.headers.get("User-Agent") or "")
         opted_out = self.headers.get("DNT") == "1" or self.headers.get("Sec-GPC") == "1"
-        if COUNTED_PATH.match(path) and not BOT_UA.search(user_agent) and not opted_out:
-            ip = (self.headers.get("X-Forwarded-For") or self.client_address[0]).split(",")[0].strip()
-            record_hit(path, ip, user_agent)
+        if COUNTED_PATH.match(path) and not is_bot and not opted_out:
+            record_view(path)
         # The beacon never reads the answer; say the same thing either way.
         return self._respond(204, None)
 
@@ -130,12 +126,12 @@ class InsightsHandler(BaseHTTPRequestHandler):
         body = json.dumps(payload).encode()
         self.send_header("Content-Type", "application/json")
         self.send_header("Content-Length", str(len(body)))
-        self.send_header("Cache-Control", "public, max-age=300")
+        self.send_header("Cache-Control", "no-store")
         self.end_headers()
         self.wfile.write(body)
 
     def log_message(self, *args):
-        pass  # no access log: the point is to keep IPs off disk
+        pass  # no access log: nothing about the visitor is kept
 
 
 if __name__ == "__main__":

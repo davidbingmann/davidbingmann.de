@@ -8,15 +8,45 @@ davidbingmann.de {
         Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
         -Server
     }
-    log {
-        output file /var/log/caddy/access.jsonl {
-            roll_size 10MiB
-            roll_keep 5
-            roll_keep_for 336h
-        }
-    }
-    @insights path /api/insights /api/insights/*
+
+    @private path /private /private/*
+    respond @private 404
+
+    @feedback path /api/semestral/feedback /api/semestral/feedback/
+    reverse_proxy @feedback semestral_feedback:5002
+
+    # Only the beacon is public; the numbers are under /api/admin/insights.
+    @insights path /api/insights/hit
     reverse_proxy @insights mywebsite_insights:5003
+
+    # Login for the admin panel (Authelia: password, then a passkey or a
+    # one-time code). It must stay outside the guarded paths below.
+    @authelia path /auth /auth/*
+    reverse_proxy @authelia mywebsite_auth:9091
+
+    # Admin panel: the page and its API only answer after a full two-factor
+    # login. Everything routed to the admin services below sits inside these
+    # paths, so nothing reaches them without passing Authelia first.
+    @admin path /admin /admin/* /api/admin /api/admin/*
+    forward_auth @admin mywebsite_auth:9091 {
+        uri /api/authz/forward-auth
+        copy_headers Remote-User Remote-Groups Remote-Name Remote-Email
+    }
+    @adminstats path /api/admin/insights
+    reverse_proxy @adminstats mywebsite_insights:5003
+    @adminapi {
+        path /api/admin/*
+        not path /api/admin/insights
+    }
+    reverse_proxy @adminapi mywebsite_admin:5004
+
+    # Semestral product pages: their own container.
+    @semestral path /semestral /semestral/*
+    reverse_proxy @semestral semestral_site:8080
+
+    # MCP server for Notion agents; it checks the token itself.
+    @studipmcp path /studip-mcp
+    reverse_proxy @studipmcp studip_mcp:8000
 
     reverse_proxy mywebsite_app:5001
 }

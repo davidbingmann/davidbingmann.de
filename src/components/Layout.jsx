@@ -11,8 +11,7 @@ export default function Layout() {
       <ViewBeacon />
       <Outlet />
       <footer className="footer">
-        <Link to="/impressum">Imprint &amp; Privacy</Link> &middot;{' '}
-        <Link to="/insights">Insights</Link> &middot; &copy;{' '}
+        <Link to="/impressum">Imprint &amp; Privacy</Link> &middot; &copy;{' '}
         {currentYear} David Bingmann
       </footer>
     </div>

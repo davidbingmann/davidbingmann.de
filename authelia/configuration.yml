@@ -1,0 +1,94 @@
+# Authelia guards the admin panel (/admin, /api/admin) and serves its login
+# page at https://davidbingmann.de/auth. Written for Authelia 4.39.28; check
+# the release notes before changing the pinned image in docker-compose.yml.
+#
+# The secrets are not in this file. They come from Docker secrets through the
+# AUTHELIA_*_FILE variables in docker-compose.yml, and the user (with its
+# argon2id password hash) from users.yml on the server.
+
+theme: 'auto'
+
+server:
+  # Listens on /auth as well as /, so Caddy can pass /auth through unchanged.
+  address: 'tcp://:9091/auth'
+
+log:
+  level: 'info'
+
+authentication_backend:
+  # Nobody but the owner signs in, and a reset link by mail would be one more
+  # way in, so there is no password reset.
+  password_reset:
+    disable: true
+  file:
+    path: '/config/users.yml'
+    watch: false
+    password:
+      algorithm: 'argon2'
+      argon2:
+        variant: 'argon2id'
+
+# Second factors. Either one completes the login after the password: a
+# passkey (Face ID, Touch ID, a security key) or a 30-second code from an
+# authenticator app. Register both, so losing one device does not lock you out.
+totp:
+  disable: false
+  issuer: 'davidbingmann.de'
+  period: 30
+  digits: 6
+  skew: 1
+
+webauthn:
+  disable: false
+  display_name: 'davidbingmann.de'
+  # A passkey alone would count as a single factor; signing in still starts
+  # with the password, and the passkey is the second step.
+  enable_passkey_login: false
+  timeout: '60 seconds'
+  selection_criteria:
+    discoverability: 'preferred'
+    # The device must check that it is you (biometrics or device PIN).
+    user_verification: 'required'
+
+access_control:
+  default_policy: 'deny'
+  rules:
+    - domain: 'davidbingmann.de'
+      policy: 'two_factor'
+      resources:
+        - '^/admin([/?].*)?$'
+        - '^/api/admin([/?].*)?$'
+
+session:
+  name: 'authelia_session'
+  same_site: 'lax'
+  inactivity: '15 minutes'
+  expiration: '4 hours'
+  remember_me: -1
+  cookies:
+    - domain: 'davidbingmann.de'
+      authelia_url: 'https://davidbingmann.de/auth'
+      default_redirection_url: 'https://davidbingmann.de/admin'
+
+# Three wrong attempts within ten minutes lock the account for an hour. Only by
+# user, not by IP: behind Docker's port forwarding every client may share one
+# address, and an IP ban would then lock out everyone, the owner included.
+# Lift a ban early with: docker exec mywebsite_auth authelia storage bans user revoke <user>
+regulation:
+  modes:
+    - 'user'
+  max_retries: 3
+  find_time: '10 minutes'
+  ban_time: '1 hour'
+
+storage:
+  local:
+    path: '/data/db.sqlite3'
+
+# Registering a passkey or an authenticator app asks for a one-time code that
+# is "mailed" into this file. Read it on the server with:
+#   docker exec mywebsite_auth cat /data/notification.txt
+# No mail account is involved, so there is nothing to phish or leak there.
+notifier:
+  filesystem:
+    filename: '/data/notification.txt'
