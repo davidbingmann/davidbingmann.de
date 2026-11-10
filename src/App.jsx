@@ -3,6 +3,7 @@ import Layout from './components/Layout.jsx';
 import Home from './pages/Home.jsx';
 import Impressum from './pages/Impressum.jsx';
 import Insights from './pages/Insights.jsx';
+import Post from './pages/Post.jsx';
 import Project from './pages/Project.jsx';
 
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
           <Route path="/impressum" element={<Impressum />} />
           <Route path="/insights" element={<Insights />} />
           <Route path="/projects/:slug" element={<Project />} />
+          <Route path="/posts/:slug" element={<Post />} />
           {/* Projects and resume moved onto the home page; anything else
               unknown lands there too, rather than on an empty page. */}
           <Route path="*" element={<Navigate to="/" replace />} />

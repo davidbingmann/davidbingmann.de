@@ -5,7 +5,8 @@ import { FaXTwitter } from 'react-icons/fa6';
 import profilePicture400 from '../assets/profile_picture_400.webp';
 import profilePicture600 from '../assets/profile_picture_600.webp';
 import { timelineItems } from '../data/timeline.jsx';
-import { projects } from '../data/projects.js';
+import projects from '../content/projects.json';
+import { formatPostDate, postsByDate } from '../content/posts.js';
 import { useDocumentTitle } from '../hooks/useDocumentTitle.js';
 
 const socialLinks = [
@@ -130,6 +131,23 @@ export default function Home() {
           <p>{project.summary}</p>
         </div>
       ))}
+
+      {postsByDate.length > 0 && (
+        <>
+          <h2 className="ctitle">Posts</h2>
+          {postsByDate.map((post) => (
+            <div className="project" key={post.slug}>
+              <p className="ptitle">
+                <Link to={`/posts/${post.slug}`}>{post.title}</Link>
+              </p>
+              <p className="pub-venue">
+                <time dateTime={post.date}>{formatPostDate(post.date)}</time>
+              </p>
+              {post.summary && <p>{post.summary}</p>}
+            </div>
+          ))}
+        </>
+      )}
     </>
   );
 }

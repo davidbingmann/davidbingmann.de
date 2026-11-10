@@ -1,7 +1,8 @@
 import { Link, useParams } from 'react-router-dom';
 import BackLink from '../components/BackLink.jsx';
 import ExternalLink from '../components/ExternalLink.jsx';
-import { projects } from '../data/projects.js';
+import Markdown from '../components/Markdown.jsx';
+import projects from '../content/projects.json';
 import { useDocumentTitle } from '../hooks/useDocumentTitle.js';
 
 export default function Project() {
@@ -26,18 +27,12 @@ export default function Project() {
             <h1 className="page-title">{project.title}</h1>
             <p className="lede">{project.headline}</p>
             {/* A URL reads better in monospace; a written label does not. */}
-            <p
-              className={
-                project.type === 'paper' ? 'pmeta pmeta--prose' : 'pmeta'
-              }
-            >
-              <ExternalLink href={project.link.href}>
-                {project.link.label}
-              </ExternalLink>
-            </p>
-            {project.body.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
+            {project.link?.href && (
+              <p className={project.type === 'paper' ? 'pmeta pmeta--prose' : 'pmeta'}>
+                <ExternalLink href={project.link.href}>{project.link.label || project.link.href}</ExternalLink>
+              </p>
+            )}
+            <Markdown source={project.body} />
           </>
         )}
       </div>

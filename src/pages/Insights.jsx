@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import BackLink from '../components/BackLink.jsx';
-import { projects } from '../data/projects.js';
+import projects from '../content/projects.json';
 import { useDocumentTitle } from '../hooks/useDocumentTitle.js';
 
 const W = 800;
